@@ -3,7 +3,7 @@ import { HelloWorldComponent } from './helloWorld';
 
 const mapStateToProps = (state) => {
     return {
-      userName: state.userProfileReducer.firstname
+      userName: state.userProfileReducer.firstname      
     }
 }
 
