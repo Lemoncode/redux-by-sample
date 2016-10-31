@@ -3,6 +3,7 @@ import { LoginComponent } from './login';
 
 const mapStateToProps = (state) => {
     return {
+      
     }
 }
 
