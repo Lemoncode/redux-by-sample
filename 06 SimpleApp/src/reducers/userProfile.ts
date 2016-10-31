@@ -1,5 +1,4 @@
 import {actionsEnums} from '../common/actionsEnums';
-import {updateUserProfileName} from '../actions/updateUserProfileName';
 import objectAssign = require('object-assign');
 
 class userProfileState  {
@@ -14,7 +13,7 @@ class userProfileState  {
 export const userProfileReducer =  (state : userProfileState = new userProfileState(), action) => {
       switch (action.type) {
         case actionsEnums.UPDATE_USERPROFILE_NAME:
-           return handleUserProfileAction(state, action);        
+           return handleUserProfileAction(state, action);
       }
 
       return state;

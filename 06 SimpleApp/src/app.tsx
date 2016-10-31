@@ -1,13 +1,19 @@
-import * as React from 'react';
-import {HelloWorldContainer} from './helloWorldContainer';
-import {NameEditContainer} from './nameEditContainer';
+import * as React from 'react'
+import { Link, browserHistory } from 'react-router'
 
-export const App = () => {
+export const App = (props: { children? }) => {
   return (
     <div>
-      <HelloWorldContainer/>
-      <br/>
-      <NameEditContainer/>
+      <header>
+        Links:
+        {' '}
+        <Link to="/">Login</Link>
+        {' '}
+        <Link to="/student-list">Student List</Link>
+        {' '}
+        <Link to="/student-detail">Student Detail</Link>
+      </header>
+      <div style={{ marginTop: '1.5em' }}>{props.children}</div>
     </div>
-  );
+  )
 }
