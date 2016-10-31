@@ -6,7 +6,7 @@ import {LoginEntity} from '../../model/login';
 interface Props {
    loginInfo : LoginEntity;
    updateLoginInfo : (loginInfo : LoginEntity) => void;
-   performLogin : () => void;
+   performLogin : (loginInfo : LoginEntity) => void;
 }
 
 export const LoginComponent = (props : Props) => {
@@ -16,9 +16,9 @@ export const LoginComponent = (props : Props) => {
         <div className="col-md-4 col-md-offset-4">
           <div className="panel panel-default">
             <Header/>
-            <Form loginInfo={this.props.loginInfo}
-                  updateLoginInfo={this.props.updateLoginInfo.bind(this)}
-                  performLogin={this.props.performLogin.bind(this)}
+            <Form loginInfo={props.loginInfo}
+                  updateLoginInfo={props.updateLoginInfo}
+                  performLogin={() => props.performLogin(props.loginInfo)}
                   />
           </div>
         </div>

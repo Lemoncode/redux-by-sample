@@ -2,15 +2,20 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import { syncHistoryWithStore} from 'react-router-redux'
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import {reducers} from './reducers'
 import {App} from './app';
 import {LoginContainer} from './pages/login';
 import {StudentListContainer} from './pages/student-list';
 import {StudentDetailContainer} from './pages/student-detail';
+import reduxThunk from 'redux-thunk';
 
-let store = createStore(reducers);
+let store = createStore(
+  reducers,
+  applyMiddleware(reduxThunk)
+);
+
 const history = syncHistoryWithStore(browserHistory, store)
 
 ReactDOM.render(

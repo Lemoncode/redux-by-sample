@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/redux-thunk": "^2.1.31",
     "typescript": "^2.0.3",
     "webpack": "^1.13.2",
     "webpack-devserver": "0.0.6"
@@ -35,6 +36,7 @@
     "react-router": "^3.0.0",
     "react-router-redux": "^4.0.6",
     "redux": "^3.6.0",
+    "redux-thunk": "^2.1.0",
     "style-loader": "^0.13.1",
     "ts-loader": "^0.9.3",
     "url-loader": "^0.5.7"

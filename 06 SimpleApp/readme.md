@@ -62,6 +62,30 @@ npm install core-js --save
 npm install @types/core-js --save
 ```
 
+- Let's install Redux-Thunk to handle async actions
+
+```
+npm install redux-thunk --save
+```
+
+```
+npm install @types/redux-thunk --save-dev
+```
+
+- Let's configure redux-thunk in _main.tsx_
+
+```javascript
+import { createStore, applyMiddleware } from 'redux';
+//(...)
+import reduxThunk from 'redux-thunk';
+
+let store = createStore(
+  reducers,
+  applyMiddleware(reduxThunk)
+);
+```
+
+
 - Let's start working with the pages structure, create the following folder _./src/pages_
 
 - Under pages let's create a subfolder called _./src/pages/login_.
@@ -362,22 +386,30 @@ login window we will keep this under the following path _./src/pages/login/actio
 
 ```javascript
 import {actionsEnums} from '../../../common/actionsEnums';
-import {LoginEntity} from '../../../model/LoginEntity';
+import {LoginEntity} from '../../../model/login';
 import {loginApi} from '../../../rest-api/loginApi';
 import {loginRequestCompletedAction} from './loginRequestCompleted';
+import { browserHistory } from 'react-router'
 
 export const loginRequestStartedAction = (login : LoginEntity) => {
   return function(dispatcher) {
     const promise = loginApi.login(login);
 
     promise.then(
-      data => dispatcher(loginRequestCompletedAction(data))
+      data => {
+        dispatcher(loginRequestCompletedAction(data));
+
+        // This is not ideal to have it here, maybe move it to middleware?
+        if(data.succeeded == true) {
+          browserHistory.push('/student-list')
+        }
+      }
+
     );
 
     return promise;
   }
-}
-```
+}```
 
 - Now the completed _./src/pages/login/actions/loginRequestCompleted.ts_
 
