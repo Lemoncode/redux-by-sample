@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { StudentDetailComponent } from './studentDetail';
+import { getStudentRequestStartAction} from './actions/getStudentRequestStart';
 
 const mapStateToProps = (state) => {
     return {
@@ -9,6 +10,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    getstudent: (id : number) => dispatch(getStudentRequestStartAction(id))
   }
 }
 
