@@ -15,6 +15,11 @@ class StudentApi {
   loadStudentList() : Promise<StudentEntity[]> {
       return Promise.resolve(this.studentsData);
   }
+
+  getStudentById(id : number) : Promise<StudentEntity> {
+    const student = this.studentsData.find(st => st.id === id);
+    return Promise.resolve(student);
+  }
 }
 
 export const studentApi = new StudentApi();

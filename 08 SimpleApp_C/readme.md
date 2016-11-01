@@ -144,3 +144,162 @@ export class StudentDetailComponent extends React.Component<Props, {}> {
     const studentId = this.props.params.id;
   }
 ```
+
+- Now that we have got the right Id, we need to load the student information, we
+are going to add a new method to the _students-api_.
+
+_./src/rest-api/student-api.ts_
+
+```javascript
+// (...)
+getStudentById(id : number) : Promise<StudentEntity> {
+  const student = this.studentsData.find(st => st.id === id);
+  return Promise.resolve(student);
+}
+// (...)
+```
+
+- let's define an aysnc action for this and a complete one, and load the form
+fields with this information.
+
+_./src/common/actionsEnums.ts
+
+```javascript
+export const actionsEnums = {
+  // (...)
+  STUDENT_GET_STUDENT_REQUEST_COMPLETED: 'STUDENT_GET_STUDENT_REQUEST_COMPLETED'
+}
+```
+
+_./src/pages/student-detail/actions/getStudentRequestCompleted.ts_
+
+```javascript
+import { actionsEnums } from '../../../common/actionsEnums';
+import { StudentEntity } from '../../../model/student';
+
+export const getStudentRequestCompletedAction = (student : StudentEntity) => {
+  return {
+    type: actionsEnums.STUDENT_GET_STUDENT_REQUEST_COMPLETED,
+    payload: student
+  }
+}
+```
+
+_./src/pages/student-detail/actions/getStudentRequestStart.ts_
+
+```javascript
+import {actionsEnums} from '../../../common/actionsEnums';
+import {StudentEntity} from '../../../model/student';
+import {studentApi} from '../../../rest-api/student-api';
+import {getStudentRequestCompletedAction} from './getStudentRequestCompleted';
+
+export const getStudentRequestStartAction = (studentId : number) => {
+  return function(dispatcher) {
+    const promise = studentApi.getStudentById(studentId);
+
+    promise.then(
+      data => {
+        dispatcher(getStudentRequestCompletedAction(data));
+      }
+    );
+
+    return promise;
+  }
+}
+```
+
+- Let's update the reducer
+
+_./src/reducers/student.ts_
+
+```javascript
+import {actionsEnums} from '../common/actionsEnums';
+import objectAssign = require('object-assign');
+import {StudentEntity} from '../model/student';
+
+class StudentState  {
+  studentsList : StudentEntity[];
+  editingStudent : StudentEntity;
+
+  public constructor()
+  {
+    this.studentsList = [];
+    this.editingStudent = new StudentEntity();
+  }
+}
+
+export const studentReducer =  (state : StudentState = new StudentState(), action) => {
+      switch (action.type) {
+        case actionsEnums.STUDENTS_GET_LIST_REQUEST_COMPLETED:
+           return handleGetStudentList(state, action.payload);
+       case actionsEnums.STUDENT_GET_STUDENT_REQUEST_COMPLETED:
+          return handleGetStudent(state, action.payload);
+
+      }
+
+      return state;
+};
+
+const handleGetStudentList = (state : StudentState, payload : StudentEntity[]) => {
+  const newState = objectAssign({}, state, {studentsList: payload});
+  return newState;
+}
+
+
+const handleGetStudent = (state : StudentState, payload : StudentEntity[]) => {
+  const newState = objectAssign({}, state, {editingStudent: payload});
+  return newState;
+}
+```
+
+- Let's go back to the studentDetail component, we are going to expose a property
+that will hold the student being edited:
+
+_./src/pages/student-detail/studentDetail.tsx_
+
+```javascript
+import * as React from 'react';
+import {StudentEntity} from '../../model/student';
+
+interface Props  {
+  params? : any;
+  student : StudentEntity
+}
+
+export class StudentDetailComponent extends React.Component<Props, {}> {
+
+  componentDidMount() {
+    const studentId = this.props.params.id;
+  }
+
+
+  render() {
+    return (
+      <div>
+        if(!this.props.student) {
+          <span>Student Info loading...</span>
+        } else {
+          <div>
+            <h2>Im the Student Detail page</h2>
+            <span>Test, student name {this.props.student.fullname}</span>
+          </div>
+        }
+      </div>
+    );
+  }
+}
+```
+
+- Then in the container we will request it.
+
+_./src/pages/student-detail/studentDetailContainer.tsx_
+
+```javascript
+//(...)
+const mapStateToProps = (state) => {
+    return {
+      student : state.studentReducer.editingStudent
+    }
+}
+//(...)
+```

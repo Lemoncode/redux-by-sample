@@ -3,6 +3,7 @@ import { StudentDetailComponent } from './studentDetail';
 
 const mapStateToProps = (state) => {
     return {
+      student : state.studentReducer.editingStudent
     }
 }
 
