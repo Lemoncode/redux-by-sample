@@ -1,9 +1,10 @@
 # 06 Simple App
 
-This sample takes as starting point _02 Change Name_
+This sample series takes as starting point _02 Change Name_
 
 In this sample we will create a minimal application, that will include
-a login page, a list like and a detail page.
+a login page, a list like and a detail page. In this sample we will
+create the project structure plus the login page functinallity.
 
 We will be using react router redux, and in a later sample we will check
 how this integrates with redux dev tools.
