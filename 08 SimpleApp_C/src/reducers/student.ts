@@ -20,7 +20,6 @@ export const studentReducer =  (state : StudentState = new StudentState(), actio
       return state;
 };
 
-
 const handleGetStudentList = (state : StudentState, payload : StudentEntity[]) => {
   const newState = objectAssign({}, state, {studentsList: payload});
   return newState;

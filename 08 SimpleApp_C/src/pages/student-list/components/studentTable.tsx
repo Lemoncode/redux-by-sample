@@ -5,6 +5,7 @@ import {StudentRowComponent} from './studentRow';
 
 interface Props {
   studentList : StudentEntity[];
+  editStudent : (id:number) => void;
 }
 
 export const StudentTableComponent = (props : Props) => {
@@ -14,7 +15,10 @@ export const StudentTableComponent = (props : Props) => {
       <tbody>
       {
         props.studentList.map((student : StudentEntity) =>
-          <StudentRowComponent key={student.id} student = {student}/>
+          <StudentRowComponent
+            key={student.id}
+            student = {student}
+            editStudent ={props.editStudent}/>
         )
       }
       </tbody>

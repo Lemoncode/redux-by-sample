@@ -5,6 +5,7 @@ import {StudentTableComponent} from './components/studentTable';
 interface Props {
   studentList : StudentEntity[];
   getStudentList : () => void;
+  editStudent : (id:number) => void;
 }
 
 export class StudentListComponent extends React.Component<Props, {}> {
@@ -16,7 +17,7 @@ export class StudentListComponent extends React.Component<Props, {}> {
   render() {
     return (
       <div>
-          <StudentTableComponent studentList={this.props.studentList}/>
+          <StudentTableComponent studentList={this.props.studentList} editStudent={this.props.editStudent}/>
       </div>
     )
   }

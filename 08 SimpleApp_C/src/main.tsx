@@ -26,7 +26,7 @@ ReactDOM.render(
             <IndexRoute component={LoginContainer}/>
             <Route path="login" component={LoginContainer}/>
             <Route path="student-list" component={StudentListContainer}/>
-            <Route path="student-detail" component={StudentDetailContainer}/>
+            <Route path="student-detail/:id" component={StudentDetailContainer}/>
           </Route>
         </Router>
       </div>

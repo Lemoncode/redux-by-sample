@@ -3,6 +3,7 @@ import {StudentEntity} from '../../../model/student';
 
 interface Props {
   student : StudentEntity;
+  editStudent : (id:number) => void;
 }
 
 export const StudentRowComponent = (props : Props) => {
@@ -22,7 +23,11 @@ export const StudentRowComponent = (props : Props) => {
         <span>{props.student.email}</span>
       </td>
       <td>
-        <span className="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+        <div onClick={(e) => props.editStudent(props.student.id)}>
+          <span className="glyphicon glyphicon-pencil"
+                aria-hidden="true"
+                ></span>
+        </div>
         <span className="glyphicon glyphicon-trash" aria-hidden="true"></span>
       </td>
 
