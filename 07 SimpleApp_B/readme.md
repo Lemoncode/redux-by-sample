@@ -265,3 +265,129 @@ export const StudentListContainer = connect(
 ```
 npm start
 ```
+
+- Now that we have all the data and actions properly wired up let's focus on
+the ui side, we are going to have the following structure (only presentational components):
+
+  - studentList: The studentList Page.
+  - components/studentTable: This one could be promoted to a common component in the future.
+  - components/studentRow: a single row.
+
+_./src/stundent-list/components/studentRow.tsx_
+
+```javascript
+import * as React from 'react';
+import {StudentEntity} from '../../../model/student';
+
+interface Props {
+  student : StudentEntity;
+}
+
+export const StudentRowComponent = (props : Props) => {
+  return (
+    <tr>
+      <td>
+       {(props.student.gotActiveTraining)
+        ?
+        <span className="glyphicon glyphicon-ok" aria-hidden="true"></span>
+        :
+        null}
+      </td>
+      <td>
+        <span>{props.student.fullname}</span>
+      </td>
+      <td>
+        <span>{props.student.email}</span>
+      </td>
+      <td>
+        <span className="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+        <span className="glyphicon glyphicon-trash" aria-hidden="true"></span>
+      </td>
+
+    </tr>
+  );
+}
+```
+
+_./src/stundent-list/components/studentHeader.tsx_
+
+```javascript
+import * as React from 'react';
+
+
+export const StudentHeaderComponent = () => {
+  return (
+      <thead>
+        <tr>
+          <th>Active Training</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Commands</th>
+        </tr>
+      </thead>
+  );
+}
+```
+
+
+_./src/stundent-list/components/studentTable.tsx_
+
+```javascript
+import * as React from 'react';
+import {StudentEntity} from '../../../model/student';
+import {StudentHeaderComponent} from './studentHeader';
+import {StudentRowComponent} from './studentRow';
+
+interface Props {
+  studentList : StudentEntity[];
+}
+
+export const StudentTableComponent = (props : Props) => {
+  return (
+    <table className='table'>
+      <StudentHeaderComponent/>
+      <tbody>
+      {
+        props.studentList.map((student : StudentEntity) =>
+          <StudentRowComponent key={student.id} student = {student}/>
+        )
+      }
+      </tbody>
+    </table>
+  );
+}
+```
+
+_./src/stundentList/studentList.tsx_
+
+```javascript
+import * as React from 'react';
+import {StudentEntity} from '../../model/student';
+import {StudentTableComponent} from './components/studentTable';
+
+interface Props {
+  studentList : StudentEntity[];
+  getStudentList : () => void;
+}
+
+export class StudentListComponent extends React.Component<Props, {}> {
+
+  componentDidMount() {
+    this.props.getStudentList();
+  }
+
+  render() {
+    return (
+      <div>
+          <StudentTableComponent studentList={this.props.studentList}/>
+      </div>
+    )
+  }
+}
+```
+
+- Let's give a try
+
+```
+npm start
+```
