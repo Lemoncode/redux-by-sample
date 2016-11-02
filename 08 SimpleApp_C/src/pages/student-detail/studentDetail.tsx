@@ -10,7 +10,7 @@ interface Props  {
 export class StudentDetailComponent extends React.Component<Props, {}> {
 
   componentDidMount() {
-    const studentId = this.props.params.id;
+    const studentId : number = Number(this.props.params.id);
     this.props.getstudent(studentId);
   }
 
