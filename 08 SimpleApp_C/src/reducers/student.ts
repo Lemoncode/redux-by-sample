@@ -19,7 +19,8 @@ export const studentReducer =  (state : StudentState = new StudentState(), actio
            return handleGetStudentList(state, action.payload);
        case actionsEnums.STUDENT_GET_STUDENT_REQUEST_COMPLETED:
           return handleGetStudent(state, action.payload);
-
+       case actionEnums.STUDENT_FIELD_VALUE_CHANGED_COMPLETED:
+          return handleFieldValueChanged(state, action.payload)
       }
 
       return state;
@@ -34,4 +35,8 @@ const handleGetStudentList = (state : StudentState, payload : StudentEntity[]) =
 const handleGetStudent = (state : StudentState, payload : StudentEntity[]) => {
   const newState = objectAssign({}, state, {editingStudent: payload});
   return newState;
+}
+
+const handleFieldValueChanged = (state : StudentState, payload) {
+  
 }
