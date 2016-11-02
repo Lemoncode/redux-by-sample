@@ -5,6 +5,8 @@ interface Props  {
   params? : any;
   student : StudentEntity;
   getstudent : (id : number) => void;
+  fireFieldValueChanged  : (viewModel : any, fieldName : string, value : any) => void;
+  saveStudent : (student : StudentEntity) => void;
 }
 
 export class StudentDetailComponent extends React.Component<Props, {}> {

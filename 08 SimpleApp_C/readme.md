@@ -269,7 +269,7 @@ interface Props  {
 export class StudentDetailComponent extends React.Component<Props, {}> {
 
   componentDidMount() {
-    const studentId = this.props.params.id;
+    const studentId = Number(this.props.params.id);
   }
 
 
@@ -303,3 +303,167 @@ const mapStateToProps = (state) => {
 }
 //(...)
 ```
+
+- Let's check that the sample is working end to end:
+
+```
+npm start
+```
+
+- It's time to build a form that will contain the data to be edited, we will
+define it using some special Id's to make it easier to get the properties updated.
+Let's start by creating a common input component.
+
+_./src/common/components/Input.sx_
+
+```javascript
+import * as React from 'react';
+
+interface Props {
+  name : string;
+  label : string;
+  onChange : any;
+  placeholder? : string;
+  value: string;
+  error : string;
+}
+
+export class Input extends React.Component<Props, {}> {
+  constructor(props : Props){
+      super(props);
+  }
+
+  public render() {
+     var wrapperClass : string = 'form-group';
+     if (this.props.error && this.props.error.length > 0) {
+       wrapperClass += " " + 'has-error';
+     }
+     return (
+       <div className={wrapperClass}>
+          <label htmlFor={this.props.name}>{this.props.label}</label>
+          <div className="field">
+            <input type="text"
+              name={this.props.name}
+              className="form-control"
+              placeholder={this.props.placeholder}
+              ref={this.props.name}
+              value={this.props.value}
+              onChange={this.props.onChange} />
+            <div className="input">{this.props.error}</div>
+          </div>
+        </div>
+     );
+  }
+}
+```
+
+- Let's build the form layout.
+
+_./src/pages/student-detail/components/studentForm.tsx_
+
+```javascript
+import * as React from 'react';
+import {Input} from '../../../common/components/Input';
+import {StudentEntity} from '../../../model/student';
+
+interface Props {
+    student : StudentEntity;
+    fireFieldValueChanged  : (viewModel : any, fieldName : string, value : any) => void;
+    saveStudent : (student : StudentEntity) => void;
+}
+
+export const StudentForm = (props : Props) => {
+
+  const updateStudentFromUI = (event) => {
+    var field = event.target.name;
+    var value = event.target.value;
+
+    props.fireFieldValueChanged(props.student, field, value);
+  }
+
+  const onSave = (event) => {
+    event.preventDefault();
+    this.props.saveStudent(this.props.student);
+  }
+
+
+  return (
+    <form>
+        <h1>Customer Form</h1>
+
+        <Input
+            name="fullname"
+            label="full name"
+            value={props.student.fullname}
+            onChange={updateStudentFromUI.bind(this)}
+            />
+
+            <Input
+                name="email"
+                label="email"
+                value={props.student.email}
+                onChange={updateStudentFromUI.bind(this)}
+                />
+
+            <input type="submit" value="Save" className="btn btn-default"
+                onClick={onSave.bind(this)} />
+   </form>
+  )
+}
+```
+
+- Now we need to propagate most of the props to the _studentDetail_ page:
+
+```javascript
+interface Props  {
+  params? : any;
+  student : StudentEntity;
+  getstudent : (id : number) => void;
+  fireFieldValueChanged  : (viewModel : any, fieldName : string, value : any) => void;
+  saveStudent : (student : StudentEntity) => void;  
+}
+```
+
+- Before defining this bindings in the _studentDetailContainer_ we need to
+define the needed actions. Let's start by defining the enums:
+
+```javascript
+STUDENT_FIELD_VALUE_CHANGED: 'STUDENT_FIELD_VALUE_CHANGED',
+STUDENT_SAVE_COMPLETED: 'STUDENT_SAVE_COMPLETED',
+```
+
+- Now let's the define an async action (we will see later on why this)
+for the _studentFieldValueChanged_ action.
+
+_./src/pages/student-detail/actions/studentFieldValueChangedStart_
+
+```javascript
+import {studentFieldValueChangedCompleted} from './studentFieldValueChangedCompleted';
+
+export function studentFieldValueChangedStart(viewModel : any, fieldName : string, value: any) {
+
+    return (dispatcher) => {
+      // This will change when we add validations to this action
+      dispatcher(studentFieldValueChangedCompleted(fieldName, value ));
+    }
+}
+```
+
+_./src/pages/student-detail/actions/studentFieldValueChangedCompleted_
+
+```javascript
+import { actionsEnums } from '../../../common/actionsEnums';
+
+export const studentFieldValueChangedCompleted = (fieldName : string, value : string) => {
+  return {
+    type: actionsEnums.STUDENT_GET_STUDENT_REQUEST_COMPLETED,
+    payload: {
+      fieldName : fieldName,
+      value : value
+    }
+  }
+}
+```
+
+
+- Let's define as well an async action for the _saveStudent_ action.

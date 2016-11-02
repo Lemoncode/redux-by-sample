@@ -17,11 +17,6 @@ class StudentApi {
   }
 
   getStudentById(id : number) : Promise<StudentEntity> {
-
-    // const student = this.studentsData.filter(function(student) {
-    //     return student.id === id; // Filter out the appropriate one
-    // })[0];
-
     const student = this.studentsData.find(st => st.id === id);
 
     return Promise.resolve(student);
