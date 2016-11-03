@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {StudentEntity} from '../../model/student';
+import {StudentForm} from './components/studentForm';
 
 interface Props  {
   params? : any;
@@ -22,14 +23,10 @@ export class StudentDetailComponent extends React.Component<Props, {}> {
       return <span>Student Info loading...</span>
 
     return (
-      <div>
-          {
-            <div>
-              <h2>I'm the Student Detail page</h2>
-              <span>Test, student name {this.props.student.fullname}</span>
-            </div>
-          }
-      </div>
+      <StudentForm
+        student={this.props.student}
+        fireFieldValueChanged={this.props.fireFieldValueChanged}
+        saveStudent={this.props.saveStudent}/>
     );
   }
 }

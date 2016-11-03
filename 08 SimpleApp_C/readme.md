@@ -412,6 +412,10 @@ export const StudentForm = (props : Props) => {
 }
 ```
 
+- Let's instantiate it in the studentDetail page.
+
+_./src/pages/student-detail/studentDetail.tsx_
+
 - Now we need to propagate most of the props to the _studentDetail_ page:
 
 ```javascript
@@ -465,5 +469,29 @@ export const studentFieldValueChangedCompleted = (fieldName : string, value : st
 }
 ```
 
+_./src/reducers/student.ts_
+
+- And let's update the student reducer:
+
+```javascript
+export const studentReducer =  (state : StudentState = new StudentState(), action) => {
+      switch (action.type) {
+        case actionsEnums.STUDENTS_GET_LIST_REQUEST_COMPLETED:
+           return handleGetStudentList(state, action.payload);
+       case actionsEnums.STUDENT_GET_STUDENT_REQUEST_COMPLETED:
+          return handleGetStudent(state, action.payload);
+       case actionsEnums.STUDENT_FIELD_VALUE_CHANGED_COMPLETED:
+          return handleFieldValueChanged(state, action.payload)
+      }
+
+      return state;
+};
+
+const handleFieldValueChanged = (state : StudentState, payload) => {
+  const newStudent = objectAssign({}, state.editingStudent, {[payload.fieldName]: payload.value});
+
+  return objectAssign({}, state, {editingStudent: newStudent})
+}
+```
 
 - Let's define as well an async action for the _saveStudent_ action.
