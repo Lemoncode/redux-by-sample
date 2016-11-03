@@ -383,7 +383,7 @@ export const StudentForm = (props : Props) => {
 
   const onSave = (event) => {
     event.preventDefault();
-    this.props.saveStudent(this.props.student);
+    props.saveStudent(props.student);
   }
 
 
@@ -460,7 +460,7 @@ import { actionsEnums } from '../../../common/actionsEnums';
 
 export const studentFieldValueChangedCompleted = (fieldName : string, value : string) => {
   return {
-    type: actionsEnums.STUDENT_GET_STUDENT_REQUEST_COMPLETED,
+    type: actionsEnums.STUDENT_FIELD_VALUE_CHANGED_COMPLETED,
     payload: {
       fieldName : fieldName,
       value : value
@@ -494,4 +494,120 @@ const handleFieldValueChanged = (state : StudentState, payload) => {
 }
 ```
 
+- Time to wire up container with component
+
+```javascript
+import { connect } from 'react-redux';
+import { StudentDetailComponent } from './studentDetail';
+import { getStudentRequestStartAction } from './actions/getStudentRequestStart';
+import { studentFieldValueChangedStart } from './actions/studentFieldValueChangedStart';
+
+const mapStateToProps = (state) => {
+    return {
+      student : state.studentReducer.editingStudent
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getstudent: (id : number) => dispatch(getStudentRequestStartAction(id)),
+    fireFieldValueChanged: (viewModel : any,
+                            fieldName : string,
+                            value : any) => dispatch(studentFieldValueChangedStart(viewModel, fieldName, value))    
+  }
+}
+
+export const StudentDetailContainer = connect(
+                                   mapStateToProps
+                                  ,mapDispatchToProps
+                                )(StudentDetailComponent);
+```
+
+- Getting started with the save functionallity, we have to define a mock functionallity
+in the api, since we are playing with in memory collections, we have to perform some
+inmmutable replace operation just to avoid the same students data object being updated
+automatically in the ui.
+
+_./src/rest-api/student-api.ts_
+
+```javascript
+saveStudent(student : StudentEntity) : Promise<boolean> {
+    const index = this.studentsData.findIndex(st => st.id === student.id)
+
+    // Just to ensure we get a new object (no mutability)
+    this.studentsData = this.studentsData
+                          .slice(0, index)
+                          .concat([student])
+                          .concat(this.studentsData.slice(index + 1))
+    ;
+
+    return Promise.resolve(true);
+}
+```
+
 - Let's define as well an async action for the _saveStudent_ action.
+
+_./src/pages/student-detail/studentSaveRequestCompleted.ts_
+
+```javascript
+import { actionsEnums } from '../../../common/actionsEnums';
+
+export const getStudentRequestCompletedAction = (succeeded : boolean) => {
+  return {
+    type: actionsEnums.STUDENT_SAVE_COMPLETED,
+    payload: succeeded
+  }
+}
+```
+
+
+_./src/pages/student-detail/action/studentSaveRequestStarted.ts_
+
+```javascript
+import {actionsEnums} from '../../../common/actionsEnums';
+import {StudentEntity} from '../../../model/student';
+import {studentApi} from '../../../rest-api/student-api';
+import {studentSaveRequestCompleted} from './studentSaveRequestCompleted';
+
+export const studentSaveRequestStart = (student : StudentEntity) => {
+  return function(dispatcher) {
+    const promise = studentApi.saveStudent(student);
+
+    promise.then(
+      succeeded => {
+        dispatcher(studentSaveRequestCompleted(succeeded));
+      }
+    );
+
+    return promise;
+  }
+}```
+
+- About the reducer we should handle some change state, e.g. reset a _dirty_ flag,
+and we should control in the action if the save action has failed, notify or
+do something about that, we will leave up to you to implement it as an excercise.
+
+- Let's wire up the container an component.
+
+_./src/pages/student-detail/studentDetailContainer.tsx_
+```javascript
+import { studentFieldValueChangedStart } from './actions/studentFieldValueChangedStart';
+
+// (...)
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getstudent: (id : number) => dispatch(getStudentRequestStartAction(id)),
+    saveStudent : (student : Student) => dispatch(studentSaveRequestStart(student)),
+    fireFieldValueChanged: (viewModel : any,
+                            fieldName : string,
+                            value : any) => dispatch(studentFieldValueChangedStart(viewModel, fieldName, value))
+  }
+}
+```
+
+- Now if run the sample we can check that the save operation is performed by
+updating the student detail and going back to the list view we can see that the
+update has been performed (remember that we are using a mock api, that is only
+persisted in memory, if we stop and start the app again it will load the
+  original data seed).

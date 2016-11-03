@@ -1,6 +1,8 @@
 import { connect } from 'react-redux';
 import { StudentDetailComponent } from './studentDetail';
-import { getStudentRequestStartAction} from './actions/getStudentRequestStart';
+import { getStudentRequestStartAction } from './actions/getStudentRequestStart';
+import { studentFieldValueChangedStart } from './actions/studentFieldValueChangedStart';
+import { studentSaveRequestStart } from './actions/studentSaveRequestStart';
 
 const mapStateToProps = (state) => {
     return {
@@ -10,7 +12,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getstudent: (id : number) => dispatch(getStudentRequestStartAction(id))
+    getstudent: (id : number) => dispatch(getStudentRequestStartAction(id)),
+    saveStudent : (student : Student) => dispatch(studentSaveRequestStart(student)),
+    fireFieldValueChanged: (viewModel : any,
+                            fieldName : string,
+                            value : any) => dispatch(studentFieldValueChangedStart(viewModel, fieldName, value))
   }
 }
 

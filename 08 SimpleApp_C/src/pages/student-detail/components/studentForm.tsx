@@ -19,7 +19,7 @@ export const StudentForm = (props : Props) => {
 
   const onSave = (event) => {
     event.preventDefault();
-    this.props.saveStudent(this.props.student);
+    props.saveStudent(props.student);
   }
 
 
