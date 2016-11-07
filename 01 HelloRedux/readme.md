@@ -11,14 +11,14 @@ Summary steps:
 
 - Install react, react-dom, redux libraries.
 - Install react, react-dom, redux typescript definitions.
-- Update the index.html to create a placeholder for the react components
+- Update the index.html to create a placeholder for the react components.
 - Create a HelloWorld component.
-- Create an _app.tsx_ as entry point.
+- Create an _main.tsx_ as entry point.
 - Create the react-dom entry point _main.tsx_.
 - Create a reducer (it will hold user name).
 - Wire it up.
 - Create a HelloworldContainer component and perform the connections.
-- Include this HelloworldContainer component in the _app.tsx_
+- Include this HelloworldContainer component in the _main.tsx_
 
 # Prerequisites
 
@@ -42,7 +42,7 @@ npm install react react-dom redux react-redux --save
 npm install @types/react @types/react-dom @types/redux @types/react-redux --save
 ```
 
-- Update webpack config in order to take as entry point _main.tsx_
+- Update webpack config in the _./src/webpack.config.js_ file, in order to take as entry point _main.tsx_
 
 ```javascript
 entry: [
@@ -80,12 +80,12 @@ ReactDOM.render(
   , document.getElementById('root'));
 ```
 
-- Create a HelloWorld component.
+- Create a HelloWorld component, path : _./src/helloWorld.tsx_.
 
 ```javascript
 import * as React from 'react';
 
-export const HelloComponent = (props : {userName : string}) => {
+export const HelloWorldComponent = (props : {userName : string}) => {
   return (
     <h2>Hello Mr. {props.userName} !</h2>
   );
@@ -93,7 +93,7 @@ export const HelloComponent = (props : {userName : string}) => {
 ```
 
 
-- Create a reducer (it will hold user name), path: _./src/reducers/userprofile.ts_.
+- Create a reducer (it will hold user name), path: _./src/reducers/userProfile.ts_.
 
 ```javascript
 class userProfileState  {
@@ -115,7 +115,6 @@ combine all reducers references in the future.
 ```javascript
 import { combineReducers } from 'redux';
 import { userProfileReducer } from './userProfile';
-import { Provider } from 'react-redux';
 
 
 export const reducers =  combineReducers({
@@ -132,6 +131,7 @@ import * as ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import {reducers} from './reducers'
+import {HelloWorldContainer} from './helloWorldContainer';
 
 let store = createStore(reducers);
 
@@ -144,30 +144,7 @@ ReactDOM.render(
 
 
 - Create a HelloworldContainer component and perform the connections, full path
-_./src/helloWolrContainer.ts_.
-
-```javascript
-import { connect } from 'react-redux';
-import { HelloWorldComponent } from './helloWorld';
-
-const mapStateToProps = (state) => {
-    return {
-      userName: state.userProfile.firstname
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-  }
-}
-
-export const helloWorldContainer = connect(
-                                   mapStateToProps
-                                  ,mapDispatchToProps
-                                )(HelloWorldComponent);
-```
-
-- Include this HelloworldContainer component in the _app.tsx
+_./src/helloWorldContainer.ts_.
 
 ```javascript
 import { connect } from 'react-redux';
@@ -188,6 +165,26 @@ export const HelloWorldContainer = connect(
                                    mapStateToProps
                                   ,mapDispatchToProps
                                 )(HelloWorldComponent);
+```
+
+- Include this HelloworldContainer component in the application, path: _.src/main.tsx_
+
+```javascript
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import {reducers} from './reducers'
+import {HelloWorldContainer} from './helloWorldContainer';
+
+let store = createStore(reducers);
+
+ReactDOM.render(
+   <Provider store={store}>
+      <HelloWorldContainer/>
+   </Provider>
+  , document.getElementById('root'));
+
 ```
 
 - Let's give a try to the sample.
