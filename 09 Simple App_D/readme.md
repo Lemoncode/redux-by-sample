@@ -1,0 +1,310 @@
+# 09 Simple App D
+
+This sample series takes as starting point _08 SimpleApp C_
+
+In this sample we are going to add form field validation field support to the
+student form.
+
+Summary steps:
+
+- Install lc-form-validation.
+- Create the needed validators.
+- Configure the student form validations.
+- Extend the updatefield action to support validation.
+- Extend the reducer to support validation
+- Add support in the component ui to display validations.ç
+- Wire up the container.
+
+
+
+# Prerequisites
+
+Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not already installed on your computer.
+
+> Verify that you are running at least node v6.x.x and npm 3.x.x by running `node -v` and `npm -v` in a terminal/console window. Older versions may produce errors.
+
+## Steps to build it
+
+- Copy the content from _08 Simple App C_ and execute _npm install_.
+
+- Let's install the lc-form-validation package
+
+```
+npm install lc-form-validation --save
+```
+
+> We don't need to install additional typescript definition because the project already brings it
+
+- Let's create an entity that will hold the form errors:
+
+```javascript
+import { FieldValidationResult } from 'lc-form-validation';
+
+export class StudentErrors {
+  fullname : FieldValidationResult;
+  email : FieldValidationResult;  
+}
+```
+
+- We will define reusable field validations under common folder (we will start by adding a
+  required validation).
+
+_./src/common/validations/validators.ts_
+
+```javascript
+// TODO: Harcoded strings and Id's isolate them in a config class
+export const requiredValidationHandler = (vm : any, value: any) : FieldValidationResult => {
+  const isFieldInformed : boolean = (value != null && value.length > 0);
+  const errorInfo : string = (isFieldInformed) ? '' : 'Mandatory field';
+
+  const fieldValidationResult : FieldValidationResult = new FieldValidationResult();
+  fieldValidationResult.type = 'REQUIRED';
+  fieldValidationResult.succeeded = isFieldInformed;
+  fieldValidationResult.errorMessage = errorInfo;
+
+  return fieldValidationResult;
+}
+```
+
+> By using this isolated functions, is quite easy to add unit test support to them without
+getting involved the UI.
+
+- Let's define the login form validation in our project (let's make user and email mandatory fields)
+we will create a validations file.
+
+_./src/pages/login/login.validation.ts_
+
+```javascript
+import { Promise } from 'es6-promise';
+import { FieldValidationResult, BaseFormValidation } from 'lc-form-validation';
+import {requiredValidationHandler} from '../../common/validations/validators';
+
+class LoginFormValidation extends BaseFormValidation {
+
+  public constructor() {
+    super();
+
+    this._validationEngine.initialize([
+        {formFieldName: 'fullname', vmFieldName: 'fullname'},
+        {formFieldName: 'email', vmFieldName: 'email'}
+    ]);
+
+    this._validationEngine.addFieldValidation('fullname',
+                                                requiredValidationHandler
+                                             )
+
+   this._validationEngine.addFieldValidation('email',
+                                               requiredValidationHandler
+                                            );
+  }
+}
+
+
+export const loginFormValidation = new LoginFormValidation();
+```
+
+- Let's update the generic input control that will take care of handling user input plus displaying
+inline errors.
+
+_./src/common/input.tsx_
+
+```javascript
+import * as React from 'react';
+
+interface Props {
+  name : string;
+  label : string;
+  onChange : any;
+  onBlur? : any;
+  placeholder? : string;
+  value: string;
+  error : string;
+}
+
+export class Input extends React.Component<Props, {}> {
+  constructor(props : Props){
+      super(props);
+  }
+
+  public render() {
+     var wrapperClass : string = 'form-group';
+     if (this.props.error && this.props.error.length > 0) {
+       wrapperClass += " " + 'has-error';
+     }
+     return (
+       <div className={wrapperClass}>
+          <label htmlFor={this.props.name}>{this.props.label}</label>
+          <div className="field">
+            <input type="text"
+              name={this.props.name}
+              className="form-control"
+              placeholder={this.props.placeholder}
+              ref={this.props.name}
+              value={this.props.value}
+              onChange={this.props.onChange}
+              onBlur={this.props.onBlur}/>
+            <div className="input">{this.props.error}</div>
+          </div>
+        </div>
+     );
+  }
+}
+```
+
+- Now it's time to update the action ui input update actions, start:
+
+_./src/actions/studentFieldValueChangedStart.ts_
+
+```javascript
+import {studentFieldValueChangedCompleted} from './studentFieldValueChangedCompleted';
+import {FieldValidationResult} from 'lc-form-validation'
+import { loginFormValidation} from '../../login/login.validation';
+
+export function studentFieldValueChangedStart(viewModel : any, fieldName : string, value: any, event? : any) {
+
+    return (dispatcher) => {
+      loginFormValidation.validateField(viewModel, fieldName, value, event).then(
+        (fieldValidationResult : FieldValidationResult) => dispatcher(studentFieldValueChangedCompleted(fieldName, value, fieldValidationResult ))
+      );
+    }
+}
+```
+
+- Completed
+
+_./src/actions/studentFieldValueChangedCompleted.ts_
+
+```javascript
+import { actionsEnums } from '../../../common/actionsEnums';
+import { FieldValidationResult } from 'lc-form-validation';
+
+interface IStudentFieldValueChangedCompletedPayload {
+  fieldName : string;
+  value : any;
+  fieldValidationResult : FieldValidationResult;
+}
+
+const studentFieldValueChangedCompleted = (fieldName : string, value : string, fieldValidationResult : FieldValidationResult) => {
+  return {
+    type: actionsEnums.STUDENT_FIELD_VALUE_CHANGED_COMPLETED,
+    payload: {
+      fieldName,
+      value,
+      fieldValidationResult
+    } as IStudentFieldValueChangedCompletedPayload
+  }
+}
+
+export {
+  IStudentFieldValueChangedCompletedPayload,
+  studentFieldValueChangedCompleted
+}
+```
+
+Let's jump now into the reducer:
+
+_./src/reducers/student.ts_
+
+On the import side:
+
+```javascript
+import {StudentErrors} from '../model/studentErrors';
+import {IStudentFieldValueChangedCompletedPayload} from '../pages/student-detail/actions/studentFieldValueChangedCompleted';
+```
+
+On the reducer state:
+
+```javascript
+class StudentState  {
+  //(...)
+  editingStudentErrors : StudentErrors;
+
+  public constructor()
+  {
+    //(...)
+    this.editingStudentErrors = new StudentErrors();
+  }
+}
+
+```
+
+On reducer handler:
+
+```javascript
+const handleFieldValueChanged = (state : StudentState, payload : IStudentFieldValueChangedCompletedPayload) => {
+  const newStudent = objectAssign({}, state.editingStudent, {[payload.fieldName]: payload.value});
+  const newStudentErrors = objectAssign({}, state.editingStudentErrors, {[payload.fieldName]: payload.fieldValidationResult});
+  return objectAssign({}, state, {editingStudent: newStudent, editingStudentErrors: newStudentErrors})
+}
+```
+
+Let's jump now on the component side
+
+_./src/pages/student-detail/components/studentForm.tsx_
+```javascript
+import {StudentErrors} from '../../../model/studentErrors';
+
+interface Props  {
+  // (...)
+  errors: StudentErrors;
+  fireFieldValueChanged  : (viewModel : any, fieldName : string, value : any, filter? : any) => void;
+  //(...)
+}
+
+export const StudentForm = (props : Props) => {
+  // (...)
+  return (
+    // (...)
+    <Input
+        name="fullname"
+        label="full name"
+        value={props.student.fullname}
+        onChange={updateStudentFromUI.bind(this)}
+        error={(props.errors.fullname) ? props.errors.fullname.errorMessage : ''}
+        />
+
+    <Input
+        name="email"
+        label="email"
+        value={props.student.email}
+        onChange={updateStudentFromUI.bind(this)}
+        error={(props.errors.email) ? props.errors.email.errorMessage : ''}
+        />
+    // (...)
+  )
+}
+```
+
+
+_./src/pages/student-detail/studentDetail.tsx_
+```javascript
+// (...)
+import {StudentErrors} from '../../model/studentErrors';
+
+interface Props  {
+  // (...)
+  errors: StudentErrors;
+  fireFieldValueChanged  : (viewModel : any, fieldName : string, value : any, filter? : any) => void;
+  //(...)
+}
+```
+
+_./src/pages/student-detail/studentDetailContainer.tsx_
+```javascript
+const mapStateToProps = (state) => {
+    return {
+      student : state.studentReducer.editingStudent,
+      errors : state.studentReducer.editingStudentErrors
+    }
+}
+```
+
+- Let's make a quick test before we keep on progressing:
+
+```
+npm start
+```
+
+- let's add a better --> Save Button disallow
+
+- let's add an email validation
