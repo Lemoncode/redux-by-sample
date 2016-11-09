@@ -386,4 +386,52 @@ export const studentSaveRequestStart = (student : StudentEntity) => {
 npm start
 ```
 
-- let's add an email validation
+- Just as a last step for this sample, let's add an email validation to the student
+email field, we will check that the email is well formed (regex validation). To make
+this easy we will install the [validator](https://github.com/chriso/validator.js) library and add a wrapper to integrate
+the email validation into the _lc-form-validation_ library.
+
+```
+npm install validator --save
+```
+
+```
+npm install @types/validator --save-dev
+```
+
+> Is expected that lc-form-validation will incorporate in it's library a set of
+already made validations
+
+
+- Let's define an lc-form-validation email validator
+_./src/common/validations/email.ts_
+
+```javascript
+import * as isEmail from 'validator/lib/isEmail';
+import { FieldValidationResult } from 'lc-form-validation';
+
+// TODO: Harcoded strings and Id's isolate them in a config class
+export const emailValidationHandler = (vm : any, value: any) : FieldValidationResult => {
+  const isFieldValidEmail : boolean = isEmail(value);
+  const errorInfo : string = (isFieldValidEmail) ? '' : 'Not a valid email';
+
+  const fieldValidationResult : FieldValidationResult = new FieldValidationResult();
+  fieldValidationResult.type = 'EMAIL_NOT_VALID';
+  fieldValidationResult.succeeded = isFieldValidEmail;
+  fieldValidationResult.errorMessage = errorInfo;
+
+  return fieldValidationResult;
+}
+```
+
+- Let's add this validation to the login form.
+
+_./src/pages/login/login.validation.ts_
+
+```javascript
+import {emailValidationHandler} from '../../common/validations/email';
+//(...)
+this._validationEngine.addFieldValidation('email',
+                                            emailValidationHandler
+                                         );
+```

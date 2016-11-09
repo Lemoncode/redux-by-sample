@@ -12,6 +12,7 @@
   "devDependencies": {
     "@types/redux-thunk": "^2.1.31",
     "@types/toastr": "^2.1.30",
+    "@types/validator": "^5.7.34",
     "typescript": "^2.0.3",
     "webpack": "^1.13.2",
     "webpack-devserver": "0.0.6"
@@ -43,6 +44,7 @@
     "style-loader": "^0.13.1",
     "toastr": "^2.1.2",
     "ts-loader": "^0.9.3",
-    "url-loader": "^0.5.7"
+    "url-loader": "^0.5.7",
+    "validator": "^6.1.0"
   }
 }
