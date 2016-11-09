@@ -305,6 +305,85 @@ const mapStateToProps = (state) => {
 npm start
 ```
 
-- let's add a better --> Save Button disallow
+- Now, let's avoid saving the data whenever the form contains errors and display a
+notification to the user asking to review the form errors.
+
+- First of all we are going to install a library to display toast notifications like,
+we will install the popular _toastr_, it needs _jquery_ as a dependency (there are
+other toastr libraries that doesn't need jquery as dependency) .
+
+```
+npm install jquery --save
+npm install toastr --save
+```
+
+```
+npm install @types/toastr --save-dev
+```
+
+- Le's update webpack config in order to include the toastr styles.
+
+_./webpack.config.js_
+```javascript
+entry: [
+  './main.tsx',
+  '../node_modules/bootstrap/dist/css/bootstrap.css',
+  '../node_modules/toastr/build/toastr.css',
+],
+```
+
+- Let's check the status of the form before saving, in case there is an errors
+let's display a toast indicating that the form contains errors.
+
+_./src/pages/student-detail/studentSaveRequestStart_
+
+```javascript
+import {Promise} from 'es6-promise';
+import {actionsEnums} from '../../../common/actionsEnums';
+import {StudentEntity} from '../../../model/student';
+import {studentApi} from '../../../rest-api/student-api';
+import {studentSaveRequestCompleted} from './studentSaveRequestCompleted';
+import {FormValidationResult} from 'lc-form-validation';
+import {loginFormValidation} from '../../login/login.validation';
+import * as toastr from 'toastr';
+
+export const studentSaveRequestStart = (student : StudentEntity) => {
+
+  const saveStudent = (dispatcher, student : StudentEntity) : Promise<boolean> => {
+    const promise = studentApi.saveStudent(student);
+
+    promise.then(
+      succeeded => {
+        dispatcher(studentSaveRequestCompleted(succeeded));
+      }
+    );
+
+    return promise;
+  }
+
+  return function(dispatcher) {
+    let promise = null;
+
+    loginFormValidation.validateForm(student).then(
+      (formValidationResult : FormValidationResult) => {
+          if(formValidationResult.succeeded === true) {
+            saveStudent(dispatcher, student);
+          } else {
+            toastr.error("Form failed to save, please review the fields content.")
+          }
+      }
+    );
+
+    return promise;
+  }
+}
+```
+
+
+- Let's give a try and test
+
+```
+npm start
+```
 
 - let's add an email validation

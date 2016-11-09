@@ -45,7 +45,10 @@ export const StudentForm = (props : Props) => {
                 error={(props.errors.email) ? props.errors.email.errorMessage : ''}
                 />
 
-            <input type="submit" value="Save" className="btn btn-default"
+            <input type="submit"
+                value="Save"
+                className="btn btn-default"
+
                 onClick={onSave.bind(this)} />
    </form>
   )

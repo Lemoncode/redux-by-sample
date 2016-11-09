@@ -12,7 +12,8 @@ module.exports = {
 
   entry: [
     './main.tsx',
-    '../node_modules/bootstrap/dist/css/bootstrap.css'
+    '../node_modules/bootstrap/dist/css/bootstrap.css',
+    '../node_modules/toastr/build/toastr.css',
   ],
   output: {
     path: path.join(basePath, 'dist'),
