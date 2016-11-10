@@ -56,4 +56,64 @@ let store = createStore(
 npm start
 ```
 
-- 
+- This is great, specially the "time machine" option, but what happen if we need to 
+add changes to our code? As soon as webpack is launched we will loose all or state and
+the page will be refresh or... wait _react-hot-loader_ to the rescue ! by using this
+we can add changes to our code and webpack will only push the pieces of javascript
+that have changed, no need to refresh the browser, no state lost. Let's start by
+installing the hot loader:
+
+```
+npm install react-hot-loader --save-dev
+```
+
+- Let's add some paths to the webpack config entry section:
+
+```javascript
+  entry: [
+    'webpack-dev-server/client?http://localhost:8080',
+    'webpack/hot/only-dev-server',    
+    './main.tsx',
+    //(...)
+  ],
+
+```
+
+- Let's update the _dev_server_ settings to allow live reload:
+
+```javascript
+devServer: {
+       contentBase: './dist', //Content base
+       inline: true, //Enable watch and live reload
+       hot: true,
+       //(...)
+  },
+```
+
+- Let's update ts loader to add some code injected by the react hot loader.
+
+```javascript
+  module: {
+        loaders: [
+      {
+        test: /\.(ts|tsx)$/,
+        exclude: /node_modules/,
+        loaders: ['react-hot', 'ts']
+      },
+      // (..)
+    },
+```
+
+- Let's include the HotModuleReplacement plugin
+
+```javascript
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    // (...)
+```
+
+- Let's give a try and check that we can update code and no browser refresh is needed.
+
+```
+npm start
+```

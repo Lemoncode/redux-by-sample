@@ -11,6 +11,8 @@ module.exports = {
   },
 
   entry: [
+    'webpack-dev-server/client?http://localhost:8080',
+    'webpack/hot/only-dev-server',    
     './main.tsx',
     '../node_modules/bootstrap/dist/css/bootstrap.css',
     '../node_modules/toastr/build/toastr.css',
@@ -25,6 +27,8 @@ module.exports = {
   devServer: {
        contentBase: './dist', //Content base
        inline: true, //Enable watch and live reload
+       hot: true,
+       noInfo: true,
        host: 'localhost',
        port: 8080,
        stats: 'errors-only'
@@ -35,7 +39,7 @@ module.exports = {
       {
         test: /\.(ts|tsx)$/,
         exclude: /node_modules/,
-        loader: 'ts-loader'
+        loaders: ['react-hot', 'ts-loader']
       },
       {
         test: /\.css$/,
@@ -62,6 +66,7 @@ module.exports = {
     ]
   },
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
     // Generate index.html in /dist => https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: 'index.html', // Name of file in ./dist/
