@@ -1,4 +1,3 @@
-import { Promise } from 'es6-promise';
 import { FieldValidationResult, BaseFormValidation } from 'lc-form-validation';
 import {requiredValidationHandler} from '../../common/validations/validators';
 import {emailValidationHandler} from '../../common/validations/email';
