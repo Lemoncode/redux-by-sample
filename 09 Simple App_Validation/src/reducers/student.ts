@@ -1,5 +1,5 @@
+import {} from 'core-js'
 import {actionsEnums} from '../common/actionsEnums';
-import objectAssign = require('object-assign');
 import {StudentEntity} from '../model/student';
 import {StudentErrors} from '../model/studentErrors';
 import {IStudentFieldValueChangedCompletedPayload} from '../pages/student-detail/actions/studentFieldValueChangedCompleted';
@@ -31,18 +31,18 @@ export const studentReducer =  (state : StudentState = new StudentState(), actio
 };
 
 const handleGetStudentList = (state : StudentState, payload : StudentEntity[]) => {
-  const newState = objectAssign({}, state, {studentsList: payload});
+  const newState = Object.assign({}, state, {studentsList: payload});
   return newState;
 }
 
 
 const handleGetStudent = (state : StudentState, payload : StudentEntity[]) => {
-  const newState = objectAssign({}, state, {editingStudent: payload});
+  const newState = Object.assign({}, state, {editingStudent: payload});
   return newState;
 }
 
 const handleFieldValueChanged = (state : StudentState, payload : IStudentFieldValueChangedCompletedPayload) => {
-  const newStudent = objectAssign({}, state.editingStudent, {[payload.fieldName]: payload.value});
-  const newStudentErrors = objectAssign({}, state.editingStudentErrors, {[payload.fieldName]: payload.fieldValidationResult});
-  return objectAssign({}, state, {editingStudent: newStudent, editingStudentErrors: newStudentErrors})
+  const newStudent = Object.assign({}, state.editingStudent, {[payload.fieldName]: payload.value});
+  const newStudentErrors = Object.assign({}, state.editingStudentErrors, {[payload.fieldName]: payload.fieldValidationResult});
+  return Object.assign({}, state, {editingStudent: newStudent, editingStudentErrors: newStudentErrors})
 }

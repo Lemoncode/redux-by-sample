@@ -4,7 +4,7 @@
   "description": "In this sample we are going to setup the basic plumbing to \"build\" our project and launch it in a dev server.",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-devserver --inline",
+    "start": "webpack-dev-server --inline",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -15,25 +15,22 @@
     "@types/validator": "^5.7.34",
     "typescript": "^2.0.3",
     "webpack": "^1.13.2",
-    "webpack-devserver": "0.0.6"
+    "webpack-dev-server": "*"
   },
   "dependencies": {
-    "@types/core-js": "^0.9.34",
-    "@types/object-assign": "^4.0.30",
+    "@types/core-js": "^0.9.34",    
     "@types/react": "^0.14.43",
     "@types/react-dom": "^0.14.18",
     "@types/react-redux": "^4.4.32",
     "@types/react-router": "^2.0.38",
     "@types/react-router-redux": "^4.0.34",
     "@types/redux": "^3.6.31",
-    "bootstrap": "^3.3.7",
-    "core-js": "^2.4.1",
+    "bootstrap": "^3.3.7",    
     "css-loader": "^0.25.0",
     "file-loader": "^0.9.0",
     "html-webpack-plugin": "^2.22.0",
     "jquery": "^3.1.1",
-    "lc-form-validation": "^0.1.5",
-    "object-assign": "^4.1.0",
+    "lc-form-validation": "*",    
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",

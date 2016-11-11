@@ -27,7 +27,7 @@ export const StudentForm = (props : Props) => {
 
   return (
     <form>
-        <h1>Customer Form</h1>
+        <h1>Customer Form </h1>
 
         <Input
             name="fullname"
