@@ -33,14 +33,14 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 npm install object-assign --save
 ```
 
-- Let's install typescript definitions for this library:
+- Let's install the typescript definitions for this library:
 
 ```
 npm install @types/object-assign --save
 ```
 
 
-- Create a nameEdit presentational component.
+- Create a nameEdit presentational component. In `src/nameEdit.tsx`:
 
 ```javascript
 import * as React from 'react';
@@ -57,6 +57,7 @@ export const NameEditComponent = (props: {userName : string, onChange : (name : 
   );
 }
 ```
+
 - Create an action const file, let's create them under the following
 fullpath _./src/common/actionEnum.ts_.
 
@@ -80,7 +81,7 @@ export const updateUserProfileName = (newName : string) => {
 }
 ```
 
-- Handle this action in the reducer, _./src/reducers/userProfile.tsx_.
+- Handle this action in the reducer, _./src/reducers/userProfile.tsx_. (Rename old userProfile.ts)
 
 ```javascript
 import {actionsEnums} from '../common/actionsEnums';
