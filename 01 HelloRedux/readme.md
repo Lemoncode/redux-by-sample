@@ -42,6 +42,8 @@ npm install react react-dom redux react-redux --save
 npm install @types/react @types/react-dom @types/redux @types/react-redux --save
 ```
 
+- Rename _./src/main.ts_ to _./src/main.tsx_.
+
 - Update webpack config in the _./src/webpack.config.js_ file, in order to take as entry point _main.tsx_
 
 ```javascript
@@ -69,7 +71,7 @@ entry: [
 </html>
 ```
 
-- Create the react-dom entry point _main.tsx_.
+- Create the react-dom entry point updating _./src/main.tsx_ to:
 
 ```
 import * as React from 'react';
