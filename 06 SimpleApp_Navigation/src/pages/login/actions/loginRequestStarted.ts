@@ -2,7 +2,7 @@ import {actionsEnums} from '../../../common/actionsEnums';
 import {LoginEntity} from '../../../model/login';
 import {loginApi} from '../../../rest-api/loginApi';
 import {loginRequestCompletedAction} from './loginRequestCompleted';
-import { browserHistory } from 'react-router'
+import { hashHistory } from 'react-router';
 
 export const loginRequestStartedAction = (login : LoginEntity) => {
   return function(dispatcher) {
@@ -14,7 +14,7 @@ export const loginRequestStartedAction = (login : LoginEntity) => {
 
         // This is not ideal to have it here, maybe move it to middleware?
         if(data.succeeded == true) {
-          browserHistory.push('/student-list')
+          hashHistory.push('/student-list');
         }
       }
 
