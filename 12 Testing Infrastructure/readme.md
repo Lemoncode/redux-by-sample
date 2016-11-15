@@ -35,6 +35,8 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 - **karma-sourcemap-loader:** add source map support to karma (debugging).
 - **karma-webpack:** webpack support for karma.
 - **react-addons-test-utils: makes it easy to test React components in the testing framework of your choice.**
+- *phantomjs-prebuilt*: browser with no UI (good to run the test in a CI machine).
+- *karma-phantomjs-launcher*: phantomjs support for karma
 
 We will do that by running:
 
@@ -42,7 +44,7 @@ We will do that by running:
 npm install chai deep-freeze enzyme mocha json-loader sinon
 redux-mock-store karma karma-chai karma-chrome-launcher
 karma-mocha karma-sourcemap-loader karma-webpack
-react-addons-test-utils --save-dev
+react-addons-test-utils phantomjs-prebuilt --save-dev
 ```
 
 - Now let's install the needed typings:
