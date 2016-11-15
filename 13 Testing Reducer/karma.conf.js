@@ -5,7 +5,8 @@ module.exports = function (config) {
     basePath: '',
     frameworks: ['mocha', 'chai'],
     files: [
-      './test/test_index.js'
+      './test/test_index.js',
+      './node_modules/phantomjs-polyfill-object-assign/object-assign-polyfill.js'
     ],
     exclude: [
     ],
