@@ -1,4 +1,4 @@
-# 12 Testing Infraestructure
+# 12 Testing Infrastructure
 
 This sample series takes as starting point _12 Testing Infrastructure_
 

@@ -7,7 +7,7 @@
     "jsx": "react",
     "sourceMap": true,
     "noLib": false,
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true    
   },
   "compileOnSave": false,
   "exclude": [

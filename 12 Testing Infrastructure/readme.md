@@ -159,3 +159,9 @@ Let's add  command to our npm to run the tests (package.json)
 },
 
 ````
+Now if we want to run the sample using Chrome browser we can type the following
+command
+
+```
+karma start
+```
