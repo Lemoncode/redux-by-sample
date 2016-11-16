@@ -1,4 +1,4 @@
-# React Typescript by sample
+# Redux by sample with Typescript
 
 The goal of this project is to provide a set of step by step guided samples, covering
 core concepts of React + Redux (basic concepts, middleware, ...)
