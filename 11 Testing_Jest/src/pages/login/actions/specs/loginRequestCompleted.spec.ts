@@ -60,5 +60,5 @@ describe('loginRequestCompleted', () => {
       expect(result.type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
       expect(result.payload.userProfile.fullname).toEqual("test");
     });
-  })
+  });
 });
