@@ -258,7 +258,7 @@ export const reducers =  combineReducers({
   ```javascript
   import * as React from 'react';
   import * as ReactDOM from 'react-dom';
-  import { Router, Route, IndexRoute, browserHistory } from 'react-router'
+  import { Router, Route, IndexRoute, hashHistory } from 'react-router';
   import { syncHistoryWithStore} from 'react-router-redux'
   import { createStore } from 'redux';
   import { Provider } from 'react-redux';
@@ -269,7 +269,7 @@ export const reducers =  combineReducers({
   import {StudentDetailContainer} from './pages/student-detail';
 
   let store = createStore(reducers);
-  const history = syncHistoryWithStore(browserHistory, store)
+  const history = syncHistoryWithStore(hashHistory, store);
 
   ReactDOM.render(
      <Provider store={store}>
@@ -291,7 +291,7 @@ export const reducers =  combineReducers({
 
 ```javascript
 import * as React from 'react'
-import { Link, browserHistory } from 'react-router'
+import { Link } from 'react-router'
 
 export const App = (props: { children? }) => {
   return (
@@ -390,7 +390,7 @@ import {actionsEnums} from '../../../common/actionsEnums';
 import {LoginEntity} from '../../../model/login';
 import {loginApi} from '../../../rest-api/loginApi';
 import {loginRequestCompletedAction} from './loginRequestCompleted';
-import { browserHistory } from 'react-router'
+import { hashHistory } from 'react-router';
 
 export const loginRequestStartedAction = (login : LoginEntity) => {
   return function(dispatcher) {
@@ -402,7 +402,7 @@ export const loginRequestStartedAction = (login : LoginEntity) => {
 
         // This is not ideal to have it here, maybe move it to middleware?
         if(data.succeeded == true) {
-          browserHistory.push('/student-list')
+          hashHistory.push('/student-list');
         }
       }
 
