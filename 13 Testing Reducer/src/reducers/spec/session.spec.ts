@@ -17,6 +17,8 @@ describe('sessionReducer', () => {
                               editingLogin : new LoginEntity()
                             };
 
+      deepFreeze(initialState);
+
       const userFullname = 'John Doe';
       const role = 'admin';
 

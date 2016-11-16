@@ -36,4 +36,83 @@ import {sessionReducer} from '../session'
 Now let's add a simple test
 
 ```javascript
+describe('sessionReducer', () => {
+  describe('#handlePerformLogin', () => {
+    it('Store successful login information in the store', () => {
+      // Arrange
+      const initialState = {  isUserLoggedIn : false,
+                              userProfile : new UserProfile(),
+                              editingLogin : new LoginEntity()
+                            };
+
+      const userFullname = 'John Doe';
+      const role = 'admin';
+
+      const action = {
+        type: actionsEnums.USERPROFILE_PERFORM_LOGIN,
+        payload: {
+          succeeded : true,
+          userProfile : {
+            fullname : userFullname,
+            role : role
+          }
+        }
+      };
+
+      // Act
+      const finalState = sessionReducer(initialState, action);
+
+      // Assert
+      expect(finalState).not.to.be.undefined;
+      expect(finalState.isUserLoggedIn).to.be.true;
+      expect(finalState.userProfile.fullname).to.be.equal(userFullname)
+      expect(finalState.userProfile.role).to.be.equal(role)
+    });
+  });
+});
 ```
+
+- A final check for this test, reducers should be immutable, we can check this
+in the unit tests by using deepfreeze library.
+
+```javascript
+describe('sessionReducer', () => {
+  describe('#handlePerformLogin', () => {
+    it('Store successful login information in the store', () => {
+      // Arrange
+      const initialState = {  isUserLoggedIn : false,
+                              userProfile : new UserProfile(),
+                              editingLogin : new LoginEntity()
+                            };
+
+      deepFreeze(initialState);
+
+      //(...)
+
+      // Assert
+      expect(finalState).not.to.be.undefined;
+      expect(finalState.isUserLoggedIn).to.be.true;
+      expect(finalState.userProfile.fullname).to.be.equal(userFullname)
+      expect(finalState.userProfile.role).to.be.equal(role)
+    });
+  });
+});
+```
+
+- Now if you want to run the test you can make it in two flavours:
+
+Just by executing the test once and using phantom browser (nice approach if you want
+to add it as part of a CI build, e.g. travis)
+
+```
+npm test
+```
+
+Keep it executing forever (rerun on any file change) and run it using a real browser
+(e.g. Chrome).
+
+```
+karma start
+```
+
+> you will probably need to install karma-cli as a global dependency
