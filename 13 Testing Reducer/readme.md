@@ -116,3 +116,8 @@ karma start
 ```
 
 > you will probably need to install karma-cli as a global dependency
+
+
+In the sample code you can find more a batter of unit tests implemented per reducer,
+you can check it out directly in the repository code (some of this unit tests
+detected bugs and they have been corrected as well on the main code).

@@ -42,5 +42,62 @@ describe('sessionReducer', () => {
       expect(finalState.userProfile.fullname).to.be.equal(userFullname)
       expect(finalState.userProfile.role).to.be.equal(role)
     });
+
+    it('Store failed login information in the store', () => {
+      // Arrange
+      const initialState = {  isUserLoggedIn : false,
+                              userProfile : null,
+                              editingLogin : null
+                            };
+
+      deepFreeze(initialState);
+
+
+      const action = {
+        type: actionsEnums.USERPROFILE_PERFORM_LOGIN,
+        payload: {
+          succeeded : false,
+          userProfile : null
+        }
+      };
+
+      // Act
+      const finalState = sessionReducer(initialState, action);
+
+      // Assert
+      expect(finalState).not.to.be.undefined;
+      expect(finalState.isUserLoggedIn).to.be.false;
+      expect(finalState.userProfile).to.be.equal(null)
+    });
+
+  });
+
+  describe('#handleUpdateEditingLogin', () => {
+    it('Update initial editingLogin information', () => {
+      // Arrange
+      const initialState = {  isUserLoggedIn : false,
+                              userProfile : new UserProfile(),
+                              editingLogin : new LoginEntity()
+                            };
+
+      deepFreeze(initialState);
+
+      const loginInfo = new LoginEntity();
+      loginInfo.login = "john";
+      loginInfo.password = "test";
+
+      const action = {
+        type: actionsEnums.USERPROFILE_UPDATE_EDITING_LOGIN,
+        payload: loginInfo
+      };
+
+      // Act
+      const finalState = sessionReducer(initialState, action);
+
+      // Assert
+      expect(finalState).not.to.be.undefined;
+      expect(finalState.editingLogin.login).to.be.equal(loginInfo.login);
+      expect(finalState.editingLogin.password).to.be.equal(loginInfo.password)
+    });
   });
 });
