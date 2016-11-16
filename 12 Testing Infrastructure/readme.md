@@ -38,13 +38,14 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 - *phantomjs-prebuilt*: browser with no UI (good to run the test in a CI machine).
 - *karma-phantomjs-launcher*: phantomjs support for karma
 - *object-assign-polyfill*: object assign polyfill for phantomjs.
+- *karma-mocha-reporter*: Friendly karma progress reporter.
 
 We will do that by running:
 
 ```
 npm install chai deep-freeze enzyme mocha json-loader sinon
 redux-mock-store karma karma-chai karma-chrome-launcher
-karma-mocha karma-sourcemap-loader karma-webpack
+karma-mocha karma-sourcemap-loader karma-webpack karma-mocha-reporter
 react-addons-test-utils phantomjs-prebuilt object-assign-polyfill --save-dev
 ```
 
@@ -138,7 +139,7 @@ module.exports = function (config) {
         noInfo: true
     },
 
-    reporters: ['progress'],
+    reporters: ['mocha'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
