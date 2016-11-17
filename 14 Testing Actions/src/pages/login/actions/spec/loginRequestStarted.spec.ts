@@ -10,6 +10,7 @@ import { loginRequestCompletedAction } from '../loginRequestCompleted'
 import { actionsEnums } from '../../../../common/actionsEnums'
 import { hashHistory } from 'react-router'
 
+
 const middlewares = [ ReduxThunk ];
 const mockStore = configureStore(middlewares);
 
@@ -37,20 +38,17 @@ describe('pages/login/loginRequestStarted Action', () => {
 
     const hashHistoryStub = sinon.stub(hashHistory, 'push');
 
-    //loginApi
 
     // Act
     const store = mockStore([]);
 
-    // Assert
     store.dispatch(loginRequestStartedAction(loginInfo))
       .then(() => {
+          // Assert
           expect(store.getActions()[0].type).to.be.equal(actionsEnums.USERPROFILE_PERFORM_LOGIN);
           expect(store.getActions()[0].payload.succeeded).to.be.true;
+          expect(hashHistoryStub.called).to.be.true;
           done();
-      });
-    ;
-
-
+      });    
   }).bind(this))
 });
