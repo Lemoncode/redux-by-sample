@@ -6,8 +6,8 @@ import {loginRequestCompletedAction} from '../loginRequestCompleted';
 
 describe('loginRequestCompleted', () => {
   describe('#loginRequestCompletedAction', () => {
-    it('should return action { type: USERPROFILE_PERFORM_LOGIN, payload: undefined } ' +
-    'when passing loginResponse equals undefined', () => {
+    it('When passing loginResponse equals undefined' +
+    'Should return action { type: USERPROFILE_PERFORM_LOGIN, payload: undefined }', () => {
       //Arrange
       let loginResponse = undefined;
 
@@ -19,8 +19,8 @@ describe('loginRequestCompleted', () => {
       expect(result.payload).toBeUndefined();
     });
 
-    it('should return action { type: USERPROFILE_PERFORM_LOGIN, payload: null } ' +
-    'when passing loginResponse equals null', () => {
+    it('When passing loginResponse equals null' +
+    'Should return action { type: USERPROFILE_PERFORM_LOGIN, payload: null }', () => {
       //Arrange
       let loginResponse = null;
 
@@ -32,8 +32,8 @@ describe('loginRequestCompleted', () => {
       expect(result.payload).toBeNull();
     });
 
-    it('should return action { type: USERPROFILE_PERFORM_LOGIN, payload: {succeeded: true} } ' +
-    'when passing loginResponse equals {succeeded: true}', () => {
+    it('When passing loginResponse equals {succeeded: true}' +
+    'Should return action { type: USERPROFILE_PERFORM_LOGIN, payload: {succeeded: true} }', () => {
       //Arrange
       let loginResponse = new LoginResponse();
       loginResponse.succeeded = true;
@@ -46,8 +46,8 @@ describe('loginRequestCompleted', () => {
       expect(result.payload.succeeded).toBeTruthy();
     });
 
-    it('should return action { type: USERPROFILE_PERFORM_LOGIN, payload: {userProfile: {fullname: "test"}} } ' +
-    'when passing loginResponse equals {userProfile: {fullname: "test"}}', () => {
+    it('When passing loginResponse equals {userProfile: {fullname: "test"}}' +
+    'Should return action { type: USERPROFILE_PERFORM_LOGIN, payload: {userProfile: {fullname: "test"}} }', () => {
       //Arrange
       let loginResponse = new LoginResponse();
       loginResponse.userProfile = new UserProfile();

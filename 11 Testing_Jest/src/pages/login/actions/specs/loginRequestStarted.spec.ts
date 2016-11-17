@@ -13,8 +13,8 @@ import {LoginResponse} from '../../../../model/loginResponse';
 
 describe('loginRequestStarted', () => {
   describe('#loginRequestStartedAction', () => {
-    it('should calls loginApi.login(loginEntity), hashHistory.push and dispatch loginRequestCompletedAction action ' +
-    'when passing loginEntity.login equals "test login" and expected LoginResponse.succeeded equals true', () => {
+    it('When passing loginEntity.login equals "test login" and expected LoginResponse.succeeded equals true ' +
+    'Should calls loginApi.login(loginEntity), hashHistory.push and dispatch loginRequestCompletedAction action', () => {
       //Arrange
       let loginEntity = new LoginEntity();
       loginEntity.login = "test login";
@@ -46,8 +46,8 @@ describe('loginRequestStarted', () => {
         });
     });
 
-    it('should calls loginApi.login(loginEntity) and dispatch loginRequestCompletedAction action ' +
-    'when passing loginEntity.login equals "test login" and expected LoginResponse.succeeded equals false', () => {
+    it('When passing loginEntity.login equals "test login" and expected LoginResponse.succeeded equals false' +
+    'Should calls loginApi.login(loginEntity) and dispatch loginRequestCompletedAction action', () => {
       //Arrange
       let loginEntity = new LoginEntity();
       loginEntity.login = "test login";
