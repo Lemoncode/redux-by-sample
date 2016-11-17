@@ -10,27 +10,27 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "typescript": "^2.0.3",
-    "webpack": "^1.13.2",
+    "typescript": "^2.0.7",
+    "webpack": "^1.13.3",
     "webpack-devserver": "0.0.6"
   },
   "dependencies": {
     "@types/object-assign": "^4.0.30",
-    "@types/react": "^0.14.43",
+    "@types/react": "^0.14.44",
     "@types/react-dom": "^0.14.18",
     "@types/react-redux": "^4.4.32",
     "@types/redux": "^3.6.31",
     "bootstrap": "^3.3.7",
     "css-loader": "^0.25.0",
     "file-loader": "^0.9.0",
-    "html-webpack-plugin": "^2.22.0",
+    "html-webpack-plugin": "^2.24.1",
     "object-assign": "^4.1.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",
     "redux": "^3.6.0",
     "style-loader": "^0.13.1",
-    "ts-loader": "^0.9.3",
+    "ts-loader": "^0.9.5",
     "url-loader": "^0.5.7"
   }
 }
