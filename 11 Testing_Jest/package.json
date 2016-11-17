@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --inline",
-    "test": "jest",
-    "test:watch": "jest --watchAll"
+    "test": "jest --verbose",
+    "test:watch": "jest --watchAll --verbose",
   },
   "author": "",
   "license": "ISC",
