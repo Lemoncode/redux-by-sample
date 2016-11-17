@@ -37,7 +37,7 @@ Let's start by installing the testing libraries:
 
 - Jest typings configuration to work with [jest global declarations](https://github.com/DefinitelyTyped/DefinitelyTyped/pull/11830):
 
-### tsconfig.json
+*tsconfig.json*
 ```javascript
 {
   "compilerOptions": {
@@ -59,7 +59,7 @@ NOTE:
 
 > --verbose Display individual test results with the test suite hierarchy.
 
-### package.json
+*package.json*
 ```javascript
 {
   ...
@@ -70,4 +70,131 @@ NOTE:
   }
   ...
 }
+```
+
+- Jest configuration:
+
+*package.json*
+```javascript
+{
+  ...
+  "jest": {
+    "testPathDirs": [
+      "<rootDir>/src/"
+    ],
+    "testRegex": "/specs/",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    ...
+  }
+}
+```
+
+- ts-jest configuration:
+
+*package.json*
+```javascript
+{
+  ...
+  "jest": {
+    ...
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    }
+  }
+}
+```
+
+## Adding tests
+
+Let's launch tests in watch mode:
+
+```
+npm run test:watch
+```
+
+- Adding unit tests support to the *loginRequestCompleted* action. We will implement a simple test, in the implemented sample code you can find a battery of unit tests already implemented.
+
+*./src/pages/login/actions/specs/loginRequestCompleted.spec.ts*
+```javascript
+import {actionsEnums} from '../../../../common/actionsEnums';
+import {LoginResponse} from '../../../../model/loginResponse';
+import {UserProfile} from '../../../../model/userProfile'
+import {loginRequestCompletedAction} from '../loginRequestCompleted';
+
+describe('loginRequestCompleted', () => {
+  describe('#loginRequestCompletedAction', () => {
+    it('When passing loginResponse equals {succeeded: true}' +
+    'Should return action { type: USERPROFILE_PERFORM_LOGIN, payload: {succeeded: true} }', () => {
+      //Arrange
+      let loginResponse = new LoginResponse();
+      loginResponse.succeeded = true;
+
+      //Act
+      var result = loginRequestCompletedAction(loginResponse);
+
+      //Assert
+      expect(result.type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
+      expect(result.payload.succeeded).toBeTruthy();
+    });
+  });
+});
+```
+
+- Now it's time to go for a case that has a greater level of completexity, we are going to test an async action (thunk) and we will have to mock dependencies (rest api), the action we are going to test is loginRequestStarted.
+
+*./src/pages/login/actions/specs/loginRequestStarted.spec.ts*
+```javascript
+import configureStore from 'redux-mock-store';
+import ReduxThunk from 'redux-thunk';
+const middlewares = [ ReduxThunk ];
+const mockStore = configureStore(middlewares);
+import {hashHistory} from 'react-router';
+
+import {loginRequestStartedAction} from '../loginRequestStarted';
+import {loginRequestCompletedAction} from '../loginRequestCompleted';
+import {loginApi} from '../../../../rest-api/loginApi';
+import {actionsEnums} from '../../../../common/actionsEnums';
+import {LoginEntity} from '../../../../model/login';
+import {LoginResponse} from '../../../../model/loginResponse';
+
+describe('loginRequestStarted', () => {
+  describe('#loginRequestStartedAction', () => {
+    it('When passing loginEntity.login equals "test login" and expected LoginResponse.succeeded equals true ' +
+    'Should calls loginApi.login(loginEntity), hashHistory.push and dispatch loginRequestCompletedAction action', () => {
+      //Arrange
+      let loginEntity = new LoginEntity();
+      loginEntity.login = "test login";
+
+      let expectedData = new LoginResponse();
+      expectedData.succeeded = true;
+
+      loginApi.login = jest.fn(() => {
+        return  {
+          then: callback => {
+            callback(expectedData);
+          }
+        };
+      });
+
+      hashHistory.push = jest.fn();
+
+      //Act
+      const store = mockStore([]);
+
+      store.dispatch(loginRequestStartedAction(loginEntity))
+        .then((data) => {
+          //Assert
+          expect(loginApi.login).toHaveBeenCalledWith(loginEntity);
+          expect(data).toBe(expectedData);
+          expect(store.getActions()[0].type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
+          expect(store.getActions()[0].payload).toBe(expectedData);
+          expect(hashHistory.push).toHaveBeenCalledWith('/student-list');
+        });
+    });
+  });
+});
 ```
