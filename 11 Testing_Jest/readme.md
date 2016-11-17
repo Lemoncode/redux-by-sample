@@ -32,6 +32,8 @@ Let's start by installing the testing libraries:
 - [ts-jest](https://github.com/kulshekhar/ts-jest): A preprocessor with sourcemap support to help use Typescript with Jest.
 - [@types/jest](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/jest/jest.d.ts): Typings for jest.
 - [@types/redux-mock-store](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/redux-mock-store/redux-mock-store.d.ts): Typings for redux-mock-store.
+- [deep-freeze](https://github.com/substack/deep-freeze): To ensure immutability of the reducers.
+- [@types/deep-freeze](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/deep-freeze/deep-freeze.d.ts): Typings for deep-freeze
 
 ## Configuration
 
@@ -108,7 +110,7 @@ NOTE:
 }
 ```
 
-## Adding tests
+## Adding action tests
 
 Let's launch tests in watch mode:
 
@@ -194,6 +196,86 @@ describe('loginRequestStarted', () => {
           expect(store.getActions()[0].payload).toBe(expectedData);
           expect(hashHistory.push).toHaveBeenCalledWith('/student-list');
         });
+    });
+  });
+});
+```
+
+## Adding reducer tests
+
+Now let's add a simple test
+
+*./src/reducers/specs/session.spec.ts*
+
+```javascript
+import * as deepFreeze from 'deep-freeze';
+import {actionsEnums} from '../../common/actionsEnums';
+import {UserProfile} from '../../model/userProfile';
+import {LoginEntity} from '../../model/login';
+import {sessionReducer} from '../session';
+
+describe('session', () => {
+  describe('#handlePerformLogin', () => {
+    it('When passing initialState with defaul values and an action type USERPROFILE_PERFORM_LOGIN with successful values. ' +
+    'Should returns new immutable SessionState with payload values', () => {
+      //Arrange
+      let initialState = {
+        isUserLoggedIn: false,
+        userProfile: new UserProfile(),
+        editingLogin: new LoginEntity()
+      };
+
+      let action = {
+        type: actionsEnums.USERPROFILE_PERFORM_LOGIN,
+        payload: {
+          succeeded: true,
+          userProfile: {
+            fullname: 'Jonh Doe',
+            role: 'admin'
+          },
+        }
+      };
+
+      //Act
+      let finalState = sessionReducer(initialState, action);
+
+      //Assert
+      expect(finalState.isUserLoggedIn).toBeTruthy();
+      expect(finalState.userProfile.fullname).toEqual("Jonh Doe");
+      expect(finalState.userProfile.role).toEqual("admin");
+      expect(finalState.editingLogin).toEqual(new LoginEntity());
+    });
+  });
+});
+```
+
+- A final check for this test, reducers should be immutable, we can check this in the unit tests by using deep-freeze:
+
+*./src/reducers/specs/session.spec.ts*
+
+```javascript
+import * as deepFreeze from 'deep-freeze';
+import {actionsEnums} from '../../common/actionsEnums';
+import {UserProfile} from '../../model/userProfile';
+import {LoginEntity} from '../../model/login';
+import {sessionReducer} from '../session';
+
+describe('session', () => {
+  describe('#handlePerformLogin', () => {
+    it('When passing initialState with defaul values and an action type USERPROFILE_PERFORM_LOGIN with successful values. ' +
+    'Should returns new immutable SessionState with payload values', () => {
+      //Arrange
+      let initialState = {
+        isUserLoggedIn: false,
+        userProfile: new UserProfile(),
+        editingLogin: new LoginEntity()
+      };
+
+      deepFreeze(initialState);
+
+      let action = {
+        type: actionsEnums.USERPROFILE_PERFORM_LOGIN,
+      ...
     });
   });
 });
