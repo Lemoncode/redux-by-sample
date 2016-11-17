@@ -49,6 +49,41 @@ describe('pages/login/loginRequestStarted Action', () => {
           expect(store.getActions()[0].payload.succeeded).to.be.true;
           expect(hashHistoryStub.called).to.be.true;
           done();
-      });    
-  }).bind(this))
+      });
+  }).bind(this));
+
+  it('loginRequest login failed', sinon.test((done) => {
+    // Arrange
+    const sinon : Sinon.SinonStatic = this;
+    const loginInfo : LoginEntity = new LoginEntity();
+    loginInfo.login = "john";
+    loginInfo.password = "pass";
+
+    const expectedLoginResponse = new LoginResponse();
+    expectedLoginResponse.succeeded = false;
+    expectedLoginResponse.userProfile = null;
+
+    const loginMethodStub = sinon.stub(loginApi, 'login');
+
+    loginMethodStub.returns({
+      then: callback => {
+        callback(expectedLoginResponse)
+      }
+    });
+
+    const hashHistoryStub = sinon.stub(hashHistory, 'push');
+
+
+    // Act
+    const store = mockStore([]);
+
+    store.dispatch(loginRequestStartedAction(loginInfo))
+      .then(() => {
+          // Assert
+          expect(store.getActions()[0].type).to.be.equal(actionsEnums.USERPROFILE_PERFORM_LOGIN);
+          expect(store.getActions()[0].payload.succeeded).to.be.false;
+          expect(hashHistoryStub.called).to.be.false;
+          done();
+      });
+  }).bind(this));
 });
