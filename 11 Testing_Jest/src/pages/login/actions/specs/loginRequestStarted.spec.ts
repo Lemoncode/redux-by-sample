@@ -1,4 +1,3 @@
-import {} from 'core-js';
 import configureStore from 'redux-mock-store';
 import ReduxThunk from 'redux-thunk';
 const middlewares = [ ReduxThunk ];
@@ -42,7 +41,7 @@ describe('loginRequestStarted', () => {
           expect(loginApi.login).toHaveBeenCalledWith(loginEntity);
           expect(data).toBe(expectedData);
           expect(store.getActions()[0].type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
-          expect(store.getActions()[0].payload).toBe(data);
+          expect(store.getActions()[0].payload).toBe(expectedData);
           expect(hashHistory.push).toHaveBeenCalledWith('/student-list');
         });
     });
@@ -75,7 +74,8 @@ describe('loginRequestStarted', () => {
           expect(loginApi.login).toHaveBeenCalledWith(loginEntity);
           expect(data).toBe(expectedData);
           expect(store.getActions()[0].type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
-          expect(store.getActions()[0].payload).toBe(data);
+          expect(store.getActions()[0].payload).toBe(expectedData);
+          expect(hashHistory.push).not.toHaveBeenCalled();
           expect(hashHistory.push).not.toHaveBeenCalledWith('/student-list');
         });
     });
