@@ -12,7 +12,7 @@ module.exports = {
 
   entry: [
     'webpack-dev-server/client?http://localhost:8080',
-    'webpack/hot/only-dev-server',    
+    'webpack/hot/only-dev-server',
     './main.tsx',
     '../node_modules/bootstrap/dist/css/bootstrap.css',
     '../node_modules/toastr/build/toastr.css',
@@ -62,7 +62,11 @@ module.exports = {
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'url?limit=10000&mimetype=image/svg+xml'
-      }
+      },
+      {
+          test: /sinon\.js$/,
+          loader: "imports?define=>false,require=>false"
+      }      
     ]
   },
   plugins: [

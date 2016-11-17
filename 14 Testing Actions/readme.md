@@ -66,5 +66,9 @@ describe('pages/login/loginRequestCompleted Action', () => {
 npm test
 ```
 
+- Now it's time to go for a case that has a greater level of completexity, we are going
+to test an async action (thunk) and we will have to mock dependencies (rest api),
+the action we are going to test is _loginRequestStarted_
+
 - We have added unit tests to all the actions implemented in the project, just
 download the repo and check have been implemented.
