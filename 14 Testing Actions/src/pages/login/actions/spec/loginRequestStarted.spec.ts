@@ -10,8 +10,6 @@ import { loginRequestCompletedAction } from '../loginRequestCompleted'
 import { actionsEnums } from '../../../../common/actionsEnums'
 import { hashHistory } from 'react-router'
 
-var sinon = window["sinon"];
-
 const middlewares = [ ReduxThunk ];
 const mockStore = configureStore(middlewares);
 

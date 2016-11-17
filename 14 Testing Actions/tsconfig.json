@@ -8,7 +8,7 @@
     "sourceMap": true,
     "noLib": false,
     "suppressImplicitAnyIndexErrors": true,
-    "types": ["sinon", "karma-chai-sinon"]
+    "types": ["karma-chai-sinon"]
   },
   "compileOnSave": false,
   "exclude": [
