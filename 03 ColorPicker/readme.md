@@ -106,34 +106,34 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
 
 - Let's create the needed `ColorPicker` components, plus subcomponents.
 
-_./src/colorslider.tsx_:
+  _./src/colorslider.tsx_:
 
   ```jsx
-  import * as React from 'react';
-  import {Color} from './model/color'
+  import * as React from "react";
+  import { Color } from "./model/color";
 
   interface Props {
-    value : number;
-    onValueUpdated : (newValue : number) => void;
+    value: number;
+    onValueUpdated: (newValue: number) => void;
   }
 
-  export const ColorSlider = (props : Props) => {
-
+  export const ColorSlider = (props: Props) => {
     return (
       <div>
-        <input type="range"
-               min="0"
-               max="255"
-               value={props.value}
-               onChange={(event : any) => props.onValueUpdated(event.target.value)}
+        <input
+          type="range"
+          min="0"
+          max="255"
+          value={props.value}
+          onChange={(event: any) => props.onValueUpdated(event.target.value)}
         />
         {props.value}
       </div>
     );
-  }
+  };
   ```
 
-_./src/colorpicker.tsx_:
+  _./src/colorpicker.tsx_:
 
   ```jsx
   import * as React from "react";
@@ -170,7 +170,7 @@ _./src/colorpicker.tsx_:
   };
   ```
 
-_./src/colordisplayer.tsx_:
+  _./src/colordisplayer.tsx_:
 
   ```jsx
   import * as React from "react";
