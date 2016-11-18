@@ -1,4 +1,4 @@
-import * as isEmail from 'validator/lib/isEmail';
+import {isEmail} from 'validator';
 import { FieldValidationResult } from 'lc-form-validation';
 
 // TODO: Harcoded strings and Id's isolate them in a config class
