@@ -51,6 +51,21 @@ Let's start by installing the testing libraries:
 }
 ```
 
+- Due to *react-test-renderer* doesn't have typings on *DefinitelyTyped*, we can use _allowJs_ flag and will make more JS-based inferences in .js files, so we can import library and get type information from js files.
+
+> Link to resource [How to create d.ts file](http://stackoverflow.com/questions/12687779/how-do-you-produce-a-d-ts-typings-definition-file-from-an-existing-javascript).
+
+*tsconfig.json*
+```javascript
+{
+  "compilerOptions": {
+  ...
+    "allowJs": true
+  },
+  ...
+}
+```
+
 - Jest test commands:
   - `npm test`: to single run
   - `npm run test:watch`: to run all specs after changes.
@@ -85,7 +100,7 @@ NOTE:
     "testPathDirs": [
       "<rootDir>/src/"
     ],
-    "testRegex": "/specs/",
+    "testRegex": "(/specs/.*|\\.spec)\\.(ts|tsx)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
