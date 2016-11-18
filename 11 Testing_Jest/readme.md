@@ -33,7 +33,8 @@ Let's start by installing the testing libraries:
 - [@types/jest](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/jest/jest.d.ts): Typings for jest.
 - [@types/redux-mock-store](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/redux-mock-store/redux-mock-store.d.ts): Typings for redux-mock-store.
 - [deep-freeze](https://github.com/substack/deep-freeze): To ensure immutability of the reducers.
-- [@types/deep-freeze](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/deep-freeze/deep-freeze.d.ts): Typings for deep-freeze
+- [@types/deep-freeze](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/deep-freeze/deep-freeze.d.ts): Typings for deep-freeze.
+- [react-test-renderer](https://www.npmjs.com/package/react-test-renderer)
 
 ## Configuration
 

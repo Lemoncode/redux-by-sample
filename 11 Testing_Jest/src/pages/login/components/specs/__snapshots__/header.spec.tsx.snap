@@ -1,0 +1,9 @@
+exports[`header #render renders correctly 1`] = `
+<div
+  className="panel-heading">
+  <h3
+    className="panel-title">
+    Please sign in (login: admin / pwd: test)
+  </h3>
+</div>
+`;
