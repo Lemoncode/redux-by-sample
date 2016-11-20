@@ -2,8 +2,7 @@
 
 In this sample we are going to setup the basic plumbing to "build" our project and launch it in a dev server.
 
-We won't install anything related with react or redux, just some basic plumbing, in sample 01 we will start by importing
-React and React-Dom
+We won't install anything related with react or redux, just some basic plumbing, in sample 01 we will start by importing React and React-Dom
 
 We will setup an initial npm project, give support to typescript, and install react.
 Then we will create a helloworld.ts sample.
@@ -56,7 +55,7 @@ our webpack configuration (handling css, typescript...).
 npm install css-loader style-loader file-loader url-loader html-webpack-plugin ts-loader --save -dev
 ```
 
-- In order to launch webpack-dev-server, modify the **package.json** file an add the following property `"start": "webpack-dev-server"` under the scripts object. It allows us to launch webpack from the command line through npm typing `npm start`.
+- In order to launch webpack-dev-server, modify the **package.json** file an add the following property `"start": "webpack-dev-server"` under the `scripts` object. This allows us to launch webpack from the command line through npm typing `npm start`.
 
 - Let's install locally typescript (version 2.0 or newer):
 
@@ -64,7 +63,7 @@ npm install css-loader style-loader file-loader url-loader html-webpack-plugin t
 npm install typescript --save-dev
 ```
 
-- We need as well to drop a _tsconfig.json_ file in the root folder of
+- We also need to create a _tsconfig.json_ file in the root folder of
 our project
 
 ```json
@@ -155,6 +154,8 @@ our project
  - Setup twitter bootstrap (including, fonts etc...).
  - Generating the build under a _dist_ folder.
 
+Create a file named `webpack.config.js` in the root directory with the following contents:
+
  ```javascript
  var path = require('path');
  var webpack = require('webpack');
@@ -228,3 +229,7 @@ our project
    ]
  }
  ```
+
+ Now you should be able to execute `npm start` and go to `http://localhost:8080/` and see the page working.
+ 
+ ![Boilerplate](../99 Readme Resources/00 Boilerplate.png)

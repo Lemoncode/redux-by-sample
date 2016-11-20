@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "declaration": false,
+    "noImplicitAny": false,
+    "jsx": "react",
+    "sourceMap": true,
+    "noLib": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "types": ["karma-chai-sinon"]    
+  },
+  "compileOnSave": false,
+  "exclude": [
+    "node_modules"
+  ]
+}

@@ -3,6 +3,7 @@ import { StudentDetailComponent } from './studentDetail';
 import { getStudentRequestStartAction } from './actions/getStudentRequestStart';
 import { studentFieldValueChangedStart } from './actions/studentFieldValueChangedStart';
 import { studentSaveRequestStart } from './actions/studentSaveRequestStart';
+import { StudentEntity } from '../../model/student';
 
 const mapStateToProps = (state) => {
     return {
@@ -13,7 +14,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getstudent: (id : number) => dispatch(getStudentRequestStartAction(id)),
-    saveStudent : (student : Student) => dispatch(studentSaveRequestStart(student)),
+    saveStudent : (student : StudentEntity) => dispatch(studentSaveRequestStart(student)),
     fireFieldValueChanged: (viewModel : any,
                             fieldName : string,
                             value : any) => dispatch(studentFieldValueChangedStart(viewModel, fieldName, value))

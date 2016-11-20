@@ -1,13 +1,13 @@
-import * as React from 'react';
-import {Color} from '../../model/color';
-import {ColorSlider} from './colorslider';
+import * as React from "react";
+import { Color } from "../../model/color";
+import { ColorSlider } from "./colorslider";
 
 interface Props {
-  color : Color;
-  onColorUpdated : (color : Color) => void;
+  color: Color;
+  onColorUpdated: (color: Color) => void;
 }
 
-export const ColorPicker = (props : Props) => {
+export const ColorPicker = (props: Props) => {
   return (
     <div>
       <ColorSlider
@@ -29,4 +29,4 @@ export const ColorPicker = (props : Props) => {
       />
     </div>
   );
-}
+};
