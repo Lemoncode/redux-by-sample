@@ -81,7 +81,7 @@ export const updateUserProfileName = (newName : string) => {
 }
 ```
 
-- Handle this action in the reducer, _./src/reducers/userProfile.tsx_. (Rename old userProfile.ts)
+- Handle this action in the reducer, `./src/reducers/userProfile.tsx`_. (Rename old _userProfile.ts_)
 
 ```javascript
 import {actionsEnums} from '../common/actionsEnums';
@@ -106,15 +106,13 @@ export const userProfileReducer =  (state : userProfileState = new userProfileSt
       return state;
 };
 
-
 const handleUserProfileAction = (state : userProfileState, action) => {
   const newState = objectAssign({}, state, {firstname: action.newName});
   return newState;
 }
 ```
 
-
-- Create a nameEditContainer component to wire it up.
+- Create a nameEditContainer component to wire it up. In `src/nameEditContainer.tsx`:
 
 ```javascript
 import { connect } from 'react-redux';
@@ -139,7 +137,7 @@ export const HelloWorldContainer = connect(
                                 )(NameEditComponent);
 ```
 
-- Let's create an _app_ component and instantiate in main.tsx
+- Let's create an _app_ component in `src/app.tsx`
 
 ```
 import * as React from 'react';
@@ -156,7 +154,7 @@ export const App = () => {
   );
 }
 ```
-
+And instantiate it in `main.tsx`
 ```
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
@@ -170,28 +168,6 @@ let store = createStore(reducers);
 ReactDOM.render(
    <Provider store={store}>
     <App/>
-   </Provider>
-  , document.getElementById('root'));
-```
-
-- Let's instantiate nameEditContainer, in _./src/main.tsx_
-
-```javascript
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import {reducers} from './reducers'
-import {HelloWorldContainer} from './helloWorldContainer';
-import {NameEditContainer} from './nameEditContainer';
-
-let store = createStore(reducers);
-
-ReactDOM.render(
-   <Provider store={store}>
-      <HelloWorldContainer/>
-      <br/>
-      <NameEditContainer/>
    </Provider>
   , document.getElementById('root'));
 ```
