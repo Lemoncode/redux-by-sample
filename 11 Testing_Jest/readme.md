@@ -52,7 +52,7 @@ Let's start by installing the testing libraries:
 }
 ```
 
-- Webpack-env typings configuration to work with global declarations:
+- Due to *react-test-renderer* doesn't have typings on *DefinitelyTyped*, we have to use webpack-env to require js lib. Webpack-env typings configuration to work with global declarations:
 
 *tsconfig.json*
 ```javascript
@@ -60,21 +60,6 @@ Let's start by installing the testing libraries:
   "compilerOptions": {
   ...
     "types": ["jest", "webpack-env"]
-  },
-  ...
-}
-```
-
-- Due to *react-test-renderer* doesn't have typings on *DefinitelyTyped*, we can use _allowJs_ flag and will make more JS-based inferences in .js files, so we can import library and get type information from js files.
-
-> Link to resource [How to create d.ts file](http://stackoverflow.com/questions/12687779/how-do-you-produce-a-d-ts-typings-definition-file-from-an-existing-javascript).
-
-*tsconfig.json*
-```javascript
-{
-  "compilerOptions": {
-  ...
-    "allowJs": true
   },
   ...
 }
@@ -309,4 +294,52 @@ describe('session', () => {
     });
   });
 });
+```
+
+## Adding reducer tests
+
+Now let's add a simple test
+
+*./src/pages/login/components/specs/header.spec.tsx*
+
+```javascript
+import * as React from 'react';
+const renderer: any = require('react-test-renderer');
+import {Header} from '../header';
+
+describe('header', () => {
+  describe('#render', () => {
+    it('renders correctly', () => {
+      //Arrange
+
+      //Act
+      const component = renderer.create(
+        <Header />
+      ).toJSON();
+
+      //Assert
+      expect(component).toMatchSnapshot();
+    });
+  });
+});
+```
+
+When we run this test, it creates a snapshot test file:
+
+Note:
+> We should include this file in repository so everybody can view this file in PR.
+
+*./src/pages/login/components/specs/__snapshots__/header.spec.tsx.snap*
+
+```
+exports[`header #render renders correctly 1`] = `
+<div
+  className="panel-heading">
+  <h3
+    className="panel-title">
+    Please sign in (login: admin / pwd: test)
+  </h3>
+</div>
+`;
+
 ```
