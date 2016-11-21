@@ -77,3 +77,8 @@ it('Should interact to the click on edit student and return as param 2 student I
    expect(onDivClicked.calledWith(student.id)).to.be.true;
 });
 ```
+
+- Now let's test _studentListContainer_
+
+```javascript
+```
