@@ -8,8 +8,7 @@
     "sourceMap": true,
     "noLib": false,
     "suppressImplicitAnyIndexErrors": true,
-    "types": ["jest"],
-    "allowJs": true
+    "types": ["jest", "webpack-env"]
   },
   "compileOnSave": false,
   "exclude": [

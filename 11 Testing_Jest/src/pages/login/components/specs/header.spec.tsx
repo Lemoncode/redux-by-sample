@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {create} from 'react-test-renderer';
+const renderer: any = require('react-test-renderer');
 import {Header} from '../header';
 
 describe('header', () => {
@@ -8,9 +8,8 @@ describe('header', () => {
       //Arrange
 
       //Act
-      const component = create(
-        <Header />,
-        undefined
+      const component = renderer.create(
+        <Header />
       ).toJSON();
 
       //Assert
