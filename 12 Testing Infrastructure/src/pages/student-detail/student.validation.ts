@@ -2,7 +2,7 @@ import { FieldValidationResult, BaseFormValidation } from 'lc-form-validation';
 import {requiredValidationHandler} from '../../common/validations/validators';
 import {emailValidationHandler} from '../../common/validations/email';
 
-class LoginFormValidation extends BaseFormValidation {
+class StudentFormValidation extends BaseFormValidation {
 
   public constructor() {
     super();
@@ -25,4 +25,4 @@ class LoginFormValidation extends BaseFormValidation {
   }
 }
 
-export const loginFormValidation = new LoginFormValidation();
+export const studentFormValidation = new StudentFormValidation();

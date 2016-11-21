@@ -3,7 +3,7 @@ import {StudentEntity} from '../../../model/student';
 import {studentApi} from '../../../rest-api/student-api';
 import {studentSaveRequestCompleted} from './studentSaveRequestCompleted';
 import {FormValidationResult} from 'lc-form-validation';
-import {loginFormValidation} from '../../login/login.validation';
+import {studentFormValidation} from '../student.validation';
 import * as toastr from 'toastr';
 
 export const studentSaveRequestStart = (student : StudentEntity) => {
@@ -26,7 +26,7 @@ export const studentSaveRequestStart = (student : StudentEntity) => {
   return function(dispatcher) {
     let promise = null;
 
-    loginFormValidation.validateForm(student).then(
+    studentFormValidation.validateForm(student).then(
       (formValidationResult : FormValidationResult) => {
           if(formValidationResult.succeeded === true) {
             saveStudent(dispatcher, student);
