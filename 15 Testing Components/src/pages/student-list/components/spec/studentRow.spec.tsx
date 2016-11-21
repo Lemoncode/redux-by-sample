@@ -28,7 +28,7 @@ describe('StudentRowComponent', () => {
      expect(studentRowWrapper.children().at(2).children().at(0).html()).to.be.equals('<span>john@mail.com</span>');
   });
 
-  it('Should interact to the click on edit student', () => {
+  it('Should interact to the click on edit student and return as param 2 student Id', () => {
      // Arrange
      const student = new StudentEntity();
      student.id = 2;
@@ -52,6 +52,6 @@ describe('StudentRowComponent', () => {
 
      // Assert
      expect(onDivClicked.calledOnce).to.be.true;
+     expect(onDivClicked.calledWith(student.id)).to.be.true;
   });
-
 });
