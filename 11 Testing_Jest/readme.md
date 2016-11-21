@@ -34,7 +34,8 @@ Let's start by installing the testing libraries:
 - [@types/redux-mock-store](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/redux-mock-store/redux-mock-store.d.ts): Typings for redux-mock-store.
 - [deep-freeze](https://github.com/substack/deep-freeze): To ensure immutability of the reducers.
 - [@types/deep-freeze](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/deep-freeze/deep-freeze.d.ts): Typings for deep-freeze.
-- [react-test-renderer](https://www.npmjs.com/package/react-test-renderer)
+- [react-test-renderer](https://www.npmjs.com/package/react-test-renderer): provides an experimental React renderer that can be used to render React components to pure JavaScript objects, without depending on the DOM or a native mobile environment.
+- [@types/webpack-env](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/webpack/webpack-env.d.ts): Typings to use require from webpack.
 
 ## Configuration
 
@@ -46,6 +47,19 @@ Let's start by installing the testing libraries:
   "compilerOptions": {
   ...
     "types": ["jest"]
+  },
+  ...
+}
+```
+
+- Webpack-env typings configuration to work with global declarations:
+
+*tsconfig.json*
+```javascript
+{
+  "compilerOptions": {
+  ...
+    "types": ["jest", "webpack-env"]
   },
   ...
 }
