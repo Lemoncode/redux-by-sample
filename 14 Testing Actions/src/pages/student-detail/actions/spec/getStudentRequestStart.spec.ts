@@ -15,7 +15,7 @@ const mockStore = configureStore(middlewares);
 describe('pages/login/getStudentRequestStart Action', () => {
   it('Student request succeeded', sinon.test((done) => {
     // Arrange
-    const sinon : Sinon.SinonStatic = this;
+    const sinon : sinon.SinonStatic = this;
     const studentId = 1;
 
     const student : StudentEntity = new StudentEntity();

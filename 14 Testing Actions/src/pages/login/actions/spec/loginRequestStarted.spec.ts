@@ -17,7 +17,7 @@ const mockStore = configureStore(middlewares);
 describe('pages/login/loginRequestStarted Action', () => {
   it('loginRequest login succeeded', sinon.test((done) => {
     // Arrange
-    const sinon : Sinon.SinonStatic = this;
+    const sinon : sinon.SinonStatic = this;
     const loginInfo : LoginEntity = new LoginEntity();
     loginInfo.login = "john";
     loginInfo.password = "pass";
@@ -54,7 +54,7 @@ describe('pages/login/loginRequestStarted Action', () => {
 
   it('loginRequest login failed', sinon.test((done) => {
     // Arrange
-    const sinon : Sinon.SinonStatic = this;
+    const sinon : sinon.SinonStatic = this;
     const loginInfo : LoginEntity = new LoginEntity();
     loginInfo.login = "john";
     loginInfo.password = "pass";
