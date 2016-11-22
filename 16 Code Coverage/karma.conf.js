@@ -23,16 +23,18 @@ module.exports = function (config) {
                   exclude: /node_modules/,
                   loaders: ['ts-loader']
               },
+              //Configuration required by enzyme
               {
-                   test: /\.(ts|tsx)/,
-                   exclude: /(node_modules|spec)/,
-                   loaders: ['istanbul-instrumenter','ts-loader']
-              },
-
-            //Configuration required by enzyme
+                  test: /\.json$/,
+                  loader: 'json'
+              }
+          ],
+          // https://www.npmjs.com/package/istanbul-instrumenter-loader
+          postLoaders: [
             {
-                test: /\.json$/,
-                loader: 'json'
+                 test: /\.(ts|tsx)/,
+                 exclude: /(node_modules|spec)/,
+                 loaders: ['istanbul-instrumenter','ts-loader']
             }
           ],
           //Configuration required to import sinon on spec.ts files
