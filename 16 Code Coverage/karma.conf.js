@@ -17,30 +17,29 @@ module.exports = function (config) {
       devtool: 'inline-source-map',
       module: {
           loaders: [
-
               {
                   test: /\.spec\.(ts|tsx)$/,
                   exclude: /node_modules/,
-                  loaders: ['ts-loader']
-              },
-              //Configuration required by enzyme
-              {
-                  test: /\.json$/,
-                  loader: 'json'
-              }
-          ],
-          // https://www.npmjs.com/package/istanbul-instrumenter-loader
-          postLoaders: [
+                  loader: 'ts-loader'
+            },
+            //Configuration required by enzyme
             {
-                 test: /\.(ts|tsx)/,
-                 exclude: /(node_modules|spec)/,
-                 loaders: ['istanbul-instrumenter','ts-loader']
+                test: /\.json$/,
+                loader: 'json'
             }
           ],
           //Configuration required to import sinon on spec.ts files
           noParse: [
               /node_modules(\\|\/)sinon/,
-          ]
+          ],
+          // https://www.npmjs.com/package/istanbul-instrumenter-loader
+          postLoaders: [
+            {
+                  test: /\.(ts|tsx)/,
+                  exclude: /(node_modules|spec)/,
+                  loaders: ['istanbul-instrumenter','ts-loader']
+            }
+          ],
       },
       resolve: {
           //Added .json extension required by cheerio (enzyme dependency)

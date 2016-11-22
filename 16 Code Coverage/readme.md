@@ -1,13 +1,14 @@
-# 15 Testing Components
+# 16 Code coverage
 
-This sample series takes as starting point _14 Testing Actions_
+This sample series takes as starting point _15 Testing Components_
 
-We will add unit testing to our components.
+We will add test coverage to our project.
 
 Summary:
 
-- Add a simple test to a presentational component.
-- Add a simple test to a container component.
+- Install the needed components.
+- Configure karma to generate the tests.
+- Create two karma configurations: simple and no coverage.
 
 # Prerequisites
 
@@ -17,68 +18,74 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 
 ## Steps to build it
 
--  Let's start by adding a simple test to _studentRow.tsx_ checking the the row is displaying the expected data
 
-_./src/pages/student-list/components/studentRow.tsx_
+- Let's start by installing _istanbul-instrumenter-loader_ and _karma-coverage_
 
-```javascript
-describe('StudentRowComponent', () => {
-  it('Should render a row with a given name and email', () => {
-     // Arrange
-     const student = new StudentEntity();
-     student.id = 2;
-     student.gotActiveTraining = true;
-     student.fullname = 'John Doe';
-     student.email = "john@mail.com";
+npm install karma-coverage istanbul-instrumenter-loader --save-dev
 
-     // Act
-     const studentRowWrapper = shallow(
-       <StudentRowComponent student={student} editStudent={()=>{}}/>
-     );
-
-     // Assert
-     expect(studentRowWrapper.type()).to.be.equals('tr');
-     expect(studentRowWrapper.children().at(0).type()).to.be.equals('td');
-     expect(studentRowWrapper.children().at(1).type()).to.be.equals('td');
-     expect(studentRowWrapper.children().at(1).children().at(0).html()).to.be.equals('<span>John Doe</span>');
-     expect(studentRowWrapper.children().at(2).type()).to.be.equals('td');
-     expect(studentRowWrapper.children().at(2).children().at(0).html()).to.be.equals('<span>john@mail.com</span>');
-  });
-});
-```
-
-- Now let's interact with the component, we want to check that clicking on the div calls the expected callback
+- in _karma.conf.js_ we need to update the pattern for the ts loader (just only specs),
+the we will add a postLoader that will traverse through all the ts files (it won't evaluate
+spec folders).
 
 ```javascript
-it('Should interact to the click on edit student and return as param 2 student Id', () => {
-   // Arrange
-   const student = new StudentEntity();
-   student.id = 2;
-   student.gotActiveTraining = true;
-   student.fullname = 'John Doe';
-   student.email = "john@mail.com";
-
-   const onDivClicked = sinon.spy();
-
-   // Act
-   const studentRowWrapper = shallow(
-     <StudentRowComponent student={student} editStudent={onDivClicked}/>
-   );
-
-   // Under this TD, first div is clickable
-   const tdContainingDivClickable = studentRowWrapper.children().at(3);
-
-   // Clikable DIV
-   const clickableDiv = tdContainingDivClickable.children().at(0);
-   clickableDiv.simulate('click');
-
-   // Assert
-   expect(onDivClicked.calledOnce).to.be.true;
-   expect(onDivClicked.calledWith(student.id)).to.be.true;
-});
+// https://www.npmjs.com/package/istanbul-instrumenter-loader
+          loaders: [
+              {
+                  test: /\.spec\.(ts|tsx)$/,
+                  exclude: /node_modules/,
+                  loader: 'ts-loader'
+            },
+            //Configuration required by enzyme
+            {
+                test: /\.json$/,
+                loader: 'json'
+            }
+          ],
+          //Configuration required to import sinon on spec.ts files
+          noParse: [
+              /node_modules(\\|\/)sinon/,
+          ],
+          // https://www.npmjs.com/package/istanbul-instrumenter-loader
+          postLoaders: [
+            {
+                  test: /\.(ts|tsx)/,
+                  exclude: /(node_modules|spec)/,
+                  loaders: ['istanbul-instrumenter','ts-loader']
+            }
+          ],
 ```
 
-- Now let's test _studentListContainer_
+The under reporters entry, let's add the following configuration:
 
 ```javascript
+  reporters: ['mocha', 'coverage'],
+  coverageReporter: {
+      type : 'html',
+      dir : 'coverage/'
+  },
 ```
+
+Now we need to extend our _testindex.js_ in order to include the
+all the ts files, regardless they are hit by the units tests or not.
+
+```javascript
+// require all modules ending in ".spec" from the
+// current directory and all subdirectories
+
+var testsContext = require.context("../src", true, /.spec$/);
+testsContext.keys().forEach(testsContext);
+
+// require all `project/src/components/**/index.js`
+const componentsContext = require.context('../src', true, /.ts$/);
+
+componentsContext.keys().forEach(componentsContext);
+```
+
+- Now let's give a try
+
+```
+npm start
+```
+
+- Once the test have been run check the _coverage_ folder you will find an html
+file that will show you the actual coverage of your tests.
