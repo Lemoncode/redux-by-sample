@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --inline",
-    "test": "jest --verbose",
+    "test": "jest --verbose --coverage --no-cache",
     "test:watch": "jest --watchAll --verbose"
   },
   "author": "",
@@ -68,6 +68,8 @@
     ],
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    }
+    },
+    "testResultsProcessor": "<rootDir>/node_modules/ts-jest/coverageprocessor.js",
+    "coverageDirectory": "<rootDir>/coverage"
   }
 }
