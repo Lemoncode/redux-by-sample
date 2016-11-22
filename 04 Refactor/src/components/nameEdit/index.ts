@@ -1,4 +1,4 @@
-import {NameEditContainer} from './nameEditContainer';
+import { NameEditContainer } from "./nameEditContainer";
 
 export {
   NameEditContainer
