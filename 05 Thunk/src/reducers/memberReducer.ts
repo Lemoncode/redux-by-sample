@@ -1,5 +1,4 @@
 import {actionsEnums} from '../common/actionsEnums';
-import {membersRequestCompleted} from '../actions/memberRequestCompleted';
 import {MemberEntity} from '../model/member';
 import objectAssign = require('object-assign');
 
