@@ -17,11 +17,18 @@ module.exports = function (config) {
       devtool: 'inline-source-map',
       module: {
           loaders: [
+
               {
-                  test: /\.(ts|tsx)$/,
+                  test: /\.spec\.(ts|tsx)$/,
                   exclude: /node_modules/,
-                  loaders: ['istanbul-instrumenter','ts-loader']
-            },
+                  loaders: ['ts-loader']
+              },
+              {
+                   test: /\.(ts|tsx)/,
+                   exclude: /(node_modules|spec)/,
+                   loaders: ['istanbul-instrumenter','ts-loader']
+              },
+
             //Configuration required by enzyme
             {
                 test: /\.json$/,
@@ -57,7 +64,8 @@ module.exports = function (config) {
 
     reporters: ['mocha', 'coverage'],
     coverageReporter: {
-            type: 'text'
+        type : 'html',
+        dir : 'coverage/'
     },
     port: 9876,
     colors: true,
