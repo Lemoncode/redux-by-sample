@@ -298,7 +298,7 @@ describe('session', () => {
 
 ## Adding reducer tests
 
-Now let's add a simple test
+- Now let's add a simple test
 
 *./src/pages/login/components/specs/header.spec.tsx*
 
@@ -341,5 +341,145 @@ exports[`header #render renders correctly 1`] = `
   </h3>
 </div>
 `;
+```
 
+- Let's continue by adding test to sutendtRow.tsx checking that the row is displaying the expected data:
+
+*./src/pages/student-list/components/specs/studentRow.spec.tsx*
+
+```javascript
+import * as React from 'react';
+const renderer: any = require('react-test-renderer');
+import {StudentRowComponent} from '../studentRow';
+import { StudentEntity } from '../../../../model/student';
+
+describe('StudentRowComponent', () => {
+  it('Should render a row with a given name and email', () => {
+    //Arrange
+    const student = new StudentEntity();
+    student.id = 2;
+    student.gotActiveTraining = true;
+    student.fullname = "John Doe";
+    student.email = "john@email.com";
+
+    //Act
+    const tree = renderer.create(
+      <StudentRowComponent
+        student={student}
+        editStudent={() => {}}
+       />
+    ).toJSON();
+
+    //Assert
+    expect(tree).toMatchSnapshot();
+  });
+});
+```
+
+Snapshot:
+
+*./src/pages/student-list/components/specs/__snapshots__/studentRow.spec.tsx.snap*
+
+```
+exports[`StudentRowComponent Should render a row with a given name and email 1`] = `
+<tr>
+  <td>
+    <span
+      aria-hidden="true"
+      className="glyphicon glyphicon-ok" />
+  </td>
+  <td>
+    <span>
+      John Doe
+    </span>
+  </td>
+  <td>
+    <span>
+      john@email.com
+    </span>
+  </td>
+  <td>
+    <div
+      onClick={[Function]}>
+      <span
+        aria-hidden="true"
+        className="glyphicon glyphicon-pencil" />
+    </div>
+    <span
+      aria-hidden="true"
+      className="glyphicon glyphicon-trash" />
+  </td>
+</tr>
+`;
+```
+
+- And simulating a click event:
+*./src/pages/student-list/components/specs/studentRow.spec.tsx*
+
+```javascript
+it('Should interact to the click on edit student and returns as param 2 student Id', () => {
+  //Arrange
+  const student = new StudentEntity();
+  student.id = 2;
+  student.gotActiveTraining = true;
+  student.fullname = "John Doe";
+  student.email = "john@email.com";
+
+  const onEditStudentMock = jest.fn();
+
+  //Act
+  const tree = renderer.create(
+    <StudentRowComponent
+      student={student}
+      editStudent={onEditStudentMock}
+     />
+  ).toJSON();
+
+  const tdContainingDivClickable = tree.children[3];
+  const divClickable = tdContainingDivClickable.children[0];
+
+  divClickable.props.onClick();
+
+  //Assert
+  expect(tree).toMatchSnapshot();
+  expect(onEditStudentMock).toHaveBeenCalled();
+  expect(onEditStudentMock).toHaveBeenCalledWith(student.id);
+});
+```
+
+Snapshot:
+
+*./src/pages/student-list/components/specs/__snapshots__/studentRow.spec.tsx.snap*
+
+```
+exports[`StudentRowComponent Should interact to the click on edit student and returns as param 2 student Id 1`] = `
+<tr>
+  <td>
+    <span
+      aria-hidden="true"
+      className="glyphicon glyphicon-ok" />
+  </td>
+  <td>
+    <span>
+      John Doe
+    </span>
+  </td>
+  <td>
+    <span>
+      john@email.com
+    </span>
+  </td>
+  <td>
+    <div
+      onClick={[Function]}>
+      <span
+        aria-hidden="true"
+        className="glyphicon glyphicon-pencil" />
+    </div>
+    <span
+      aria-hidden="true"
+      className="glyphicon glyphicon-trash" />
+  </td>
+</tr>
+`;
 ```
