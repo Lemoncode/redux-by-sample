@@ -7,12 +7,15 @@ var basePath = __dirname;
 module.exports = {
   context: path.join(basePath, "src"),
   resolve: {
-      extensions: ['', '.js', '.ts', '.tsx']
+      extensions: ['', '.js', '.ts', '.tsx'],
+      // Temporary workaround for React-Hot-Loading V1, til we migrate to 3
+      // https://github.com/gaearon/react-hot-loader/issues/417
+      alias: { 'react/lib/ReactMount': 'react-dom/lib/ReactMount' }
   },
 
   entry: [
     'webpack-dev-server/client?http://localhost:8080',
-    'webpack/hot/only-dev-server',    
+    'webpack/hot/only-dev-server',
     './main.tsx',
     '../node_modules/bootstrap/dist/css/bootstrap.css',
     '../node_modules/toastr/build/toastr.css',
