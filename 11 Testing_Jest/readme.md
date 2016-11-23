@@ -521,4 +521,45 @@ exports[`StudentRowComponent Should interact to the click on edit student and re
 
 ## Debugging Jest
 
-Jest is running over node 
+Jest is running over node, so we can't use, for example, PhantomJS like we are using in karma.
+Then, we have two alternatives to debugging jest:
+
+### Using VS Code
+
+As we know, VS Code provides by default a [node debugger](https://code.visualstudio.com/Docs/editor/debugging):
+
+- Adding debug launch.json in VS Code:
+
+ ![Debug VS Code](../99 Readme Resources/11 Testing_Jest/00 Adding debug launch.json in VS Code.png)
+
+ - Configuring launch.json to work with external node process:
+
+ *.vscode/launch.json*:
+
+ ```json
+ {
+   "version": "0.2.0",
+   "configurations": [
+     {
+       "name": "Attach to Jest Process",
+       "type": "node",
+       "request": "attach",
+       "processId": "${command.PickProcess}",
+       "port": 5858,
+       "sourceMaps": true,
+       "outDir": null
+     }
+   ]
+ }
+ ```
+
+- Run `npm run test:watch`.
+
+- Run VS Code debugger, selecting watch process:
+
+![Select watch process to debug](../99 Readme Resources/11 Testing_Jest/01 Select watch process to debug.png)
+
+- Now, it's important to put the special key `debugger` in our spec.ts (only for debugging, then remove it) because *jest*/*ts-jest* are
+generating ts files from sourcemaps instead of using original ts files to debug.
+
+![Debugging](../99 Readme Resources/11 Testing_Jest/02 Debugging.png)
