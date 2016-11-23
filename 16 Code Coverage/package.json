@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --inline",
-    "test": "karma start --browsers PhantomJS --single-run",
-    "test-coverage": "karma start karma.conf.ci.js --browsers PhantomJS --single-run"
+    "test": "karma start --browsers PhantomJS --single-run"
   },
   "author": "",
   "license": "ISC",
