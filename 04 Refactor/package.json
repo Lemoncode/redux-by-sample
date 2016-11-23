@@ -4,7 +4,9 @@
   "description": "In this sample we are going to setup the basic plumbing to \"build\" our project and launch it in a dev server.",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-devserver --inline",
+    "webpack": "webpack",
+    "start": "webpack-dev-server --inline",
+    "webpack": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -12,7 +14,7 @@
   "devDependencies": {
     "typescript": "^2.0.3",
     "webpack": "^1.13.2",
-    "webpack-devserver": "0.0.6"
+    "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
     "@types/object-assign": "^4.0.30",

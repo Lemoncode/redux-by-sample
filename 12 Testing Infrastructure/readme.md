@@ -27,6 +27,7 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 - **mocha**: Mocha is a feature-rich JavaScript test framework running on Node.js and in the browser, making asynchronous testing simple.
 - **redux-mock-store:** A mock store for testing your redux async action creators and middleware.
 - **sinon:** Standalone and test framework agnostic JavaScript test spies, stubs and mocks.
+- *sinon-chai*: extends Chai with assertions for the sinon.js mocking framework.
 - **json-loader: json loader for webpack.**
 - **karma:** test runner. A simple tool that allows you to execute JavaScript code in multiple real browsers.
 - **karma-chai:** chai plugin for karma.
@@ -34,11 +35,13 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 - **karma-mocha:** mocha plugin for karma.
 - **karma-sourcemap-loader:** add source map support to karma (debugging).
 - **karma-webpack:** webpack support for karma.
+- **karma-chai-sinon:** plugin for karma.
 - **react-addons-test-utils: makes it easy to test React components in the testing framework of your choice.**
 - *phantomjs-prebuilt*: browser with no UI (good to run the test in a CI machine).
 - *karma-phantomjs-launcher*: phantomjs support for karma
 - *object-assign-polyfill*: object assign polyfill for phantomjs.
 - *karma-mocha-reporter*: Friendly karma progress reporter.
+ 
 
 We will do that by running:
 
@@ -46,14 +49,29 @@ We will do that by running:
 npm install chai deep-freeze enzyme mocha json-loader sinon
 redux-mock-store karma karma-chai karma-chrome-launcher
 karma-mocha karma-sourcemap-loader karma-webpack karma-mocha-reporter
-react-addons-test-utils phantomjs-prebuilt object-assign-polyfill --save-dev
+react-addons-test-utils phantomjs-prebuilt object-assign-polyfill
+sinon-chai karma-sinon-chai --save-dev
 ```
 
 - Now let's install the needed typings:
 
 ```
 npm install @types/mocha @types/chai @types/deep-freeze
-@types/sinon @types/enzyme @types/redux-mock-store --save-dev
+@types/sinon @types/enzyme @types/redux-mock-store 
+@types/karma-chai-sinon
+--save-dev
+```
+
+- Let's add a new entry to our tsconfig file:
+
+_./tsconfig.json_
+
+```javascript
+{
+  "compilerOptions": {
+    // (...)
+    "types": ["karma-chai-sinon"]
+  },
 ```
 
 - We are going to do implement a little trick to compile all specs in the project in a single file and properly generate

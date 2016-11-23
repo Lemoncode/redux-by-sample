@@ -36,7 +36,7 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 npm install react react-dom redux react-redux --save
 ```
 
-- let's install typescript definitions for this libraries:
+- let's install typescript definitions for these libraries:
 
 ```
 npm install @types/react @types/react-dom @types/redux @types/react-redux --save
@@ -71,7 +71,7 @@ entry: [
 </html>
 ```
 
-- Create the react-dom entry point updating _./src/main.tsx_ to:
+- Create the react-dom entry point _main.tsx_ (and remove the old `main.ts`).
 
 ```
 import * as React from 'react';
@@ -94,7 +94,6 @@ export const HelloWorldComponent = (props : {userName : string}) => {
 }
 ```
 
-
 - Create a reducer (it will hold user name), path: _./src/reducers/userProfile.ts_.
 
 ```javascript
@@ -111,6 +110,7 @@ export const userProfileReducer =  (state : userProfileState = new userProfileSt
       return state;
 };
 ```
+
 - Let's create an index file under _./src/reducers/index.ts_ this file will
 combine all reducers references in the future.
 
@@ -125,7 +125,7 @@ export const reducers =  combineReducers({
 
 ```
 
-- Wire it up _main.tsx_.
+- Wire it up in the existing _main.tsx_.
 
 ```javascript
 import * as React from 'react';
@@ -143,7 +143,6 @@ ReactDOM.render(
    </Provider>
   , document.getElementById('root'));
 ```
-
 
 - Create a HelloworldContainer component and perform the connections, full path
 _./src/helloWorldContainer.ts_.
@@ -194,3 +193,5 @@ ReactDOM.render(
 ```
 npm start
 ```
+
+(![HelloRedux](../99 Readme Resources/01 HelloRedux.png))
