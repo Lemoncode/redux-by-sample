@@ -1,6 +1,6 @@
 # 04 Refactor
 
-This sample takes as starting point _03 Color Picker_
+This sample takes as starting point _03 ColorPicker_
 
 In this sample we will add a project structure refactor, organizing components
 in a better way.
@@ -16,7 +16,7 @@ Summary steps:
 
 # Prerequisites
 
-Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not already installed on your computer.
+Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are not already installed on your computer.
 
 > Verify that you are running at least node v6.x.x and npm 3.x.x by running `node -v` and `npm -v` in a terminal/console window. Older versions may produce errors.
 
