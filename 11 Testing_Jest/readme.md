@@ -561,5 +561,6 @@ As we know, VS Code provides by default a [node debugger](https://code.visualstu
 
 - Now, it's important to put the special key `debugger` in our spec.ts (only for debugging, then remove it) because *jest*/*ts-jest* are
 generating ts files from sourcemaps instead of using original ts files to debug.
+Then we can add breakpoints from VS Code:
 
 ![Debugging](../99 Readme Resources/11 Testing_Jest/02 Debugging.png)
