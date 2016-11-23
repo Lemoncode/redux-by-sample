@@ -9,6 +9,7 @@ In this sample we are going to add unit testing with Jest:
     - actions
     - reducers
     - components
+- We will add code coverage.
 
 Summary steps:
 - Add all the needed packages.
@@ -483,3 +484,41 @@ exports[`StudentRowComponent Should interact to the click on edit student and re
 </tr>
 `;
 ```
+
+## Code Coverage configuration
+
+- `--coverage`: to enable coverage.
+- `--no-cache`: disable cache to avoid issues with sourcemap.
+
+*package.json*
+```javascript
+{
+  ...
+  "scripts": {
+    ...
+    "test": "jest --verbose --coverage --no-cache",
+    "test:watch": "jest --watchAll --verbose --no-cache"
+  }
+  ...
+}
+```
+
+- Jest configuration:
+
+*package.json*
+```javascript
+{
+  ...
+  "jest": {
+    ...
+    "testResultsProcessor": "<rootDir>/node_modules/ts-jest/coverageprocessor.js",
+    "coverageDirectory": "<rootDir>/coverage"
+  }
+}
+```
+
+- Execute `npm test` to single run test with coverage.
+
+## Debugging Jest
+
+Jest is running over node 

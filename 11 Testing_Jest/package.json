@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --inline",
     "test": "jest --verbose --coverage --no-cache",
-    "test:watch": "jest --watchAll --verbose"
+    "test:watch": "jest --watchAll --verbose --no-cache"
   },
   "author": "",
   "license": "ISC",
