@@ -1,19 +1,21 @@
+import {actionsEnums} from "../common/actionsEnums";
+import {MemberEntity} from '../model/member';
 import {memberApi} from '../restApi/memberApi';
-import {membersRequestCompleted} from './memberRequestCompleted';
 
-export function memberRequest() {
+export const memberRequestCompleted = (members: MemberEntity[]) => {
+    return {
+        type: actionsEnums.MEMBER_REQUEST_COMPLETED,
+        members: members 
+    }
+}
 
-  // Invert control!
-  // Return a function that accepts `dispatch` so we can dispatch later.
-  // Thunk middleware knows how to turn thunk async actions into actions.
+export function memberRequest(){
+    return function(dispatcher){
+        const promise = memberApi.getAllMembers();
 
-  return function (dispatcher) {
-    const promise = memberApi.getAllMembers();
-
-    promise.then(
-      data => dispatcher(membersRequestCompleted(data))
-    );
-
-    return  promise;
-  };
+        promise.then(
+            (data) => dispatcher(memberRequestCompleted(data))
+        );
+        return promise;
+    }
 }

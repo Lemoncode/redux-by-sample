@@ -159,35 +159,43 @@ export const actionsEnums = {
 
 ```javascript
 import {actionsEnums} from "../common/actionsEnums";
+import {MemberEntity} from '../model/member';
 
-export const membersRequestCompleted = (members : any) => {
+export const membersRequestCompleted = (members : MemberEntity[]) => {
    return {
      type: actionsEnums.MEMBER_REQUEST_COMPLETED,
      members: members
    }
  }
 ```
-- Let's create an action that will trigger an async action.
+- Then we will add the action that will trigger an async action. We will do that at the same file:
 
 ```javascript
+import {actionsEnums} from "../common/actionsEnums";
+import {MemberEntity} from '../model/member';
 import {memberApi} from '../restApi/memberApi';
-import {membersRequestCompleted} from './memberRequestCompleted';
 
-export function memberRequest() {
+export const memberRequestCompleted = (members: MemberEntity[]) => {
+    return {
+        type: actionsEnums.MEMBER_REQUEST_COMPLETED,
+        members: members 
+    }
+}
+
+export function memberRequest(){
 
   // Invert control!
   // Return a function that accepts `dispatch` so we can dispatch later.
   // Thunk middleware knows how to turn thunk async actions into actions.
 
-  return function (dispatcher) {
-    const promise = memberApi.getAllMembers();
+    return function(dispatcher){
+        const promise = memberApi.getAllMembers();
 
-    promise.then(
-      data => dispatcher(membersRequestCompleted(data))
-    );
-
-    return  promise;
-  };
+        promise.then(
+            (data) => dispatcher(memberRequestCompleted(data))
+        );
+        return promise;
+    }
 }
 ```
 
@@ -195,7 +203,6 @@ export function memberRequest() {
 
 ```javascript
 import {actionsEnums} from '../common/actionsEnums';
-import {membersRequestCompleted} from '../actions/memberRequestCompleted';
 import {MemberEntity} from '../model/member';
 import objectAssign = require('object-assign');
 
@@ -271,22 +278,14 @@ export const MemberRow = (props: Props) => {
 ```javascript
 import * as React from 'react';
 import {MemberEntity} from '../../model/member';
-import {memberApi} from '../../restApi/memberApi';
 import {MemberRow} from './memberRow';
 
-interface Props extends React.Props<MembersTable> {
-  members : Array<MemberEntity>
+interface Props {
+    members: MemberEntity[];
 }
 
-export class MembersTable extends React.Component<Props, {}> {
-
-  constructor(props : Props){
-        super(props);
-  }
-
-   public render() {
-
-       return (
+export const MembersTable = (props: Props) => {
+    return (
         <div className="row">
           <h2> Members Page</h2>
           <table className="table">
@@ -305,15 +304,14 @@ export class MembersTable extends React.Component<Props, {}> {
             </thead>
             <tbody>
               {
-                this.props.members.map((member : MemberEntity) =>
-                  <MemberRow key={member.id} member = {member}/>
-                )
+                  props.members.map((member) =>
+                      <MemberRow key={member.id} member={member}/>
+                  )
               }
             </tbody>
           </table>
         </div>
-       );
-  }
+    );
 }
 ```
 
@@ -321,64 +319,63 @@ export class MembersTable extends React.Component<Props, {}> {
 
 ```javascript
 import * as React from 'react';
-import {MemberEntity} from '../../model/member';
-import {memberApi} from '../../restApi/memberApi';
 import {MembersTable} from './memberstable';
+import {MemberEntity} from '../../model/member'
 
 interface Props {
-  loadMembers : () => any;
-  members : Array<MemberEntity>;
+    loadMembers: () => any;
+    members: Array<MemberEntity>;
 }
 
 export class MembersArea extends React.Component<Props, {}> {
-
-  constructor(props : Props) {
+    constructor(props: Props){
         super(props);
-        this.state = {members: []};
-  }
 
-  onLoadMembers() {
-    this.props.loadMembers();
-  }
+        this.state = {members:[]};
+        
+    }
 
-  public render() {
-       return (
-         <div>
-            <MembersTable members={this.props.members}/>
-            <br/>
-            <input type="submit" value="Load" className="btn btn-default" onClick={this.onLoadMembers.bind(this)}/>
-         </div>
-       );
-  }
+    render(){
+     return (
+        <div>
+          <MembersTable members={this.props.members}/>
+          <br/>
+          <input type="submit"
+                 value="load"
+                 className="btn btn-default"
+                 onClick={() => this.props.loadMembers()}
+          />
+        </div>
+    );       
+    }
+
 }
 ```
 
 - Let's create a memberAreaContainer.
 
-```
+```javascript
 import { connect } from 'react-redux';
 import { memberRequest } from '../../actions/memberRequest';
 import { MembersArea } from './memberArea';
 
 
 const mapStateToProps = (state) => {
-    return {
-      members: state.memberReducer.members
-    }
+    return{
+        members: state.memberReducer.members
+    };
 }
-
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    loadMembers: () => {return dispatch(memberRequest())},
-  }
+    return {
+        loadMembers: () => {return dispatch(memberRequest())}
+    };
 }
 
-
-export const MembersPageContainer = connect(
-                                   mapStateToProps
-                                  ,mapDispatchToProps
-                                )(MembersArea)
+export const MembersAreaContainer = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(MembersArea)
 ```
 
 - Let's create an _./src/members/index.ts_
