@@ -1,4 +1,4 @@
-exports[`header #render renders correctly 1`] = `
+exports[`header #render renders as expected 1`] = `
 <div
   className="panel-heading">
   <h3
