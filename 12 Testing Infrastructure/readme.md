@@ -50,7 +50,7 @@ npm install chai deep-freeze enzyme mocha json-loader sinon
 redux-mock-store karma karma-chai karma-chrome-launcher
 karma-mocha karma-sourcemap-loader karma-webpack karma-mocha-reporter
 react-addons-test-utils phantomjs-prebuilt object-assign-polyfill
-sinon-chai karma-sinon-chai --save-dev
+sinon-chai karma-sinon-chai karma-phantomjs-launcher --save-dev
 ```
 
 - Now let's install the needed typings:
