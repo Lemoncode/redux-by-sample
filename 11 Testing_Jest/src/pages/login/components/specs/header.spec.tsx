@@ -8,12 +8,12 @@ describe('header', () => {
       //Arrange
 
       //Act
-      const component = renderer.create(
+      const tree = renderer.create(
         <Header />
       ).toJSON();
 
       //Assert
-      expect(component).toMatchSnapshot();
+      expect(tree).toMatchSnapshot();
     });
   });
 });
