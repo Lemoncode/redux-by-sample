@@ -11,73 +11,71 @@ import {actionsEnums} from '../../../../common/actionsEnums';
 import {LoginEntity} from '../../../../model/login';
 import {LoginResponse} from '../../../../model/loginResponse';
 
-describe('loginRequestStarted', () => {
-  describe('#loginRequestStartedAction', () => {
-    it('When passing loginEntity.login equals "test login" and expected LoginResponse.succeeded equals true. ' +
-    'Should calls loginApi.login(loginEntity), hashHistory.push and dispatch loginRequestCompletedAction action', () => {
-      //Arrange
-      let loginEntity = new LoginEntity();
-      loginEntity.login = "test login";
+describe('loginRequestStartedAction', () => {
+  it('When passing loginEntity.login equals "test login" and expected LoginResponse.succeeded equals true. ' +
+  'Should calls loginApi.login(loginEntity), hashHistory.push and dispatch loginRequestCompletedAction action', () => {
+    //Arrange
+    let loginEntity = new LoginEntity();
+    loginEntity.login = "test login";
 
-      let expectedData = new LoginResponse();
-      expectedData.succeeded = true;
+    let expectedData = new LoginResponse();
+    expectedData.succeeded = true;
 
-      loginApi.login = jest.fn(() => {
-        return  {
-          then: callback => {
-            callback(expectedData);
-          }
-        };
-      });
-
-      hashHistory.push = jest.fn();
-
-      //Act
-      const store = mockStore([]);
-
-      store.dispatch(loginRequestStartedAction(loginEntity))
-        .then((data) => {
-          //Assert
-          expect(loginApi.login).toHaveBeenCalledWith(loginEntity);
-          expect(data).toBe(expectedData);
-          expect(store.getActions()[0].type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
-          expect(store.getActions()[0].payload).toBe(expectedData);
-          expect(hashHistory.push).toHaveBeenCalledWith('/student-list');
-        });
+    loginApi.login = jest.fn(() => {
+      return  {
+        then: callback => {
+          callback(expectedData);
+        }
+      };
     });
 
-    it('When passing loginEntity.login equals "test login" and expected LoginResponse.succeeded equals fals. ' +
-    'Should calls loginApi.login(loginEntity) and dispatch loginRequestCompletedAction action', () => {
-      //Arrange
-      let loginEntity = new LoginEntity();
-      loginEntity.login = "test login";
+    hashHistory.push = jest.fn();
 
-      let expectedData = new LoginResponse();
-      expectedData.succeeded = false;
+    //Act
+    const store = mockStore([]);
 
-      loginApi.login = jest.fn(() => {
-        return  {
-          then: callback => {
-            callback(expectedData);
-          }
-        };
+    store.dispatch(loginRequestStartedAction(loginEntity))
+      .then((data) => {
+        //Assert
+        expect(loginApi.login).toHaveBeenCalledWith(loginEntity);
+        expect(data).toBe(expectedData);
+        expect(store.getActions()[0].type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
+        expect(store.getActions()[0].payload).toBe(expectedData);
+        expect(hashHistory.push).toHaveBeenCalledWith('/student-list');
       });
+  });
 
-      hashHistory.push = jest.fn();
+  it('When passing loginEntity.login equals "test login" and expected LoginResponse.succeeded equals fals. ' +
+  'Should calls loginApi.login(loginEntity) and dispatch loginRequestCompletedAction action', () => {
+    //Arrange
+    let loginEntity = new LoginEntity();
+    loginEntity.login = "test login";
 
-      //Act
-      const store = mockStore([]);
+    let expectedData = new LoginResponse();
+    expectedData.succeeded = false;
 
-      store.dispatch(loginRequestStartedAction(loginEntity))
-        .then((data) => {
-          //Assert
-          expect(loginApi.login).toHaveBeenCalledWith(loginEntity);
-          expect(data).toBe(expectedData);
-          expect(store.getActions()[0].type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
-          expect(store.getActions()[0].payload).toBe(expectedData);
-          expect(hashHistory.push).not.toHaveBeenCalled();
-          expect(hashHistory.push).not.toHaveBeenCalledWith('/student-list');
-        });
+    loginApi.login = jest.fn(() => {
+      return  {
+        then: callback => {
+          callback(expectedData);
+        }
+      };
     });
+
+    hashHistory.push = jest.fn();
+
+    //Act
+    const store = mockStore([]);
+
+    store.dispatch(loginRequestStartedAction(loginEntity))
+      .then((data) => {
+        //Assert
+        expect(loginApi.login).toHaveBeenCalledWith(loginEntity);
+        expect(data).toBe(expectedData);
+        expect(store.getActions()[0].type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
+        expect(store.getActions()[0].payload).toBe(expectedData);
+        expect(hashHistory.push).not.toHaveBeenCalled();
+        expect(hashHistory.push).not.toHaveBeenCalledWith('/student-list');
+      });
   });
 });

@@ -143,21 +143,19 @@ import {LoginResponse} from '../../../../model/loginResponse';
 import {UserProfile} from '../../../../model/userProfile'
 import {loginRequestCompletedAction} from '../loginRequestCompleted';
 
-describe('loginRequestCompleted', () => {
-  describe('#loginRequestCompletedAction', () => {
-    it('When passing loginResponse equals {succeeded: true}' +
-    'Should return action { type: USERPROFILE_PERFORM_LOGIN, payload: {succeeded: true} }', () => {
-      //Arrange
-      let loginResponse = new LoginResponse();
-      loginResponse.succeeded = true;
+describe('loginRequestCompletedAction', () => {
+  it('When passing loginResponse equals {succeeded: true}' +
+  'Should return action { type: USERPROFILE_PERFORM_LOGIN, payload: {succeeded: true} }', () => {
+    //Arrange
+    let loginResponse = new LoginResponse();
+    loginResponse.succeeded = true;
 
-      //Act
-      var result = loginRequestCompletedAction(loginResponse);
+    //Act
+    var result = loginRequestCompletedAction(loginResponse);
 
-      //Assert
-      expect(result.type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
-      expect(result.payload.succeeded).toBeTruthy();
-    });
+    //Assert
+    expect(result.type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
+    expect(result.payload.succeeded).toBeTruthy();
   });
 });
 ```
@@ -179,40 +177,38 @@ import {actionsEnums} from '../../../../common/actionsEnums';
 import {LoginEntity} from '../../../../model/login';
 import {LoginResponse} from '../../../../model/loginResponse';
 
-describe('loginRequestStarted', () => {
-  describe('#loginRequestStartedAction', () => {
-    it('When passing loginEntity.login equals "test login" and expected LoginResponse.succeeded equals true ' +
-    'Should calls loginApi.login(loginEntity), hashHistory.push and dispatch loginRequestCompletedAction action', () => {
-      //Arrange
-      let loginEntity = new LoginEntity();
-      loginEntity.login = "test login";
+describe('loginRequestStartedAction', () => {
+  it('When passing loginEntity.login equals "test login" and expected LoginResponse.succeeded equals true ' +
+  'Should calls loginApi.login(loginEntity), hashHistory.push and dispatch loginRequestCompletedAction action', () => {
+    //Arrange
+    let loginEntity = new LoginEntity();
+    loginEntity.login = "test login";
 
-      let expectedData = new LoginResponse();
-      expectedData.succeeded = true;
+    let expectedData = new LoginResponse();
+    expectedData.succeeded = true;
 
-      loginApi.login = jest.fn(() => {
-        return  {
-          then: callback => {
-            callback(expectedData);
-          }
-        };
-      });
-
-      hashHistory.push = jest.fn();
-
-      //Act
-      const store = mockStore([]);
-
-      store.dispatch(loginRequestStartedAction(loginEntity))
-        .then((data) => {
-          //Assert
-          expect(loginApi.login).toHaveBeenCalledWith(loginEntity);
-          expect(data).toBe(expectedData);
-          expect(store.getActions()[0].type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
-          expect(store.getActions()[0].payload).toBe(expectedData);
-          expect(hashHistory.push).toHaveBeenCalledWith('/student-list');
-        });
+    loginApi.login = jest.fn(() => {
+      return  {
+        then: callback => {
+          callback(expectedData);
+        }
+      };
     });
+
+    hashHistory.push = jest.fn();
+
+    //Act
+    const store = mockStore([]);
+
+    store.dispatch(loginRequestStartedAction(loginEntity))
+      .then((data) => {
+        //Assert
+        expect(loginApi.login).toHaveBeenCalledWith(loginEntity);
+        expect(data).toBe(expectedData);
+        expect(store.getActions()[0].type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
+        expect(store.getActions()[0].payload).toBe(expectedData);
+        expect(hashHistory.push).toHaveBeenCalledWith('/student-list');
+      });
   });
 });
 ```
@@ -310,7 +306,7 @@ import {Header} from '../header';
 
 describe('header', () => {
   describe('#render', () => {
-    it('renders correctly', () => {
+    it('renders as expected', () => {
       //Arrange
 
       //Act

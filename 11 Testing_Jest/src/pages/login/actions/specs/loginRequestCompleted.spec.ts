@@ -4,61 +4,59 @@ import {LoginResponse} from '../../../../model/loginResponse';
 import {UserProfile} from '../../../../model/userProfile'
 import {loginRequestCompletedAction} from '../loginRequestCompleted';
 
-describe('loginRequestCompleted', () => {
-  describe('#loginRequestCompletedAction', () => {
-    it('When passing loginResponse equals undefined. ' +
-    'Should returns action { type: USERPROFILE_PERFORM_LOGIN, payload: undefined }', () => {
-      //Arrange
-      let loginResponse = undefined;
+describe('loginRequestCompletedAction', () => {
+  it('When passing loginResponse equals undefined. ' +
+  'Should returns action { type: USERPROFILE_PERFORM_LOGIN, payload: undefined }', () => {
+    //Arrange
+    let loginResponse = undefined;
 
-      //Act
-      var result = loginRequestCompletedAction(loginResponse);
+    //Act
+    var result = loginRequestCompletedAction(loginResponse);
 
-      //Assert
-      expect(result.type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
-      expect(result.payload).toBeUndefined();
-    });
+    //Assert
+    expect(result.type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
+    expect(result.payload).toBeUndefined();
+  });
 
-    it('When passing loginResponse equals null. ' +
-    'Should returns action { type: USERPROFILE_PERFORM_LOGIN, payload: null }', () => {
-      //Arrange
-      let loginResponse = null;
+  it('When passing loginResponse equals null. ' +
+  'Should returns action { type: USERPROFILE_PERFORM_LOGIN, payload: null }', () => {
+    //Arrange
+    let loginResponse = null;
 
-      //Act
-      var result = loginRequestCompletedAction(loginResponse);
+    //Act
+    var result = loginRequestCompletedAction(loginResponse);
 
-      //Assert
-      expect(result.type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
-      expect(result.payload).toBeNull();
-    });
+    //Assert
+    expect(result.type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
+    expect(result.payload).toBeNull();
+  });
 
-    it('When passing loginResponse equals {succeeded: true}. ' +
-    'Should returns action { type: USERPROFILE_PERFORM_LOGIN, payload: {succeeded: true} }', () => {
-      //Arrange
-      let loginResponse = new LoginResponse();
-      loginResponse.succeeded = true;
+  it('When passing loginResponse equals {succeeded: true}. ' +
+  'Should returns action { type: USERPROFILE_PERFORM_LOGIN, payload: {succeeded: true} }', () => {
+    //Arrange
+    let loginResponse = new LoginResponse();
+    loginResponse.succeeded = true;
 
-      //Act
-      var result = loginRequestCompletedAction(loginResponse);
+    //Act
+    var result = loginRequestCompletedAction(loginResponse);
 
-      //Assert
-      expect(result.type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
-      expect(result.payload.succeeded).toBeTruthy();
-    });
+    //Assert
+    expect(result.type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
+    expect(result.payload.succeeded).toBeTruthy();
+  });
 
-    it('When passing loginResponse equals {userProfile: {fullname: "test"}}. ' +
-    'Should returns action { type: USERPROFILE_PERFORM_LOGIN, payload: {userProfile: {fullname: "test"}} }', () => {
-      //Arrange
-      let loginResponse = new LoginResponse();
-      loginResponse.userProfile = new UserProfile();
-      loginResponse.userProfile.fullname = "test";
+  it('When passing loginResponse equals {userProfile: {fullname: "test"}}. ' +
+  'Should returns action { type: USERPROFILE_PERFORM_LOGIN, payload: {userProfile: {fullname: "test"}} }', () => {
+    //Arrange
+    let loginResponse = new LoginResponse();
+    loginResponse.userProfile = new UserProfile();
+    loginResponse.userProfile.fullname = "test";
 
-      //Act
-      var result = loginRequestCompletedAction(loginResponse);
+    //Act
+    var result = loginRequestCompletedAction(loginResponse);
 
-      //Assert
-      expect(result.type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
-      expect(result.payload.userProfile.fullname).toEqual("test");
-    });
+    //Assert
+    expect(result.type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
+    expect(result.payload.userProfile.fullname).toEqual("test");
   });
 });

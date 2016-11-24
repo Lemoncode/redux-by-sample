@@ -4,7 +4,7 @@ import {Header} from '../header';
 
 describe('header', () => {
   describe('#render', () => {
-    it('renders correctly', () => {
+    it('renders as expected', () => {
       //Arrange
 
       //Act
