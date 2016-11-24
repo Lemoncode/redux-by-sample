@@ -2,19 +2,12 @@ import * as React from 'react';
 import {MemberEntity} from '../../model/member';
 import {MemberRow} from './memberRow';
 
-interface Props extends React.Props<MembersTable> {
-  members : Array<MemberEntity>
+interface Props {
+    members: MemberEntity[];
 }
 
-export class MembersTable extends React.Component<Props, {}> {
-
-  constructor(props : Props){
-        super(props);
-  }
-
-   public render() {
-
-       return (
+export const MembersTable = (props: Props) => {
+    return (
         <div className="row">
           <h2> Members Page</h2>
           <table className="table">
@@ -33,13 +26,12 @@ export class MembersTable extends React.Component<Props, {}> {
             </thead>
             <tbody>
               {
-                this.props.members.map((member : MemberEntity) =>
-                  <MemberRow key={member.id} member = {member}/>
-                )
+                  props.members.map((member: MemberEntity) =>
+                      <MemberRow key={member.id} member={member}/>
+                  )
               }
             </tbody>
           </table>
         </div>
-       );
-  }
+    );
 }

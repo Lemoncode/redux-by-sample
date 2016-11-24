@@ -6,7 +6,7 @@ import {MembersAreaContainer} from './components/members';
 
 export const App = () => {
   return (
-    <div>
+    <div className="container">
       <MembersAreaContainer/>
       <br/>
       <HelloWorldContainer/>
