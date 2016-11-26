@@ -1,19 +1,21 @@
-import * as React from 'react';
-import {StudentEntity} from '../../../model/student';
+import * as React from "react";
+import { StudentEntity } from "../../../model/student";
 
 interface Props {
-  student : StudentEntity;
+  student: StudentEntity;
 }
 
-export const StudentRowComponent = (props : Props) => {
+export const StudentRowComponent = (props: Props) => {
   return (
     <tr>
       <td>
-       {(props.student.gotActiveTraining)
-        ?
-        <span className="glyphicon glyphicon-ok" aria-hidden="true"></span>
-        :
-        null}
+        {
+          (props.student.gotActiveTraining)
+          ?
+          <span className="glyphicon glyphicon-ok" aria-hidden="true" />
+          :
+          null
+        }
       </td>
       <td>
         <span>{props.student.fullname}</span>
@@ -22,10 +24,9 @@ export const StudentRowComponent = (props : Props) => {
         <span>{props.student.email}</span>
       </td>
       <td>
-        <span className="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-        <span className="glyphicon glyphicon-trash" aria-hidden="true"></span>
+        <span className="glyphicon glyphicon-pencil" aria-hidden="true" />
+        <span className="glyphicon glyphicon-trash" aria-hidden="true" />
       </td>
-
     </tr>
   );
-}
+};
