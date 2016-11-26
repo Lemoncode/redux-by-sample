@@ -11,7 +11,7 @@ interface Props {
 export const Form = (props: Props) => {
   return (
     <div className="panel-body">
-      <form role="form">
+      <form role="form" onSubmit={(e) => {e.preventDefault(); props.performLogin();}}>
         <fieldset>
           <div className="form-group">
             <input className="form-control" placeholder="E-mail" name="email" type="text"
