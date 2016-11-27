@@ -1,18 +1,18 @@
-import {actionsEnums} from '../../../common/actionsEnums';
-import {StudentEntity} from '../../../model/student';
-import {studentApi} from '../../../rest-api/student-api';
-import {studentSaveRequestCompleted} from './studentSaveRequestCompleted';
+import { actionsEnums } from "../../../common/actionsEnums";
+import { StudentEntity } from "../../../model/student";
+import { studentApi } from "../../../rest-api/student-api";
+import { getStudentRequestCompletedAction } from "./getStudentRequestCompleted";
 
-export const studentSaveRequestStart = (student : StudentEntity) => {
+export const studentSaveRequestStart = (studentId: number) => {
   return function(dispatcher) {
-    const promise = studentApi.saveStudent(student);
+    const promise = studentApi.getStudentById(studentId);
 
     promise.then(
-      succeeded => {
-        dispatcher(studentSaveRequestCompleted(succeeded));
+      data => {
+        dispatcher(getStudentRequestCompletedAction(data));
       }
     );
 
     return promise;
-  }
-}
+  };
+};
