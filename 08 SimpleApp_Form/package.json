@@ -4,7 +4,8 @@
   "description": "In this sample we are going to setup the basic plumbing to \"build\" our project and launch it in a dev server.",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-devserver --inline",
+    "start": "webpack-dev-server --inline",
+    "webpack": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -12,8 +13,8 @@
   "devDependencies": {
     "@types/redux-thunk": "^2.1.31",
     "typescript": "^2.0.3",
-    "webpack": "^1.13.2",
-    "webpack-devserver": "0.0.6"
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
     "@types/core-js": "^0.9.34",
