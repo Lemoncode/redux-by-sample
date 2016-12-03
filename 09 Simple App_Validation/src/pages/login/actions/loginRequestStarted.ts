@@ -14,7 +14,7 @@ export const loginRequestStartedAction = (login : LoginEntity) => {
 
         // This is not ideal to have it here, maybe move it to middleware?
         if(data.succeeded == true) {
-          hashHistory.push('/student-list')
+          hashHistory.push('/student-list');
         }
       }
 

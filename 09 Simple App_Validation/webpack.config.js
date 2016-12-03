@@ -9,7 +9,6 @@ module.exports = {
   resolve: {
       extensions: ['', '.js', '.ts', '.tsx']
   },
-
   entry: [
     './main.tsx',
     '../node_modules/bootstrap/dist/css/bootstrap.css',
@@ -25,7 +24,7 @@ module.exports = {
   devServer: {
        contentBase: './dist', //Content base
        inline: true, //Enable watch and live reload
-       host: 'localhost',       
+       host: 'localhost',
        port: 8080,
        stats: 'errors-only'
   },

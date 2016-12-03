@@ -1,8 +1,9 @@
+import { Promise } from "es6-promise";
 import { FieldValidationResult, BaseFormValidation } from "lc-form-validation";
 import { requiredValidationHandler } from "../../common/validations/validators";
 import { emailValidationHandler } from "../../common/validations/email";
 
-class StudentFormValidation extends BaseFormValidation {
+class LoginFormValidation extends BaseFormValidation {
 
   public constructor() {
     super();
@@ -24,4 +25,4 @@ class StudentFormValidation extends BaseFormValidation {
   }
 }
 
-export const studentFormValidation = new StudentFormValidation();
+export const loginFormValidation = new LoginFormValidation();

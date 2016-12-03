@@ -1,24 +1,11 @@
-import { actionsEnums } from '../../../common/actionsEnums';
-import { FieldValidationResult } from 'lc-form-validation';
+import { actionsEnums } from "../../../common/actionsEnums";
 
-interface IStudentFieldValueChangedCompletedPayload {
-  fieldName : string;
-  value : any;
-  fieldValidationResult : FieldValidationResult;
-}
-
-const studentFieldValueChangedCompleted = (fieldName : string, value : string, fieldValidationResult : FieldValidationResult) => {
+export const studentFieldValueChangedCompleted = (fieldName: string, value: string) => {
   return {
     type: actionsEnums.STUDENT_FIELD_VALUE_CHANGED_COMPLETED,
     payload: {
-      fieldName,
-      value,
-      fieldValidationResult
-    } as IStudentFieldValueChangedCompletedPayload
-  }
-}
-
-export {
-  IStudentFieldValueChangedCompletedPayload,
-  studentFieldValueChangedCompleted
-}
+      fieldName : fieldName,
+      value : value
+    }
+  };
+};

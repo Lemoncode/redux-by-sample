@@ -4,9 +4,10 @@ interface Props {
   name: string;
   label: string;
   onChange: any;
+  onBlur?: any;
   placeholder?: string;
   value: string;
-  error?: string;
+  error: string;
 }
 
 export class Input extends React.Component<Props, {}> {
@@ -21,7 +22,9 @@ export class Input extends React.Component<Props, {}> {
     }
     return (
       <div className={wrapperClass}>
-        <label htmlFor={this.props.name}>{this.props.label}</label>
+        <label htmlFor={this.props.name}>
+          {this.props.label}
+        </label>
         <div className="field">
           <input type="text"
             name={this.props.name}
@@ -30,8 +33,11 @@ export class Input extends React.Component<Props, {}> {
             ref={this.props.name}
             value={this.props.value}
             onChange={this.props.onChange}
+            onBlur={this.props.onBlur}
           />
-          <div className="input">{this.props.error}</div>
+          <div className="input">
+            {this.props.error}
+          </div>
         </div>
       </div>
     );
