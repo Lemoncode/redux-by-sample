@@ -471,19 +471,32 @@ already made validations
 
 - Let's define an lc-form-validation email validator
 
-  _./src/common/validations/email.ts_
+  _./src/common/validationsEnums.ts_:
+
+  ```javascript
+  export const validationsEnums = {
+    EMAIL: {
+      NOT_VALID: {
+        TYPE: "EMAIL_NOT_VALID",
+        MESSAGE: "Not a valid email",
+      }
+    },
+  };
+  ```
+
+  _./src/common/validations/email.ts_:
 
   ```javascript
   import * as isEmail from "validator/lib/isEmail";
   import { FieldValidationResult } from "lc-form-validation";
+  import { validationsEnums } from "../common/validationsEnums";
 
-  // TODO: Harcoded strings and Id"s isolate them in a config class
   export const emailValidationHandler = (vm: any, value: any): FieldValidationResult => {
     const isFieldValidEmail: boolean = isEmail(value);
-    const errorInfo: string = (isFieldValidEmail) ? "" : "Not a valid email";
+    const errorInfo: string = (isFieldValidEmail) ? "" : validationsEnums.EMAIL.NOT_VALID.MESSAGE;
 
     const fieldValidationResult: FieldValidationResult = new FieldValidationResult();
-    fieldValidationResult.type = "EMAIL_NOT_VALID";
+    fieldValidationResult.type = validationsEnums.EMAIL.NOT_VALID.TYPE;
     fieldValidationResult.succeeded = isFieldValidEmail;
     fieldValidationResult.errorMessage = errorInfo;
 
