@@ -22,9 +22,12 @@ export class Input extends React.Component<Props, {}> {
     }
     return (
       <div className={wrapperClass}>
-        <label htmlFor={this.props.name}>{this.props.label}</label>
+        <label htmlFor={this.props.name}>
+          {this.props.label}
+        </label>
         <div className="field">
-          <input type="text"
+          <input
+            type="text"
             name={this.props.name}
             className="form-control"
             placeholder={this.props.placeholder}

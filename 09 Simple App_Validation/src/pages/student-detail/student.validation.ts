@@ -19,6 +19,11 @@ class StudentFormValidation extends BaseFormValidation {
 
     this._validationEngine.addFieldValidation(
       "email",
+      requiredValidationHandler,
+    );
+
+    this._validationEngine.addFieldValidation(
+      "email",
       emailValidationHandler,
     );
   }

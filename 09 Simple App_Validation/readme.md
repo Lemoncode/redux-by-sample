@@ -172,17 +172,16 @@ inline errors.
 
 - Now it's time to update the action UI input update actions, start:
 
-  _./src/actions/studentFieldValueChangedStart.ts_
+  _./src/pages/student-detail/actions/studentFieldValueChangedStart.ts_
 
   ```javascript
+  import { studentFormValidation } from "../student.validation";
   import { studentFieldValueChangedCompleted } from "./studentFieldValueChangedCompleted";
-  import { FieldValidationResult } from "lc-form-validation";
-  import { loginFormValidation } from "../pages/login/login.validation";
 
-  export function studentFieldValueChangedStart(viewModel: any, fieldName: string, value: any, event?: any) {
+  export function studentFieldValueChangedStart(viewModel: any, fieldName: string, value: any) {
     return (dispatcher) => {
-      loginFormValidation.validateField(viewModel, fieldName, value, event).then(
-        (fieldValidationResult: FieldValidationResult) => dispatcher(studentFieldValueChangedCompleted(fieldName, value, fieldValidationResult ))
+      studentFormValidation.validateField(viewModel, fieldName, value, event).then(
+        dispatcher(studentFieldValueChangedCompleted(fieldName, value ))
       );
     };
   }
@@ -191,7 +190,7 @@ inline errors.
 
 - Completed
 
-_./src/actions/studentFieldValueChangedCompleted.ts_
+  _./src/actions/studentFieldValueChangedCompleted.ts_
 
   ```javascript
   import { actionsEnums } from "../../../common/actionsEnums";
