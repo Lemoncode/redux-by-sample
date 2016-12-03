@@ -1,5 +1,5 @@
 import { StudentErrors } from "../model/studentErrors";
-import { IStudentFieldValueChangedCompletedPayload } from "../actions/studentFieldValueChangedCompleted";
+import { IStudentFieldValueChangedCompletedPayload } from "../pages/student-detail/actions/studentFieldValueChangedCompleted";
 
 import { actionsEnums } from "../common/actionsEnums";
 import objectAssign = require("object-assign");
