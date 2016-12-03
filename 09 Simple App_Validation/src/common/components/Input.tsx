@@ -4,6 +4,7 @@ interface Props {
   name: string;
   label: string;
   onChange: any;
+  onBlur?: any;
   placeholder?: string;
   value: string;
   error?: string;
@@ -30,8 +31,11 @@ export class Input extends React.Component<Props, {}> {
             ref={this.props.name}
             value={this.props.value}
             onChange={this.props.onChange}
+            onBlur={this.props.onBlur}
           />
-          <div className="input">{this.props.error}</div>
+          <div className="input">
+            {this.props.error}
+          </div>
         </div>
       </div>
     );

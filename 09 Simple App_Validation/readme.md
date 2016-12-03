@@ -131,7 +131,7 @@ inline errors.
     onBlur?: any;
     placeholder?: string;
     value: string;
-    error: string;
+    error?: string;
   }
 
   export class Input extends React.Component<Props, {}> {
