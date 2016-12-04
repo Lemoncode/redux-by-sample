@@ -25,7 +25,7 @@ module.exports = {
   devServer: {
        contentBase: './dist', //Content base
        inline: true, //Enable watch and live reload
-       host: 'localhost',       
+       host: 'localhost',
        port: 8080,
        stats: 'errors-only'
   },

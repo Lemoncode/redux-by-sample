@@ -1,5 +1,5 @@
 import {actionsEnums} from '../common/actionsEnums';
-import {} from 'core-js'
+import objectAssign = require('object-assign');
 import {UserProfile} from '../model/userProfile';
 import {LoginResponse} from '../model/loginResponse';
 import {LoginEntity} from '../model/login';
@@ -31,11 +31,11 @@ export const sessionReducer =  (state : SessionState = new SessionState(), actio
 
 
 const handlePerformLogin = (state : SessionState, payload : LoginResponse) => {
-  const newState = Object.assign({}, state, {isUserLoggedIn: payload.succeeded, userProfile: payload.userProfile});
+  const newState = objectAssign({}, state, {isUserLoggedIn: payload.succeeded, userProfile: payload.userProfile});
   return newState;
 }
 
 const handleUpdateEditingLogin = (state: SessionState, payload : LoginEntity) => {
-  const newState = Object.assign({}, state, {editingLogin: payload});
+  const newState = objectAssign({}, state, {editingLogin: payload});
   return newState;
 }
