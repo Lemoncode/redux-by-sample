@@ -3,7 +3,6 @@ import { Input } from "../../../common/components/Input";
 import { StudentEntity } from "../../../model/student";
 import { StudentErrors } from "../../../model/studentErrors";
 
-
 interface Props {
   student: StudentEntity;
   errors: StudentErrors;
@@ -12,6 +11,7 @@ interface Props {
 }
 
 export const StudentForm = (props: Props) => {
+
   const updateStudentFromUI = (event) => {
     let field = event.target.name;
     let value = event.target.value;

@@ -9,7 +9,7 @@ import * as toastr from "toastr";
 
 export const studentSaveRequestStart = (student: StudentEntity) => {
 
-  const saveStudent = (dispatcher, student: StudentEntity) : Promise<boolean> => {
+  const saveStudent = (dispatcher, student: StudentEntity): Promise<boolean> => {
     const promise = studentApi.saveStudent(student);
 
     promise.then(

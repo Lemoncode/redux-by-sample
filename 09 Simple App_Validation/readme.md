@@ -53,7 +53,7 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
 - We will define reusable field validations under common folder (we will start by adding a
   required validation).
 
-_./src/common/validations/validators.ts_
+  _./src/common/validations/validators.ts_
 
   ```javascript
   import { FieldValidationResult } from "lc-form-validation";
@@ -73,7 +73,7 @@ _./src/common/validations/validators.ts_
 
   ```
 
-> By using this isolated functions, is quite easy to add unit test support to them without
+  > By using this isolated functions, is quite easy to add unit test support to them without
 getting involved the UI.
 
 - Let's define the login form validation in our project (let's make user and email mandatory fields)
@@ -119,7 +119,7 @@ we will create a validations file. And install `es6-promise` package module:
 - Let's update the generic input control that will take care of handling user input plus displaying
 inline errors.
 
-  _./src/common/input.tsx_
+  _./src/common/components/Input.tsx_
 
   ```jsx
   import * as React from "react";
@@ -150,7 +150,8 @@ inline errors.
             {this.props.label}
           </label>
           <div className="field">
-            <input type="text"
+            <input
+              type="text"
               name={this.props.name}
               className="form-control"
               placeholder={this.props.placeholder}
@@ -175,15 +176,15 @@ inline errors.
   _./src/pages/student-detail/actions/studentFieldValueChangedStart.ts_
 
   ```javascript
-  import { studentFormValidation } from "../student.validation";
-  import { FieldValidationResult } from "lc-form-validation";
   import { studentFieldValueChangedCompleted } from "./studentFieldValueChangedCompleted";
+  import { FieldValidationResult } from "lc-form-validation";
+  import { loginFormValidation} from "../../login/login.validation";
 
   export function studentFieldValueChangedStart(viewModel: any, fieldName: string, value: any, event?: any) {
+
     return (dispatcher) => {
-      studentFormValidation.validateField(viewModel, fieldName, value, event).then(
-        (fieldValidationResult: FieldValidationResult) =>
-          dispatcher(studentFieldValueChangedCompleted(fieldName, value, fieldValidationResult ))
+      loginFormValidation.validateField(viewModel, fieldName, value, event).then(
+        (fieldValidationResult: FieldValidationResult) => dispatcher(studentFieldValueChangedCompleted(fieldName, value, fieldValidationResult ))
       );
     };
   }
@@ -272,7 +273,7 @@ inline errors.
     // ...
   }
 
-  export const StudentForm = (props : Props) => {
+  export const StudentForm = (props: Props) => {
     // (...)
     return (
       // (...)
@@ -292,8 +293,9 @@ inline errors.
         error={(props.errors.email) ? props.errors.email.errorMessage : ""}
       />
       // (...)
-    )
-  }
+    );
+  };
+
   ```
 
   _./src/pages/student-detail/studentDetail.tsx_
@@ -370,7 +372,6 @@ let's display a toast indicating that the form contains errors.
   ```javascript
   import { FieldValidationResult, BaseFormValidation } from "lc-form-validation";
   import { requiredValidationHandler } from "../../common/validations/validators";
-  import { emailValidationHandler } from "../../common/validations/email";
 
   class StudentFormValidation extends BaseFormValidation {
 
@@ -395,9 +396,7 @@ let's display a toast indicating that the form contains errors.
   }
 
   export const studentFormValidation = new StudentFormValidation();
-
   ```
-
 
   _./src/pages/student-detail/actions/studentSaveRequestStart.ts_:
 
@@ -413,7 +412,7 @@ let's display a toast indicating that the form contains errors.
 
   export const studentSaveRequestStart = (student: StudentEntity) => {
 
-    const saveStudent = (dispatcher, student: StudentEntity) : Promise<boolean> => {
+    const saveStudent = (dispatcher, student: StudentEntity): Promise<boolean> => {
       const promise = studentApi.saveStudent(student);
 
       promise.then(
@@ -466,7 +465,7 @@ the email validation into the _lc-form-validation_ library.
   npm install @types/validator --save-dev
   ```
 
-> Is expected that lc-form-validation will incorporate in it's library a set of
+  > Is expected that lc-form-validation will incorporate in it's library a set of
 already made validations
 
 
@@ -506,9 +505,20 @@ already made validations
 
   ```
 
-- Let's add this validation to the login form.
+- Let's add this validation to the login form and student detail form.
 
   _./src/pages/login/login.validation.ts_
+
+  ```javascript
+  import { emailValidationHandler } from "../../common/validations/email";
+  // ...
+  this._validationEngine.addFieldValidation(
+    "email",
+    emailValidationHandler,
+  );
+  ```
+
+  _./src/pages/student-detail/student.validation.ts_
 
   ```javascript
   import { emailValidationHandler } from "../../common/validations/email";
