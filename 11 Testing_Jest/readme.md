@@ -30,13 +30,19 @@ Let's start by installing the testing libraries:
 
 - [jest](https://github.com/facebook/jest): JavaScript Testing library with runner, assertion, mocks, etc.
 - [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store): A mock store for testing your redux async action creators and middleware.
+- [deep-freeze](https://github.com/substack/deep-freeze): To ensure immutability of the reducers.
+- [react-test-renderer](https://www.npmjs.com/package/react-test-renderer): provides an experimental React renderer that can be used to render React components to pure JavaScript objects, without depending on the DOM or a native mobile environment.
 - [ts-jest](https://github.com/kulshekhar/ts-jest): A preprocessor with sourcemap support to help use Typescript with Jest.
 - [@types/jest](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/jest/jest.d.ts): Typings for jest.
 - [@types/redux-mock-store](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/redux-mock-store/redux-mock-store.d.ts): Typings for redux-mock-store.
-- [deep-freeze](https://github.com/substack/deep-freeze): To ensure immutability of the reducers.
 - [@types/deep-freeze](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/deep-freeze/deep-freeze.d.ts): Typings for deep-freeze.
-- [react-test-renderer](https://www.npmjs.com/package/react-test-renderer): provides an experimental React renderer that can be used to render React components to pure JavaScript objects, without depending on the DOM or a native mobile environment.
 - [@types/webpack-env](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/webpack/webpack-env.d.ts): Typings to use require from webpack.
+
+  ```bash
+  npm install --save-dev jest @types/jest ts-jest deep-freeze @types/deep-freeze redux-mock-store @types/redux-mock-store
+  npm install --save-dev @types/webpack-env 
+  npm install --save-dev react-test-renderer 
+  ```
 
 ## Configuration
 
