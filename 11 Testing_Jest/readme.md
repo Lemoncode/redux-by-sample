@@ -39,7 +39,9 @@ Let's start by installing the testing libraries:
 - [@types/webpack-env](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/webpack/webpack-env.d.ts): Typings to use require from webpack.
 
   ```bash
-  npm install --save-dev jest @types/jest ts-jest deep-freeze @types/deep-freeze redux-mock-store @types/redux-mock-store
+  npm install --save-dev jest @types/jest ts-jest 
+  npm install --save-dev deep-freeze @types/deep-freeze 
+  npm install --save-dev redux-mock-store @types/redux-mock-store
   npm install --save-dev @types/webpack-env 
   npm install --save-dev react-test-renderer 
   ```
