@@ -73,7 +73,7 @@ let store = createStore(
 );
 ```
 
-- Let's create an entity under _./src/model/member.ts
+- Let's create an entity under _./src/model/member.ts_
 
 ```javascript
 export class MemberEntity {
