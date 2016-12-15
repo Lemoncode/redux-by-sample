@@ -362,27 +362,27 @@ export class MembersArea extends React.Component<Props, {}> {
 _./src/components/members/memberAreaContainer.ts_
 
 ```javascript
-import { connect } from 'react-redux';
-import { memberRequest } from '../../actions/memberRequest';
-import { MembersArea } from './memberArea';
-
+import { connect } from "react-redux";
+import { memberRequest } from "../../actions/memberRequest";
+import { MembersArea } from "./memberArea";
 
 const mapStateToProps = (state) => {
-    return{
-        members: state.memberReducer.members
-    };
+  return {
+    members: state.memberReducer.members
+  };
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        loadMembers: () => {return dispatch(memberRequest())}
-    };
+  return {
+    loadMembers: () => {return dispatch(memberRequest())}
+  };
 }
 
 export const MembersAreaContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps,
 )(MembersArea)
+
 ```
 
 - Let's create an _./src/components/members/index.ts_
@@ -398,12 +398,13 @@ export {
 
 - Let's instantiate it on _app.tsx_
 
-```javascript
-import * as React from 'react';
-import {HelloWorldContainer} from './components/helloworld'
-import {NameEditContainer} from './components/nameEdit';
-import {ColorDisplayerContainer, ColorPickerContainer} from './components/color';
-import {MembersAreaContainer} from './components/members';
+```jsx
+import * as React from "react";
+import { MembersAreaContainer } from './components/members';
+import { HelloWorldContainer } from "./components/helloworld";
+import { NameEditContainer } from "./components/nameEdit";
+import { ColorDisplayerContainer } from "./components/color";
+import { ColorPickerContainer } from "./components/color";
 
 export const App = () => {
   return (
@@ -419,11 +420,12 @@ export const App = () => {
       <ColorPickerContainer/>
     </div>
   );
-}
+};
+
 ```
 
 - Let's give a try.
 
-```javascript
+```shell
 npm start
 ```
