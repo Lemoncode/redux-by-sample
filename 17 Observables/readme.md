@@ -2,7 +2,7 @@
 
 This sample takes as starting point _04 Refactor_
 
-Let's play with async calls and middleware (redux thunk).
+Let's play with async calls and epic middleware (redux observables).
 
 In this sample we are going to display a table, the data will
 be retrieve from github api.
@@ -20,6 +20,10 @@ Summary steps:
 - Let's create a memberArea component (include a load button).
 - Let's create a memberAreaContainer.
 
+Additional step:
+
+- Let's define two new actions (ajax-with-delay and cancel).
+
 # Prerequisites
 
 Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are not already installed on your computer.
@@ -28,13 +32,19 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
 
 ## Steps to build it
 
+- Copy the content from _04 Refactor_ and execute:
+
+  ```bash
+  npm install
+  ```
+
 - We have to install libraries and typescript definitions to handle fetch calls: redux-observable, rx and rxjs
 
 ```bash
-npm install --save-dev redux-observable rx rxjs @reactivex/rxjs @types/rx @types/es6-shim
+npm install --save-dev redux-observable rx rxjs @types/rx @types/es6-shim
 ```
 
-- Let's register a Redux Epic Middleware in _./src/store.ts_:
+- Let's register a Redux Epic Middleware in _./src/store.ts_
 
 ```javascript
 import { createStore, applyMiddleware, compose } from "redux";
@@ -87,9 +97,7 @@ export class MemberEntity {
 }
 ```
 
-- Let's create an epic to access this data, under
-
-_./src/epics/fetchMembersEpic.ts_
+- Let's create an epic to access this data, under _./src/epics/fetchMembersEpic.ts_
 
 ```javascript
 import 'rxjs';
@@ -101,7 +109,7 @@ import { } from "rxjs/add/operator/mergeMap";
 import { } from "rxjs/add/operator/map";
 
 import { actionsEnums } from "../common/actionsEnums";
-import { memberRequestCompleted } from "../actions/memberRequest";
+import { memberRequestCompleted } from "../actions/";
 import { memberAPI } from "../restApi/memberApi";
 
 // the dollar symbol in the action$ param is just a convention
@@ -117,7 +125,17 @@ export const fetchMembersEpic = action$ =>
 
 ```
 
-- Let's create a rest api class to access this data with rxjs-observable-ajax, under _./src/restApi/memberApi_
+_./src/epics/index.ts_
+
+```javascript
+import { combineEpics } from "redux-observable";
+
+import { fetchMembersEpic } from "./fetchMembersEpic";
+
+export const rootEpic = combineEpics(fetchMembersEpic);
+```
+
+- Let's create a rest api class to access this data with rxjs-observable-ajax, under _./src/restApi/memberApi.ts_
 
 ```javascript
 import { ajax } from "rxjs/observable/dom/ajax";
@@ -135,7 +153,7 @@ class MemberAPI {
 export const memberAPI = new MemberAPI();
 ```
 
-- Update _./src/actions/memberRequest.ts_:
+- Create _./src/actions/memberRequest.ts_
 
 ```javascript
 import { actionsEnums } from "../common/actionsEnums";
@@ -159,7 +177,7 @@ export const actionsEnums = {
 
 ```
 
-- Let's create an *simple* action that will inform members once completed in _./src/actions/membersRequestCompleted.ts:
+- Let's create an *simple* action that will inform members once completed in _./src/actions/memberRequestCompleted.ts_
 
 ```javascript
 import { actionsEnums } from "../common/actionsEnums";
@@ -186,36 +204,36 @@ export { memberRequest, memberRequestCompleted };
 
 - Let's add a new reducer that will hold members state
 
-_./src/reducers/memberReducer.ts_.
+_./src/reducers/memberReducer.ts_
 
 ```javascript
-import {actionsEnums} from '../common/actionsEnums';
-import {MemberEntity} from '../model/member';
-import objectAssign = require('object-assign');
+import { actionsEnums } from "../common/actionsEnums";
+import { MemberEntity } from "../model/member";
+import objectAssign = require("object-assign");
 
 class memberState  {
-  members : MemberEntity[];
+  members: MemberEntity[];
 
-  public constructor()
-  {
+  public constructor() {
     this.members = [];
   }
 }
 
-export const memberReducer =  (state : memberState = new memberState(), action) => {
-      switch (action.type) {
-        case actionsEnums.MEMBER_REQUEST_COMPLETED:
-           return handleMemberRequestCompletedAction(state, action);
-      }
+export const memberReducer =  (state: memberState = new memberState(), action) => {
+  switch (action.type) {
+    case actionsEnums.MEMBER_REQUEST_COMPLETED:
+      return handleMemberRequestCompletedAction(state, action);
+  }
 
-      return state;
+  return state;
 };
 
 
-const handleMemberRequestCompletedAction = (state : memberState, action) => {
+const handleMemberRequestCompletedAction = (state: memberState, action) => {
   const newState = objectAssign({}, state, {members: action.members});
   return newState;
 }
+
 ```
 
 - Let's register it _./src/reducers/index.ts_
@@ -225,121 +243,123 @@ import { combineReducers } from 'redux';
 import { userProfileReducer } from './userProfile';
 import { memberReducer } from './memberReducer';
 
-
 export const reducers =  combineReducers({
   userProfileReducer,
   memberReducer,
 });
 ```
 
-- Let's create a memberRow component _./src/components/members/memberrow.tsx_.
+- Let's create a `memberRow` component _./src/components/members/memberRow.tsx_
 
-```javascript
-import * as React from 'react';
-import {MemberEntity} from '../../model/member';
-
+```jsx
+import * as React from "react";
+import { MemberEntity } from "../../model/member";
 
 interface Props  {
-  member : MemberEntity;
+  member: MemberEntity;
 }
 
 export const MemberRow = (props: Props) => {
-     return (
-       <tr>
-         <td>
-           <img src={props.member.avatar_url} className="avatar"/>
-         </td>
-         <td>
-           <span>{props.member.id}</span>
-         </td>
-         <td>
-           <span>{props.member.login}</span>
-         </td>
-       </tr>
-     );
+  return (
+    <tr>
+      <td>
+        <img src={props.member.avatar_url} className="avatar"/>
+      </td>
+      <td>
+       <span>{props.member.id}</span>
+      </td>
+      <td>
+        <span>{props.member.login}</span>
+      </td>
+    </tr>
+  );
 }
+
 ```
 
-- Let's create a memberTable component under _./src/components/members/membertable.tsx_.
+- Let's create a memberTable component under _./src/components/members/memberTable.tsx_
 
-```javascript
-import * as React from 'react';
-import {MemberEntity} from '../../model/member';
-import {MemberRow} from './memberRow';
+```jsx
+import * as React from "react";
+import { MemberEntity } from "../../model/member";
+import { MemberRow } from "./memberRow";
 
 interface Props {
-    members: MemberEntity[];
+  members: MemberEntity[];
 }
 
 export const MembersTable = (props: Props) => {
-    return (
-        <div className="row">
-          <h2> Members Page</h2>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>
-                  Avatar
-                </th>
-                <th>
-                  Id
-                </th>
-                <th>
-                  Name
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                  props.members.map((member) =>
-                      <MemberRow key={member.id} member={member}/>
-                  )
-              }
-            </tbody>
-          </table>
-        </div>
-    );
+  return (
+    <div className="row">
+      <h2> Members Page</h2>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>
+              Avatar
+            </th>
+            <th>
+              Id
+            </th>
+            <th>
+              Name
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            props.members.map((member) =>
+              <MemberRow key={member.id} member={member}/>
+            )
+          }
+        </tbody>
+      </table>
+    </div>
+  );
 }
+
 ```
 
-- Let's create a memberArea component (include a load button).
+- Let's create a memberArea component (include a load button) in _./src/components/members/memberArea.tsx_
 
-```javascript
+```jsx
 import * as React from 'react';
-import {MembersTable} from './memberstable';
-import {MemberEntity} from '../../model/member'
+import { MembersTable } from './memberTable';
+import { MemberEntity } from '../../model/member'
 
 interface Props {
-    loadMembers: () => any;
-    members: Array<MemberEntity>;
+  loadMembers: () => any;
+  members: Array<MemberEntity>;
 }
 
 export class MembersArea extends React.Component<Props, {}> {
-    constructor(props: Props){
-        super(props);
+  constructor(props: Props){
+    super(props);
 
-        this.state = {members:[]};
+    this.state = {members:[]};
+  }
 
-    }
-
-    render(){
-     return (
-        <div>
-          <MembersTable members={this.props.members}/>
-          <br/>
-          <input type="submit"
-                 value="load"
-                 className="btn btn-default"
-                 onClick={() => this.props.loadMembers()}
-          />
-        </div>
-    );       
-    }
-
+  render(){
+    return (
+      <div>
+        <MembersTable members={this.props.members}/>
+        <br/>
+        <input
+          type="submit"
+          value="load"
+          className="btn btn-default"
+          onClick={() => this.props.loadMembers()}
+        />
+      </div>
+    );
+  }
 }
+
 ```
 
 - Let's create a memberAreaContainer.
+
+_./src/components/members/memberAreaContainer.ts_
 
 ```javascript
 import { connect } from 'react-redux';
@@ -368,11 +388,12 @@ export const MembersAreaContainer = connect(
 - Let's create an _./src/components/members/index.ts_
 
 ```javascript
-import {MembersAreaContainer} from './memberAreaContainer';
+import { MembersAreaContainer } from './memberAreaContainer';
 
 export {
   MembersAreaContainer
 }
+
 ```
 
 - Let's instantiate it on _app.tsx_

@@ -7,7 +7,7 @@ import { } from "rxjs/add/operator/mergeMap";
 import { } from "rxjs/add/operator/map";
 
 import { actionsEnums } from "../common/actionsEnums";
-import { memberRequest, memberRequestCompleted } from "../actions/";
+import { memberRequestCompleted } from "../actions/";
 import { memberAPI } from "../restApi/memberApi";
 
 // the dollar symbol in the action$ param is just a convention

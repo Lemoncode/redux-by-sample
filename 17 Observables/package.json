@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@reactivex/rxjs": "^5.0.1",
+    "@types/es6-shim": "^0.31.32",
     "@types/rx": "^2.5.34",
     "redux-observable": "^0.12.2",
     "rx": "^4.1.0",
@@ -21,7 +21,6 @@
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
-    "@types/es6-shim": "^0.31.32",
     "@types/object-assign": "^4.0.30",
     "@types/react": "^0.14.43",
     "@types/react-dom": "^0.14.18",

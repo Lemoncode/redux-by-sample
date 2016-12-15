@@ -1,4 +1,4 @@
-import {MembersAreaContainer} from './memberAreaContainer';
+import { MembersAreaContainer } from './memberAreaContainer';
 
 export {
   MembersAreaContainer
