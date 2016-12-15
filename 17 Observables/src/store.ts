@@ -9,5 +9,6 @@ export const store = createStore(
   reducers,
   compose(
     applyMiddleware(epicMiddleware),
+    window['devToolsExtension'] ? window['devToolsExtension']() : f => f
   ),
 );

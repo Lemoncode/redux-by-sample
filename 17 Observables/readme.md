@@ -429,3 +429,191 @@ export const App = () => {
 ```shell
 npm start
 ```
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+## Additional step
+
+- We will add DevToolsExtensions support to see better the behavior:
+
+_./src/store.ts_
+
+```javascript
+  // ...
+  reducers,
+  compose(
+    applyMiddleware(epicMiddleware),
+    window['devToolsExtension'] ? window['devToolsExtension']() : f => f
+  ),
+);
+```
+
+- We will add a delay in the ajax request and cancel behavior:
+
+_./src/common/actionsEnums.ts_
+
+```javascript
+export const actionsEnums = {
+  // ...
+  MEMBER_REQUEST_CANCELLED: "MEMBER_REQUEST_CANCELLED",
+};
+```
+
+_./src/actions/memberRequestCancelled.ts_
+
+```javascript
+import { actionsEnums } from "../common/actionsEnums";
+
+export const memberRequestCancelled = () => {
+  return {
+    type: actionsEnums.MEMBER_REQUEST_CANCELLED,
+  };
+};
+```
+
+_./src/actions/index.ts_
+
+```javascript
+import { memberRequestCompleted } from "./memberRequestCompleted";
+import { memberRequest } from "./memberRequest";
+import { memberRequestCancelled } from "./memberRequestCancelled";
+
+export { memberRequest, memberRequestCompleted, memberRequestCancelled };
+```
+
+_./src/epics/fetchMembersEpic.ts_
+
+```javascript
+// ...
+
+import { } from "rxjs/add/operator/delay";
+
+// ...
+export const fetchMembersEpic = action$ =>
+  // ...
+  action$.ofType(actionsEnums.MEMBER_REQUEST_STARTED).mergeMap(action =>
+    memberAPI.getAllMembers()
+      // Asynchronously wait 2000ms then continue
+      .delay(2000)
+      // memberRequestCompleted will be only an action ({type: '...', ...})
+      // without "black magic" for promises
+      .map(memberRequestCompleted)
+      .takeUntil(action$.ofType(actionsEnums.MEMBER_REQUEST_CANCELLED))
+  );
+
+```
+
+- We add a button to cancel the `MEMBER_REQUEST_STARTED` action and a members_loading indicator in state:
+
+_./src/components/members/memberAreaContainer.ts_
+
+```javascript
+import { connect } from "react-redux";
+import { memberRequest, memberRequestCancelled } from "../../actions/";
+import { MembersArea } from "./memberArea";
+
+const mapStateToProps = (state) => {
+  return {
+    members: state.memberReducer.members,
+    members_loading: state.memberReducer.members_loading,
+  };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadMembers: () => {return dispatch(memberRequest())},
+    cancelLoadMembers: () => {return dispatch(memberRequestCancelled())},
+  };
+}
+
+export const MembersAreaContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MembersArea)
+```
+
+```jsx
+// ...
+
+interface Props {
+  loadMembers: () => any;
+  cancelLoadMembers: () => any;
+  members: Array<MemberEntity>;
+  members_loading: boolean;
+}
+
+export class MembersArea extends React.Component<Props, {}> {
+  // ...
+
+  render(){
+    return (
+      <div>
+        <MembersTable members={this.props.members}/>
+        <br/>
+        <div className="btn-group">
+          <button
+            type="submit"
+            className="btn btn-default"
+            onClick={() => this.props.loadMembers()}
+          >
+            {
+              this.props.members_loading ?
+              'loading...'
+              :
+              'load'
+            }
+          </button>
+          {
+            this.props.members_loading ?
+            <button
+              className="btn btn-danger"
+              onClick={() => this.props.cancelLoadMembers()}
+            >
+              cancelar
+            </button>
+            :
+            ''
+          }
+        </div>
+      </div>
+    );
+  }
+}
+
+```
+
+- and new cases in the `memberReducer` to handle the cancel an loading_members indicator:
+
+_./src/reducers/memberReducer.ts_
+
+```javascript
+// ...
+const handleMemberRequestCompletedAction = (state: memberState, action) => {
+  const newState = objectAssign({}, state, { members_loading: false, members: action.members });
+  return newState;
+}
+
+const handleMemberRequestStartedAction = (state: memberState, action) => {
+  const newState = objectAssign({}, state, { members_loading: true });
+  return newState;
+}
+
+const handleMemberRequestCancelledAction = (state: memberState, action) => {
+  const newState = objectAssign({}, state, { members_loading: false });
+  return newState;
+}
+
+export const memberReducer =  (state: memberState = new memberState(), action) => {
+  switch (action.type) {
+    case actionsEnums.MEMBER_REQUEST_STARTED:
+      return handleMemberRequestStartedAction(state, action);
+    case actionsEnums.MEMBER_REQUEST_COMPLETED:
+      return handleMemberRequestCompletedAction(state, action);
+    case actionsEnums.MEMBER_REQUEST_CANCELLED:
+      return handleMemberRequestCancelledAction(state, action);
+  }
+
+  return state;
+};
+
+```
