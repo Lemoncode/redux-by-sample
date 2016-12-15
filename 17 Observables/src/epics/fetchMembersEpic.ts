@@ -1,11 +1,13 @@
 import 'rxjs';
 
+
 // merge all actions in only one action
 import { } from "rxjs/add/operator/mergeMap";
 
 // map to throw a new action
 import { } from "rxjs/add/operator/map";
 
+// delay the getAllMembers ajax petition
 import { } from "rxjs/add/operator/delay";
 
 import { actionsEnums } from "../common/actionsEnums";

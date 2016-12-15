@@ -4,9 +4,11 @@ import objectAssign = require("object-assign");
 
 class memberState  {
   members: MemberEntity[];
+  members_loading: boolean;
 
   public constructor() {
     this.members = [];
+    this.members_loading = false;
   }
 }
 
