@@ -3,30 +3,20 @@ import {MembersTable} from './memberstable';
 import {MemberEntity} from '../../model/member'
 
 interface Props {
-    loadMembers: () => any;
     members: Array<MemberEntity>;
+    loadMembers: () => any;
 }
 
-export class MembersArea extends React.Component<Props, {}> {
-    constructor(props: Props){
-        super(props);
-
-        this.state = {members:[]};
-        
-    }
-
-    render(){
-     return (
-        <div>
-          <MembersTable members={this.props.members}/>
-          <br/>
-          <input type="submit"
-                 value="load"
-                 className="btn btn-default"
-                 onClick={() => this.props.loadMembers()}
-          />
-        </div>
-    );       
-    }
-
+export const MembersArea = (props : Props) => {
+    return (
+    <div>
+        <MembersTable members={props.members}/>
+        <br/>
+        <input type="submit"
+                value="load"
+                className="btn btn-default"
+                onClick={() => props.loadMembers()}
+        />
+    </div>
+    );      
 }
