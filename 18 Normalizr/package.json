@@ -14,7 +14,7 @@
     "@types/redux-thunk": "^2.1.31",
     "@types/toastr": "^2.1.32",
     "@types/validator": "^5.7.35",
-    "typescript": "^2.0.3",
+    "@types/webpack-env": "^1.12.1",
     "webpack": "^1.13.3",
     "webpack-dev-server": "^1.16.2"
   },
@@ -35,6 +35,7 @@
     "html-webpack-plugin": "^2.22.0",
     "jquery": "^3.1.1",
     "lc-form-validation": "^0.1.7",
+    "normalizr": "^2.3.1",
     "object-assign": "^4.1.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
@@ -46,6 +47,7 @@
     "style-loader": "^0.13.1",
     "toastr": "^2.1.2",
     "ts-loader": "^0.9.3",
+    "typescript": "^2.1.4",
     "url-loader": "^0.5.7",
     "validator": "^6.2.0"
   }

@@ -1,10 +1,19 @@
 import { combineReducers } from "redux";
-import { sessionReducer } from "./session";
-import { studentReducer} from "./student";
+import { sessionReducer } from "./logic/session";
+import { studentDomain, getStudent, getIds } from "./domain/student";
+import { studentReducer} from "./logic/student";
 import { routerReducer } from "react-router-redux";
 
+
 export const reducers =  combineReducers({
+  studentDomain,
   sessionReducer,
   studentReducer,
   routing: routerReducer
 });
+
+export const getStudents = (state) => {
+  const ids = getIds(state.studentDomain.allIds);
+
+  return ids.map(id => getStudent(state.studentDomain.byId, id))
+}

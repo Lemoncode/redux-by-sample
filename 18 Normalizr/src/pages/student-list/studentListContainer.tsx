@@ -2,10 +2,11 @@ import { connect } from "react-redux";
 import { studentListRequestStartedAction } from "./actions/studentListRequestStarted";
 import { StudentListComponent } from "./studentList";
 import { navigateToEditStudentAction } from "./actions/navigateToEditStudent";
+import { getStudents } from '../../reducers'
 
 const mapStateToProps = (state) => {
   return {
-    studentList: state.studentReducer.studentsList,
+    studentList: getStudents(state),
   };
 };
 
