@@ -7,8 +7,8 @@ import { StudentEntity } from "../../model/student";
 
 const mapStateToProps = (state) => {
   return {
-    student: state.studentReducer.editingStudent,
-    errors: state.studentReducer.editingStudentErrors,
+    student: state.studentDomain.edit.editingStudent,
+    errors: state.studentDomain.edit.editingStudentErrors,
   };
 };
 

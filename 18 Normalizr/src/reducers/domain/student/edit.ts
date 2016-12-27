@@ -1,10 +1,10 @@
-import { actionsEnums } from "../../common/actionsEnums";
+import { actionsEnums } from "../../../common/actionsEnums";
 import objectAssign = require("object-assign");
-import { StudentEntity } from "../../model/student";
-import { StudentErrors } from "../../model/studentErrors";
-import { IStudentFieldValueChangedCompletedPayload } from "../../pages/student-detail/actions/studentFieldValueChangedCompleted";
+import { StudentEntity } from "../../../model/student";
+import { StudentErrors } from "../../../model/studentErrors";
+import { IStudentFieldValueChangedCompletedPayload } from "../../../pages/student-detail/actions/studentFieldValueChangedCompleted";
 
-class StudentState  {
+class EditState  {
   editingStudent: StudentEntity;
   editingStudentErrors: StudentErrors;
 
@@ -14,7 +14,7 @@ class StudentState  {
   }
 }
 
-export const studentReducer =  (state: StudentState = new StudentState(), action) => {
+export const edit =  (state : EditState = new EditState(), action) => {
   switch (action.type) {
     case actionsEnums.STUDENT_GET_STUDENT_REQUEST_COMPLETED:
       return handleGetStudent(state, action.payload);
@@ -24,12 +24,12 @@ export const studentReducer =  (state: StudentState = new StudentState(), action
   return state;
 };
 
-const handleGetStudent = (state: StudentState, payload: StudentEntity[]) => {
+const handleGetStudent = (state: EditState, payload: StudentEntity[]) => {
   const newState = objectAssign({}, state, {editingStudent: payload});
   return newState;
 };
 
-const handleFieldValueChanged = (state: StudentState, payload: IStudentFieldValueChangedCompletedPayload) => {
+const handleFieldValueChanged = (state: EditState, payload: IStudentFieldValueChangedCompletedPayload) => {
   const newStudent = objectAssign({}, state.editingStudent, {[payload.fieldName]: payload.value});
   const newStudentErrors = objectAssign({}, state.editingStudentErrors, {[payload.fieldName]: payload.fieldValidationResult});
   return objectAssign({}, state, {editingStudent: newStudent, editingStudentErrors: newStudentErrors});

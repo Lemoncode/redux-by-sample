@@ -1,14 +1,12 @@
 import { combineReducers } from "redux";
 import { sessionReducer } from "./logic/session";
 import { studentDomain, getStudent, getIds } from "./domain/student";
-import { studentReducer} from "./logic/student";
 import { routerReducer } from "react-router-redux";
 
 
 export const reducers =  combineReducers({
   studentDomain,
   sessionReducer,
-  studentReducer,
   routing: routerReducer
 });
 
