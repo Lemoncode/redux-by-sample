@@ -8,6 +8,7 @@ interface Props {
   editStudent: (id: number) => void;
 }
 
+
 export class StudentListComponent extends React.Component<Props, {}> {
 
   componentDidMount() {

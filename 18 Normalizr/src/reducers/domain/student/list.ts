@@ -7,7 +7,7 @@ import { StudentErrors } from "../../../model/studentErrors";
 
 export const byId = (state = {}, action) => {
   switch (action.type) {
-    case actionsEnums.STUDENTS_GET_LIST_REQUEST_COMPLETED:
+    case actionsEnums.STUDENTS_GET_LIST_REQUEST_COMPLETED:    
       return objectAssign({}, state, action.payload.entities.students);
   }
   return state;
