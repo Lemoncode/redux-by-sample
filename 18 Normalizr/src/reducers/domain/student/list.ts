@@ -14,7 +14,7 @@ export const byId = (state = {}, action) => {
 }
 
 
-export const allIds =  (state: any = [], action) => {
+export const allIds =  (state: Number[] = [], action) => {
   switch (action.type) {
     case actionsEnums.STUDENTS_GET_LIST_REQUEST_COMPLETED:
       return action.payload.result;
