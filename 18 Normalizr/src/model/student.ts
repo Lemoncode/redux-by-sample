@@ -12,12 +12,12 @@ export class StudentEntity {
   }
 }
 
-
-// Student list
-
-// Countries <-- Students that belogn to countries
-
-// Edit students
+// And summarized Views
+// // Student list
+//
+// // Countries <-- Students that belogn to countries
+//
+// // Edit students
 // interface Props {
 //   student: StudentView;
 //   countries : CountriesView[];
