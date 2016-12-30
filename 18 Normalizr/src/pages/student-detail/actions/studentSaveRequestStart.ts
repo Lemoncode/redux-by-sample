@@ -1,4 +1,3 @@
-import { Promise } from "es6-promise";
 import { actionsEnums } from "../../../common/actionsEnums";
 import { StudentEntity } from "../../../model/student";
 import { studentApi } from "../../../rest-api/student-api";
