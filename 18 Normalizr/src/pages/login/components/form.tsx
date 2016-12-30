@@ -11,7 +11,7 @@ interface Props {
 export const Form = (props: Props) => {
   return (
     <div className="panel-body">
-      <form role="form" onSubmit={(e) => {e.preventDefault(); props.performLogin();}}>
+      <form role="form">
         <fieldset>
           <div className="form-group">
             <input className="form-control" placeholder="E-mail" name="email" type="text"
@@ -25,7 +25,7 @@ export const Form = (props: Props) => {
               onChange={(e: any) => props.updateLoginInfo({login: props.loginInfo.login, password: e.target.value })}
             />
           </div>
-          <button type="submit" className="btn btn-lg btn-success btn-block" onClick={(e) => {props.performLogin();}}>
+          <button type="submit" className="btn btn-lg btn-success btn-block" onClick={(e) => {e.preventDefault(); props.performLogin();}}>
             Login
           </button>
         </fieldset>
