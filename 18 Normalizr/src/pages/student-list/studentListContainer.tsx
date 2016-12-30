@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { studentListRequestStartedAction } from "./actions/studentListRequestStarted";
 import { StudentListComponent } from "./studentList";
-import { navigateToEditStudentAction } from "./actions/navigateToEditStudent";
+import { navigateToEditStudentAction, navigateToNewStudentAction } from "./actions/navigateToEditStudent";
 import { getStudents } from '../../reducers'
 
 const mapStateToProps = (state) => {
@@ -14,6 +14,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getStudentList: () => dispatch(studentListRequestStartedAction()),
     editStudent: (id: number) => dispatch(navigateToEditStudentAction(id)),
+    navigateToAddNewStudent: () => dispatch(navigateToNewStudentAction())
   };
 };
 

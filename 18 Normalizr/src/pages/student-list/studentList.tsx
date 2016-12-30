@@ -1,11 +1,13 @@
 import * as React from "react";
 import { StudentEntity } from "../../model/student";
 import { StudentTableComponent } from "./components/studentTable";
+import {AddStudentComponent} from './components/addStudent';
 
 interface Props {
   studentList: StudentEntity[];
   getStudentList: () => void;
   editStudent: (id: number) => void;
+  navigateToAddNewStudent: () => void;
 }
 
 
@@ -18,6 +20,7 @@ export class StudentListComponent extends React.Component<Props, {}> {
   render() {
     return (
       <div>
+        <AddStudentComponent navigateToAddNewStudent={this.props.navigateToAddNewStudent} />
         <StudentTableComponent
           studentList={this.props.studentList}
           editStudent={this.props.editStudent}
