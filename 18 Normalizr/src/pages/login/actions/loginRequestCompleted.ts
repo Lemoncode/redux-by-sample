@@ -1,5 +1,5 @@
 import {actionsEnums} from '../../../common/actionsEnums';
-import {LoginResponse} from '../../../model/loginResponse';
+import {LoginResponse} from '../../../model/view/loginResponse';
 
 export const loginRequestCompletedAction = (loginResponse : LoginResponse) => {
   return {

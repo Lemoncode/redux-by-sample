@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Header} from './components/header';
 import {Form} from './components/form';
-import {LoginEntity} from '../../model/login';
+import {LoginEntity} from '../../model/view/login';
 
 interface Props {
    loginInfo : LoginEntity;

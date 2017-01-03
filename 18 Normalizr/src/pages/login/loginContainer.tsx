@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { LoginComponent } from './login';
-import { LoginEntity } from '../../model/login';
+import { LoginEntity } from '../../model/view/login';
 import { updateEditingLogin } from './actions/updateEditingLogin';
 import { loginRequestStartedAction} from './actions/loginRequestStarted';
 

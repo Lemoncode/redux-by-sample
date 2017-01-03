@@ -1,8 +1,8 @@
 import {actionsEnums} from '../../common/actionsEnums';
 import objectAssign = require('object-assign');
-import {UserProfile} from '../../model/userProfile';
-import {LoginResponse} from '../../model/loginResponse';
-import {LoginEntity} from '../../model/login';
+import {UserProfile} from '../../model/view/userProfile';
+import {LoginResponse} from '../../model/view/loginResponse';
+import {LoginEntity} from '../../model/view/login';
 
 class SessionState  {
   isUserLoggedIn : boolean;
