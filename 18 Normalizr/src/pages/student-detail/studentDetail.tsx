@@ -1,7 +1,7 @@
 import * as React from "react";
 import { StudentView } from "../../model/view/studentView";
 import { StudentForm } from "./components/studentForm";
-import { StudentErrors } from "../../model/studentErrors";
+import { StudentErrors } from "../../model/view/studentErrors";
 
 interface Props  {
   params?: any;

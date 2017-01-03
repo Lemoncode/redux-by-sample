@@ -1,7 +1,7 @@
 
 import { actionsEnums } from "../../../common/actionsEnums";
 import { StudentView } from "../../../model/view/studentView";
-import { StudentErrors } from "../../../model/studentErrors";
+import { StudentErrors } from "../../../model/view/studentErrors";
 
 export const byId = (state : {[id: number] : StudentView} = {}, action) => {
   if (action.payload && action.payload.entities) {

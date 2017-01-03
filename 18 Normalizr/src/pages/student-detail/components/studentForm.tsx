@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Input } from "../../../common/components/Input";
 import { StudentView } from "../../../model/view/studentView";
-import { StudentErrors } from "../../../model/studentErrors";
+import { StudentErrors } from "../../../model/view/studentErrors";
 
 interface Props {
   student: StudentView;

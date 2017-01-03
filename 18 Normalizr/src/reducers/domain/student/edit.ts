@@ -1,7 +1,7 @@
 import { actionsEnums } from "../../../common/actionsEnums";
 import objectAssign = require("object-assign");
 import { StudentView } from "../../../model/view/studentView";
-import { StudentErrors } from "../../../model/studentErrors";
+import { StudentErrors } from "../../../model/view/studentErrors";
 import { IStudentFieldValueChangedCompletedPayload } from "../../../pages/student-detail/actions/studentFieldValueChangedCompleted";
 
 class EditState  {
