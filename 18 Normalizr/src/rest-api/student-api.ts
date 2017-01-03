@@ -21,6 +21,16 @@ class StudentApi {
   }
 
   saveStudent(student: StudentEntity): Promise<boolean> {
+    if (student.id > 0) {
+      this.updateStudent(student);
+    } else {
+      this.insertStudent(student);
+    }
+
+    return Promise.resolve(true);
+  }
+
+  private updateStudent(student: StudentEntity) {
     const index = this.studentsData.findIndex(st => st.id === student.id);
 
     // Just to ensure we get a new object (no mutability)
@@ -28,8 +38,31 @@ class StudentApi {
     .slice(0, index)
     .concat([student])
     .concat(this.studentsData.slice(index + 1));
+  }
 
-    return Promise.resolve(true);
+  private insertStudent(student: StudentEntity) {
+    const id = this.getNextId();
+    student.id = id;
+
+    this.studentsData = [...this.studentsData, student];
+  }
+
+  private getNextId(): number {
+    const studentWithLastId = this.getStudentWithLastId();
+
+    return studentWithLastId.id + 1;
+  }
+
+  private getStudentWithLastId(): StudentEntity {
+    return this.studentsData.reduce((previousStudent, currentStudent) => {
+      let studentWithLastId: StudentEntity = previousStudent;
+
+      if (currentStudent.id > previousStudent.id) {
+        studentWithLastId = currentStudent;
+      }
+
+      return studentWithLastId;
+    });
   }
 }
 

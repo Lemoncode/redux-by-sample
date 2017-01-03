@@ -11,8 +11,8 @@ export const studentListRequestStartedAction = () => {
 
     promise.then(
       data => {
-        const normalizedresult = normalize(data, arrayOfStudentsSchema);
-        dispatcher(studentListRequestCompletedAction(normalizedresult));
+        const normalizedResult = normalize(data, arrayOfStudentsSchema);
+        dispatcher(studentListRequestCompletedAction(normalizedResult));
       }
     );
 
