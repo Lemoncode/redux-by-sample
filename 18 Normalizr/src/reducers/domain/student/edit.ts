@@ -1,15 +1,15 @@
 import { actionsEnums } from "../../../common/actionsEnums";
 import objectAssign = require("object-assign");
-import { StudentEntity } from "../../../model/student";
+import { StudentView } from "../../../model/view/studentView";
 import { StudentErrors } from "../../../model/studentErrors";
 import { IStudentFieldValueChangedCompletedPayload } from "../../../pages/student-detail/actions/studentFieldValueChangedCompleted";
 
 class EditState  {
-  editingStudent: StudentEntity;
+  editingStudent: StudentView;
   editingStudentErrors: StudentErrors;
 
   public constructor() {
-    this.editingStudent = new StudentEntity();
+    this.editingStudent = new StudentView();
     this.editingStudentErrors = new StudentErrors();
   }
 }
@@ -26,7 +26,7 @@ export const edit =  (state : EditState = new EditState(), action) => {
   return state;
 };
 
-const handleGetStudent = (state: EditState, payload: StudentEntity[]) => {
+const handleGetStudent = (state: EditState, payload: StudentView[]) => {
   const newState = objectAssign({}, state, {editingStudent: payload});
   return newState;
 };
@@ -40,7 +40,7 @@ const handleFieldValueChanged = (state: EditState, payload: IStudentFieldValueCh
 const handleResetEditingStudent = (state: EditState) => {
   return {
     ...state,
-    editingStudent: new StudentEntity(),
+    editingStudent: new StudentView(),
     editingStudentErrors: new StudentErrors()
   }
 }

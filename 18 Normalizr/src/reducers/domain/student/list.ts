@@ -1,9 +1,9 @@
 
 import { actionsEnums } from "../../../common/actionsEnums";
-import { StudentEntity } from "../../../model/student";
+import { StudentView } from "../../../model/view/studentView";
 import { StudentErrors } from "../../../model/studentErrors";
 
-export const byId = (state : {[id: number] : StudentEntity} = {}, action) => {
+export const byId = (state : {[id: number] : StudentView} = {}, action) => {
   if (action.payload && action.payload.entities) {
     return {
       ...state,

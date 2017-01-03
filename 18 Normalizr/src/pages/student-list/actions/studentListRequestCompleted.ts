@@ -1,5 +1,4 @@
 import { actionsEnums } from "../../../common/actionsEnums";
-import { StudentEntity } from "../../../model/student";
 
 // Former StudentEntity, ... later on add types, first level is easy, second
 // dictionary not that easy

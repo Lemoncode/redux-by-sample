@@ -1,14 +1,14 @@
 import { actionsEnums } from "../../../common/actionsEnums";
-import { StudentEntity } from "../../../model/student";
+import { StudentView } from "../../../model/view/studentView";
 import { studentApi } from "../../../rest-api/student-api";
 import { studentSaveRequestCompleted } from "./studentSaveRequestCompleted";
 import { FormValidationResult } from "lc-form-validation";
 import { studentFormValidation } from "../student.validation";
 import * as toastr from "toastr";
 
-export const studentSaveRequestStart = (student: StudentEntity) => {
+export const studentSaveRequestStart = (student: StudentView) => {
 
-  const saveStudent = (dispatcher, student: StudentEntity): Promise<boolean> => {
+  const saveStudent = (dispatcher, student: StudentView): Promise<boolean> => {
     const promise = studentApi.saveStudent(student);
 
     promise.then(
@@ -28,7 +28,7 @@ export const studentSaveRequestStart = (student: StudentEntity) => {
 
     studentFormValidation.validateForm(student).then(
       (formValidationResult: FormValidationResult) => {
-        if (formValidationResult.succeeded === true) {
+        if (formValidationResult.succeeded) {
           saveStudent(dispatcher, student);
         } else {
           toastr.error("Form failed to save, please review the fields content.");

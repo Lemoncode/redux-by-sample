@@ -1,4 +1,4 @@
-export class StudentEntity {
+export class Student {
   id: number;
   gotActiveTraining: boolean;
   fullname: string;

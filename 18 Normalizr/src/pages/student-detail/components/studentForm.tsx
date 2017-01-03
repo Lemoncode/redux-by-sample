@@ -1,13 +1,13 @@
 import * as React from "react";
 import { Input } from "../../../common/components/Input";
-import { StudentEntity } from "../../../model/student";
+import { StudentView } from "../../../model/view/studentView";
 import { StudentErrors } from "../../../model/studentErrors";
 
 interface Props {
-  student: StudentEntity;
+  student: StudentView;
   errors: StudentErrors;
   fireFieldValueChanged: (viewModel: any, fieldName: string, value: any, filter?: any) => void;
-  saveStudent: (student: StudentEntity) => void;
+  saveStudent: (student: StudentView) => void;
 }
 
 export const StudentForm = (props: Props) => {

@@ -1,9 +1,10 @@
-import { StudentEntity } from "../model/student";
+import { Student } from "../model/api/student";
+import { StudentView } from "../model/view/studentView";
 import { studentsMockData } from "./mock-data";
 import { } from "core-js";
 
 class StudentApi {
-  studentsData: StudentEntity[];
+  studentsData: Student[];
 
   constructor() {
     // Let"s the mockdata whenever the singleton is instatiated
@@ -11,16 +12,19 @@ class StudentApi {
     this.studentsData = studentsMockData;
   }
 
-  loadStudentList(): Promise<StudentEntity[]> {
+  loadStudentList(): Promise<StudentView[]> {
+    //TODO: Use mapper
     return Promise.resolve(this.studentsData);
   }
 
-  getStudentById(id: number): Promise<StudentEntity> {
+  getStudentById(id: number): Promise<StudentView> {
+    //TODO: Use mapper
     const student = this.studentsData.find(st => st.id === id);
     return Promise.resolve(student);
   }
 
-  saveStudent(student: StudentEntity): Promise<boolean> {
+  saveStudent(student: StudentView): Promise<boolean> {
+    //TODO: Use mapper
     if (student.id > 0) {
       this.updateStudent(student);
     } else {
@@ -30,7 +34,7 @@ class StudentApi {
     return Promise.resolve(true);
   }
 
-  private updateStudent(student: StudentEntity) {
+  private updateStudent(student: Student) {
     const index = this.studentsData.findIndex(st => st.id === student.id);
 
     // Just to ensure we get a new object (no mutability)
@@ -40,7 +44,7 @@ class StudentApi {
     .concat(this.studentsData.slice(index + 1));
   }
 
-  private insertStudent(student: StudentEntity) {
+  private insertStudent(student: Student) {
     const id = this.getNextId();
     student.id = id;
 
@@ -53,9 +57,9 @@ class StudentApi {
     return studentWithLastId.id + 1;
   }
 
-  private getStudentWithLastId(): StudentEntity {
+  private getStudentWithLastId(): Student {
     return this.studentsData.reduce((previousStudent, currentStudent) => {
-      let studentWithLastId: StudentEntity = previousStudent;
+      let studentWithLastId: Student = previousStudent;
 
       if (currentStudent.id > previousStudent.id) {
         studentWithLastId = currentStudent;
