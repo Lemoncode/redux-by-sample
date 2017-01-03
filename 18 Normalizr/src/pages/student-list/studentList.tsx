@@ -1,10 +1,10 @@
 import * as React from "react";
-import { StudentEntity } from "../../model/student";
+import { StudentView } from "../../model/view/studentView";
 import { StudentTableComponent } from "./components/studentTable";
 import {AddStudentComponent} from './components/addStudent';
 
 interface Props {
-  studentList: StudentEntity[];
+  studentList: StudentView[];
   getStudentList: () => void;
   editStudent: (id: number) => void;
   navigateToAddNewStudent: () => void;

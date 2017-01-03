@@ -1,5 +1,5 @@
 import {actionsEnums} from '../../../common/actionsEnums';
-import {LoginEntity} from '../../../model/login';
+import {LoginEntity} from '../../../model/view/login';
 
 export const updateEditingLogin = (loginInfo : LoginEntity) => {
   return {

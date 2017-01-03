@@ -1,15 +1,14 @@
 import { actionsEnums } from "../../../common/actionsEnums";
-import objectAssign = require("object-assign");
-import { StudentEntity } from "../../../model/student";
-import { StudentErrors } from "../../../model/studentErrors";
+import { StudentView } from "../../../model/view/studentView";
+import { StudentErrors } from "../../../model/view/studentErrors";
 import { IStudentFieldValueChangedCompletedPayload } from "../../../pages/student-detail/actions/studentFieldValueChangedCompleted";
 
 class EditState  {
-  editingStudent: StudentEntity;
+  editingStudent: StudentView;
   editingStudentErrors: StudentErrors;
 
   public constructor() {
-    this.editingStudent = new StudentEntity();
+    this.editingStudent = new StudentView();
     this.editingStudentErrors = new StudentErrors();
   }
 }
@@ -26,21 +25,31 @@ export const edit =  (state : EditState = new EditState(), action) => {
   return state;
 };
 
-const handleGetStudent = (state: EditState, payload: StudentEntity[]) => {
-  const newState = objectAssign({}, state, {editingStudent: payload});
-  return newState;
+const handleGetStudent = (state: EditState, payload: StudentView[]) => {
+  return {
+    ...state,
+    editingStudent: payload
+  };
 };
 
 const handleFieldValueChanged = (state: EditState, payload: IStudentFieldValueChangedCompletedPayload) => {
-  const newStudent = objectAssign({}, state.editingStudent, {[payload.fieldName]: payload.value});
-  const newStudentErrors = objectAssign({}, state.editingStudentErrors, {[payload.fieldName]: payload.fieldValidationResult});
-  return objectAssign({}, state, {editingStudent: newStudent, editingStudentErrors: newStudentErrors});
+  return {
+    ...state,
+    editingStudent: {
+      ...state.editingStudent,
+      [payload.fieldName]: payload.value
+    },
+    editingStudentErrors: {
+      ...state.editingStudentErrors,
+      [payload.fieldName]: payload.fieldValidationResult
+    }
+  }
 };
 
 const handleResetEditingStudent = (state: EditState) => {
   return {
     ...state,
-    editingStudent: new StudentEntity(),
+    editingStudent: new StudentView(),
     editingStudentErrors: new StudentErrors()
   }
 }

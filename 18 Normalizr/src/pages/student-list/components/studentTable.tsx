@@ -1,10 +1,10 @@
 import * as React from "react";
-import { StudentEntity } from "../../../model/student";
+import { StudentView } from "../../../model/view/studentView";
 import { StudentHeaderComponent } from "./studentHeader";
 import { StudentRowComponent } from "./studentRow";
 
 interface Props {
-  studentList: StudentEntity[];
+  studentList: StudentView[];
   editStudent: (id: number) => void;
 }
 
@@ -14,7 +14,7 @@ export const StudentTableComponent = (props: Props) => {
       <StudentHeaderComponent/>
       <tbody>
         {
-          props.studentList.map((student: StudentEntity) =>
+          props.studentList.map((student: StudentView) =>
             <StudentRowComponent
               key={student.id}
               student={student}

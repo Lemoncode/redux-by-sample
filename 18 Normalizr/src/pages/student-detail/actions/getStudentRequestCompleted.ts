@@ -1,7 +1,7 @@
 import { actionsEnums } from "../../../common/actionsEnums";
-import { StudentEntity } from "../../../model/student";
+import { StudentView } from "../../../model/view/studentView";
 
-export const getStudentRequestCompletedAction = (student: StudentEntity) => {
+export const getStudentRequestCompletedAction = (student: StudentView) => {
   return {
     type: actionsEnums.STUDENT_GET_STUDENT_REQUEST_COMPLETED,
     payload: student,

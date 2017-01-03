@@ -1,15 +1,14 @@
 
 import { actionsEnums } from "../../../common/actionsEnums";
-import { StudentEntity } from "../../../model/student";
-import { StudentErrors } from "../../../model/studentErrors";
+import { StudentView } from "../../../model/view/studentView";
+import { StudentErrors } from "../../../model/view/studentErrors";
 
-export const byId = (state : {[id : number] : StudentEntity} = {}, action) => {
-  switch (action.type) {
-    case actionsEnums.STUDENTS_GET_LIST_REQUEST_COMPLETED:
-      return {
-        ...state,
-        ...action.payload.entities.students
-      }
+export const byId = (state : {[id: number] : StudentView} = {}, action) => {
+  if (action.payload && action.payload.entities) {
+    return {
+      ...state,
+      ...action.payload.entities.students
+    }
   }
   return state;
 }

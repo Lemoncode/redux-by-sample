@@ -1,5 +1,4 @@
 import { actionsEnums } from "../../../common/actionsEnums";
-import { StudentEntity } from "../../../model/student";
 import { studentApi } from "../../../rest-api/student-api";
 import { getStudentRequestCompletedAction } from "./getStudentRequestCompleted";
 import { normalize } from 'normalizr'

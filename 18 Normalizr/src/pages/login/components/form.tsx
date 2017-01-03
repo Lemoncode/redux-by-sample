@@ -1,6 +1,6 @@
 import * as React from "react";
 import { hashHistory } from "react-router";
-import { LoginEntity } from "../../../model/login";
+import { LoginEntity } from "../../../model/view/login";
 
 interface Props {
    loginInfo: LoginEntity;

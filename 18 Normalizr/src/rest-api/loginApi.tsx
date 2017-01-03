@@ -1,7 +1,6 @@
-import {LoginEntity} from '../model/login';
-import {UserProfile} from '../model/userProfile';
-import {LoginResponse} from '../model/loginResponse';
-import {} from 'core-js'
+import {LoginEntity} from '../model/view/login';
+import {UserProfile} from '../model/view/userProfile';
+import {LoginResponse} from '../model/view/loginResponse';
 
 class LoginApi {
   login(loginInfo : LoginEntity) : Promise<LoginResponse> {

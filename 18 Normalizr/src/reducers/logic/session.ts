@@ -1,8 +1,7 @@
 import {actionsEnums} from '../../common/actionsEnums';
-import objectAssign = require('object-assign');
-import {UserProfile} from '../../model/userProfile';
-import {LoginResponse} from '../../model/loginResponse';
-import {LoginEntity} from '../../model/login';
+import {UserProfile} from '../../model/view/userProfile';
+import {LoginResponse} from '../../model/view/loginResponse';
+import {LoginEntity} from '../../model/view/login';
 
 class SessionState  {
   isUserLoggedIn : boolean;
@@ -31,11 +30,16 @@ export const sessionReducer =  (state : SessionState = new SessionState(), actio
 
 
 const handlePerformLogin = (state : SessionState, payload : LoginResponse) => {
-  const newState = objectAssign({}, state, {isUserLoggedIn: payload.succeeded, userProfile: payload.userProfile});
-  return newState;
+  return {
+    ...state,
+    isUserLoggedIn: payload.succeeded,
+    userProfile: payload.userProfile
+  };
 }
 
 const handleUpdateEditingLogin = (state: SessionState, payload : LoginEntity) => {
-  const newState = objectAssign({}, state, {editingLogin: payload});
-  return newState;
+  return {
+    ...state,
+    editingLogin: payload
+  };
 }

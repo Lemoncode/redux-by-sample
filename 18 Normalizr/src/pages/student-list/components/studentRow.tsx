@@ -1,8 +1,8 @@
 import * as React from "react";
-import { StudentEntity } from "../../../model/student";
+import { StudentView } from "../../../model/view/studentView";
 
 interface Props {
-  student: StudentEntity;
+  student: StudentView;
   editStudent: (id: number) => void;
 }
 

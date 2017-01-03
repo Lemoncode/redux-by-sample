@@ -1,5 +1,5 @@
 import {actionsEnums} from '../../../common/actionsEnums';
-import {LoginEntity} from '../../../model/login';
+import {LoginEntity} from '../../../model/view/login';
 import {loginApi} from '../../../rest-api/loginApi';
 import {loginRequestCompletedAction} from './loginRequestCompleted';
 import { hashHistory } from 'react-router';
