@@ -8,7 +8,10 @@ class StudentMapper {
       gotActiveTraining: student.gotActiveTraining,
       fullname: student.fullname,
       email: student.email,
-      country: null
+      country: {
+        id: student.countryId,
+        name: ''
+      }
     }
   }
 
