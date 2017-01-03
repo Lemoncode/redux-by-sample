@@ -8,13 +8,13 @@ interface Props {
   getStudentList: () => void;
   editStudent: (id: number) => void;
   navigateToAddNewStudent: () => void;
+  fetchCountryList: () => void;
 }
 
-
 export class StudentListComponent extends React.Component<Props, {}> {
-
   componentDidMount() {
     this.props.getStudentList();
+    this.props.fetchCountryList();
   }
 
   render() {
