@@ -6,3 +6,7 @@ export const navigateToEditStudentAction = (studentId: number) => {
     hashHistory.push(`/student-detail/${studentId}`);
   };
 };
+
+export const navigateToNewStudentAction = () => (dispatcher) => {
+  hashHistory.push(`/student-detail/${0}`);
+}

@@ -10,12 +10,17 @@ interface Props  {
   errors: StudentErrors;
   fireFieldValueChanged: (viewModel: any, fieldName: string, value: any, filter?: any) => void;
   saveStudent: (student: StudentEntity) => void;
+  resetStudent: () => void;
 }
 
 export class StudentDetailComponent extends React.Component<Props, {}> {
   componentDidMount() {
     const studentId: number = Number(this.props.params.id);
-    this.props.getstudent(studentId);
+    if (studentId > 0) {
+      this.props.getstudent(studentId);
+    } else {
+      this.props.resetStudent();
+    }
   }
 
   render() {
