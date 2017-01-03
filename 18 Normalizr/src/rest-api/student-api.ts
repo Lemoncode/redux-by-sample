@@ -1,7 +1,7 @@
 import { Student } from "../model/api/student";
 import { StudentView } from "../model/view/studentView";
 import { studentsMockData } from "./mock-data";
-import { } from "core-js";
+import { studentMapper } from '../mappers/studentMapper';
 
 class StudentApi {
   studentsData: Student[];
@@ -13,18 +13,26 @@ class StudentApi {
   }
 
   loadStudentList(): Promise<StudentView[]> {
-    //TODO: Use mapper
-    return Promise.resolve(this.studentsData);
+    const studentView = studentMapper.mapStudentListToStudentViewList(this.studentsData);
+
+    return Promise.resolve(studentView);
   }
 
   getStudentById(id: number): Promise<StudentView> {
-    //TODO: Use mapper
     const student = this.studentsData.find(st => st.id === id);
-    return Promise.resolve(student);
+    const studentView = studentMapper.mapStudentToStudentView(student);
+
+    return Promise.resolve(studentView);
   }
 
-  saveStudent(student: StudentView): Promise<boolean> {
-    //TODO: Use mapper
+  saveStudent(studentView: StudentView): Promise<boolean> {
+    const student: Student = {
+      id: studentView.id,
+      gotActiveTraining: studentView.gotActiveTraining,
+      fullname: studentView.fullname,
+      email: studentView.email
+    };
+    
     if (student.id > 0) {
       this.updateStudent(student);
     } else {
