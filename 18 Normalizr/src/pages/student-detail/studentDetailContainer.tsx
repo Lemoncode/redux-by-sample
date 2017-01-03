@@ -3,7 +3,7 @@ import { StudentDetailComponent } from "./studentDetail";
 import { getStudentRequestStartAction } from "./actions/getStudentRequestStart";
 import { studentFieldValueChangedStart } from "./actions/studentFieldValueChangedStart";
 import { studentSaveRequestStart } from "./actions/studentSaveRequestStart";
-import { initializeStudentAction } from './actions/initializeStudent';
+import { resetStudentAction } from './actions/resetStudent';
 import { StudentEntity } from "../../model/student";
 
 const mapStateToProps = (state) => {
@@ -22,7 +22,7 @@ const mapDispatchToProps = (dispatch) => {
       fieldName: string,
       value: any) => dispatch(studentFieldValueChangedStart(viewModel, fieldName, value)
     ),
-    initializeStudent: () => dispatch(initializeStudentAction())
+    resetStudent: () => dispatch(resetStudentAction())
   };
 };
 

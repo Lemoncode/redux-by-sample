@@ -20,8 +20,8 @@ export const edit =  (state : EditState = new EditState(), action) => {
       return handleGetStudent(state, action.payload);
     case actionsEnums.STUDENT_FIELD_VALUE_CHANGED_COMPLETED:
       return handleFieldValueChanged(state, action.payload);
-    case actionsEnums.INITIALIZE_STUDENT:
-      return handleInitializeStudent(state);
+    case actionsEnums.RESET_EDITING_STUDENT:
+      return handleResetEditingStudent(state);
   }
   return state;
 };
@@ -37,7 +37,7 @@ const handleFieldValueChanged = (state: EditState, payload: IStudentFieldValueCh
   return objectAssign({}, state, {editingStudent: newStudent, editingStudentErrors: newStudentErrors});
 };
 
-const handleInitializeStudent = (state: EditState) => {
+const handleResetEditingStudent = (state: EditState) => {
   return {
     ...state,
     editingStudent: new StudentEntity(),

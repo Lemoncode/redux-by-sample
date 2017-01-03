@@ -10,7 +10,7 @@ interface Props  {
   errors: StudentErrors;
   fireFieldValueChanged: (viewModel: any, fieldName: string, value: any, filter?: any) => void;
   saveStudent: (student: StudentEntity) => void;
-  initializeStudent: () => void;
+  resetStudent: () => void;
 }
 
 export class StudentDetailComponent extends React.Component<Props, {}> {
@@ -19,7 +19,7 @@ export class StudentDetailComponent extends React.Component<Props, {}> {
     if (studentId > 0) {
       this.props.getstudent(studentId);
     } else {
-      this.props.initializeStudent();
+      this.props.resetStudent();
     }
   }
 
