@@ -1,5 +1,4 @@
 import { actionsEnums } from "../../../common/actionsEnums";
-import objectAssign = require("object-assign");
 import { StudentView } from "../../../model/view/studentView";
 import { StudentErrors } from "../../../model/view/studentErrors";
 import { IStudentFieldValueChangedCompletedPayload } from "../../../pages/student-detail/actions/studentFieldValueChangedCompleted";
@@ -27,14 +26,24 @@ export const edit =  (state : EditState = new EditState(), action) => {
 };
 
 const handleGetStudent = (state: EditState, payload: StudentView[]) => {
-  const newState = objectAssign({}, state, {editingStudent: payload});
-  return newState;
+  return {
+    ...state,
+    editingStudent: payload
+  };
 };
 
 const handleFieldValueChanged = (state: EditState, payload: IStudentFieldValueChangedCompletedPayload) => {
-  const newStudent = objectAssign({}, state.editingStudent, {[payload.fieldName]: payload.value});
-  const newStudentErrors = objectAssign({}, state.editingStudentErrors, {[payload.fieldName]: payload.fieldValidationResult});
-  return objectAssign({}, state, {editingStudent: newStudent, editingStudentErrors: newStudentErrors});
+  return {
+    ...state,
+    editingStudent: {
+      ...state.editingStudent,
+      [payload.fieldName]: payload.value
+    },
+    editingStudentErrors: {
+      ...state.editingStudentErrors,
+      [payload.fieldName]: payload.fieldValidationResult
+    }
+  }
 };
 
 const handleResetEditingStudent = (state: EditState) => {
