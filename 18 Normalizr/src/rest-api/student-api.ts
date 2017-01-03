@@ -30,7 +30,8 @@ class StudentApi {
       id: studentView.id,
       gotActiveTraining: studentView.gotActiveTraining,
       fullname: studentView.fullname,
-      email: studentView.email
+      email: studentView.email,
+      countryId: 0
     };
 
     if (student.id > 0) {
