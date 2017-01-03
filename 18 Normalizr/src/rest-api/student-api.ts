@@ -13,9 +13,10 @@ class StudentApi {
   }
 
   loadStudentList(): Promise<StudentView[]> {
-    const studentView = studentMapper.mapStudentListToStudentViewList(this.studentsData);
+    const studentViewList = studentMapper
+      .mapStudentListToStudentViewList(this.studentsData);
 
-    return Promise.resolve(studentView);
+    return Promise.resolve(studentViewList);
   }
 
   getStudentById(id: number): Promise<StudentView> {
@@ -31,7 +32,7 @@ class StudentApi {
       gotActiveTraining: studentView.gotActiveTraining,
       fullname: studentView.fullname,
       email: studentView.email,
-      countryId: 0
+      countryId: studentView.country.id
     };
 
     if (student.id > 0) {
