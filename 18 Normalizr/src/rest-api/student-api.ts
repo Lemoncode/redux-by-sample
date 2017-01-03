@@ -1,7 +1,7 @@
 import { Student } from "../model/api/student";
 import { StudentView } from "../model/view/studentView";
 import { studentsMockData } from "./mock-data";
-import { studentMapper } from '../mappers/studentMapper';
+import { studentMapper } from '../model/mappers/studentMapper';
 
 class StudentApi {
   studentsData: Student[];
@@ -32,7 +32,7 @@ class StudentApi {
       fullname: studentView.fullname,
       email: studentView.email
     };
-    
+
     if (student.id > 0) {
       this.updateStudent(student);
     } else {

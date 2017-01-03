@@ -1,5 +1,5 @@
-import { Student } from '../model/api/student';
-import { StudentView } from '../model/view/studentView';
+import { Student } from '../api/student';
+import { StudentView } from '../view/studentView';
 
 class StudentMapper {
   mapStudentToStudentView(student: Student): StudentView {
