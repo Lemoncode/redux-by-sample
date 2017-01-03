@@ -10,5 +10,5 @@ export const countryDomain = combineReducers({
 
 export const getCountries = (state) : CountryView[] => {
   const ids = getIds(state.countryDomain.allIds);
-  return ids.map(id => getCountry(state.countryDomain.byId, id));
+  return ids.map(id => getCountry(state, id));
 }

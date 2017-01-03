@@ -15,5 +15,5 @@ export const reducers =  combineReducers({
 export const getStudents = (state) : StudentView[] => {
   const ids = getIds(state.studentDomain.allIds);
 
-  return ids.map(id => getStudent(state.studentDomain.byId, id))
+  return ids.map(id => getStudent(state, id))
 }

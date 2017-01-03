@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { byId, allIds} from './list';
 import { edit } from './edit'
 import { StudentView } from '../../../model/view/studentView';
+import { getCountry } from '../country/byId';
 
 export const studentDomain = combineReducers({
   byId,
@@ -9,5 +10,10 @@ export const studentDomain = combineReducers({
   edit
 });
 
-export const getStudent = (state, id) : StudentView => state[id];
+export const getStudent = (state, id) : StudentView => {
+  return {
+    ...state.studentDomain.byId[id],
+    country: getCountry(state, state.studentDomain.byId[id].country)
+  };
+};
 export const getIds = (state) => state;

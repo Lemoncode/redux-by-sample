@@ -11,4 +11,8 @@ export const byId = (state: {[id: number]: CountryView} = {}, action) => {
   return state;
 }
 
-export const getCountry = (state, id): CountryView => state[id];
+export const getCountry = (state, id): CountryView => {
+  return {
+    ...state.countryDomain.byId[id]
+  }
+};

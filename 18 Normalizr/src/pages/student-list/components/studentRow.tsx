@@ -7,6 +7,7 @@ interface Props {
 }
 
 export const StudentRowComponent = (props: Props) => {
+  console.log(props.student.country);
   return (
     <tr>
       <td>
@@ -23,6 +24,9 @@ export const StudentRowComponent = (props: Props) => {
       </td>
       <td>
         <span>{props.student.email}</span>
+      </td>
+      <td>
+        <span>{props.student.country.name}</span>
       </td>
       <td>
         <span className="btn btn-link btn-xs" onClick={(e) => props.editStudent(props.student.id)}>
