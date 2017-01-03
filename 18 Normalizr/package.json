@@ -35,7 +35,7 @@
     "bootstrap": "^3.3.7",
     "jquery": "^3.1.1",
     "lc-form-validation": "^0.1.7",
-    "normalizr": "^2.3.1",
+    "normalizr": "^3.0.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",
