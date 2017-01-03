@@ -6,7 +6,7 @@ import { getStudents } from '../../reducers'
 
 const mapStateToProps = (state) => {
   return {
-    studentList: getStudents(state),
+    studentList: getStudents(state)
   };
 };
 

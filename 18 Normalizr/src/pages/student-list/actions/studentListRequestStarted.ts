@@ -1,8 +1,8 @@
 import { actionsEnums } from "../../../common/actionsEnums";
 import { studentApi } from "../../../rest-api/student-api";
 import { studentListRequestCompletedAction } from "./studentListRequestCompleted";
-import { normalize } from 'normalizr'
-import { arrayOfStudentsSchema } from '../../../schema/schema'
+import { normalize } from 'normalizr';
+import { arrayOfStudentsSchema } from '../../../schemas/studentSchema';
 
 export const studentListRequestStartedAction = () => {
   return function(dispatcher) {
