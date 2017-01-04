@@ -7,7 +7,6 @@ interface Props {
 }
 
 export const StudentRowComponent = (props: Props) => {
-  console.log(props.student.country);
   return (
     <tr>
       <td>

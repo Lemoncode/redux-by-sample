@@ -5,11 +5,13 @@ import { studentFieldValueChangedStart } from "./actions/studentFieldValueChange
 import { studentSaveRequestStart } from "./actions/studentSaveRequestStart";
 import { resetStudentAction } from './actions/resetStudent';
 import { StudentView } from "../../model/view/studentView";
+import { getCountries } from '../../reducers/domain/country';
 
 const mapStateToProps = (state) => {
   return {
     student: state.studentDomain.edit.editingStudent,
     errors: state.studentDomain.edit.editingStudentErrors,
+    countries: getCountries(state)
   };
 };
 
@@ -20,7 +22,8 @@ const mapDispatchToProps = (dispatch) => {
     fireFieldValueChanged: (
       viewModel: any,
       fieldName: string,
-      value: any) => dispatch(studentFieldValueChangedStart(viewModel, fieldName, value)
+      value: any,
+      subProperty?: string) => dispatch(studentFieldValueChangedStart(viewModel, fieldName, value, subProperty)
     ),
     resetStudent: () => dispatch(resetStudentAction())
   };
