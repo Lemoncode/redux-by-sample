@@ -57,12 +57,12 @@ export const StudentForm = (props: Props) => {
         label="Country"
         value={props.student.country.id}
         onChange={(e: any) => onSelectCountry(e, {id: e.target.value})}
+        error={(props.errors.country) ? props.errors.country.errorMessage : ""}
         option={
           props.countries.map((country) =>
             <option key={country.id} value={country.id}>{country.name}</option>
           )
-        }
-        error={(props.errors.country) ? props.errors.country.errorMessage : ""} />
+        } />
 
       <button type="submit" className="btn btn-default" onClick={onSave.bind(this)}>
         Save
