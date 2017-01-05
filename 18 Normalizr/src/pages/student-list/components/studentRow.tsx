@@ -7,6 +7,13 @@ interface Props {
 }
 
 export const StudentRowComponent = (props: Props) => {
+
+  const showCountryName = () => {
+    return props.student.country.id > 0 ?
+      props.student.country.name:
+      "";
+  };
+
   return (
     <tr>
       <td>
@@ -25,7 +32,7 @@ export const StudentRowComponent = (props: Props) => {
         <span>{props.student.email}</span>
       </td>
       <td>
-        <span>{props.student.country.name}</span>
+        <span>{showCountryName()}</span>
       </td>
       <td>
         <span className="btn btn-link btn-xs" onClick={(e) => props.editStudent(props.student.id)}>

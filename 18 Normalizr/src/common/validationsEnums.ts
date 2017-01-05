@@ -3,8 +3,7 @@ export const validationsEnums = {
     FIELD: {
       TYPE: "REQUIRED_FIELD",
       MESSAGE: "Mandatory field",
-    },
-    
+    }
   },
   EMAIL: {
     NOT_VALID: {
