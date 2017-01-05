@@ -1,7 +1,7 @@
-import * as React from "react";
-import { Input } from "../../../common/components/Input";
-import { StudentView } from "../../../model/view/studentView";
-import { StudentErrors } from "../../../model/view/studentErrors";
+import * as React from 'react';
+import { Input, Select } from '../../../common/components/';
+import { StudentView } from '../../../model/view/studentView';
+import { StudentErrors } from '../../../model/view/studentErrors';
 import { CountryView } from '../../../model/view/countryView';
 
 interface Props {
@@ -26,14 +26,11 @@ export const StudentForm = (props: Props) => {
     props.saveStudent(props.student);
   };
 
-  const onSelectCountry = (event) => {
+  const onSelectCountry = (event, value) => {
     let field = event.target.name;
-    let value = event.target.value;
 
-    //TODO: Create fireSubpropertyFieldValueChanged
-    props.fireFieldValueChanged(props.student, field, value, "id");
-  }
-
+    props.fireFieldValueChanged(props.student.country, field, value);
+  };
 
   return (
     <form>
@@ -41,30 +38,31 @@ export const StudentForm = (props: Props) => {
 
       <Input
         name="fullname"
-        label="full name"
+        label="Full name"
         value={props.student.fullname}
-        onChange={updateStudentFromUI.bind(this)}
+        onChange={updateStudentFromUI}
         error={(props.errors.fullname) ? props.errors.fullname.errorMessage : ""}
       />
 
       <Input
         name="email"
-        label="email"
+        label="Email"
         value={props.student.email}
-        onChange={updateStudentFromUI.bind(this)}
+        onChange={updateStudentFromUI}
         error={(props.errors.email) ? props.errors.email.errorMessage : ""}
       />
 
-      <select
+      <Select
         name="country"
+        label="Country"
         value={props.student.country.id}
-        onChange={(e) => updateStudentFromUI(e)}>
-        {
+        onChange={(e: any) => onSelectCountry(e, {id: e.target.value})}
+        option={
           props.countries.map((country) =>
             <option key={country.id} value={country.id}>{country.name}</option>
           )
-      }
-      </select>
+        }
+        error={(props.errors.country) ? props.errors.country.errorMessage : ""} />
 
       <button type="submit" className="btn btn-default" onClick={onSave.bind(this)}>
         Save

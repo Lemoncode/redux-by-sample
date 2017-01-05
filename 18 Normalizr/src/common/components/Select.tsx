@@ -6,24 +6,25 @@ interface Props {
   label: string;
   onChange: any;
   onBlur?: any;
-  placeholder?: string;
-  value: string;
+  value: any;
   error?: string;
+  option: any;
 }
 
-export const Input = (props: Props) => {
+export const Select = (props: Props) => {
+
   return (
     <ValidationFieldComponent
      name={props.name} label={props.label} error={props.error}>
-      <input
-        type="text"
-        name={props.name}
-        className="form-control"
-        placeholder={props.placeholder}
-        value={props.value}
-        onChange={props.onChange}
-        onBlur={props.onBlur}
-      />
+       <select
+         name={props.name}
+         className="form-control"
+         value={props.value}
+         onChange={props.onChange}
+         onBlur={props.onBlur} >
+        {props.option}
+       </select>
     </ValidationFieldComponent>
+
   );
-};
+}

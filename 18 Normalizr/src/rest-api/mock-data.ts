@@ -9,6 +9,7 @@ export const studentsMockData: Student[] = [
 ];
 
 export const countriesMockData: Country[] = [
+  { id: 0, name: "" },
   { id: 1, name: "Spain" },
   { id: 2, name: "Italy" },
   { id: 3, name: "Germany" },
