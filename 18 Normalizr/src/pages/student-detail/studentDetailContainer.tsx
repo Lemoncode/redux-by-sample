@@ -22,8 +22,7 @@ const mapDispatchToProps = (dispatch) => {
     fireFieldValueChanged: (
       viewModel: any,
       fieldName: string,
-      value: any,
-      subProperty?: string) => dispatch(studentFieldValueChangedStart(viewModel, fieldName, value, subProperty)
+      value: any) => dispatch(studentFieldValueChangedStart(viewModel, fieldName, value)
     ),
     resetStudent: () => dispatch(resetStudentAction())
   };

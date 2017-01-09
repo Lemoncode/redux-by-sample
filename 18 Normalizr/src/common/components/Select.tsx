@@ -8,7 +8,7 @@ interface Props {
   onBlur?: any;
   value: any;
   error?: string;
-  option: any;
+  options: any;
 }
 
 export const Select = (props: Props) => {
@@ -24,7 +24,7 @@ export const Select = (props: Props) => {
         value={props.value}
         onChange={props.onChange}
         onBlur={props.onBlur} >
-      {props.option}
+      {props.options}
       </select>
     </ValidationFieldComponent>
 

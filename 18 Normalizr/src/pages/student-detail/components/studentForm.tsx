@@ -58,7 +58,7 @@ export const StudentForm = (props: Props) => {
         value={props.student.country.id}
         onChange={(e: any) => onSelectCountry(e, {id: e.target.value})}
         error={(props.errors.country) ? props.errors.country.errorMessage : ""}
-        option={
+        options={
           props.countries.map((country) =>
             <option key={country.id} value={country.id}>{country.name}</option>
           )

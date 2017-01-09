@@ -5,7 +5,7 @@ import {arrayOfCountriesSchema} from '../../../schemas/countrySchema';
 import {CountryView} from '../../../model/view/countryView';
 
 export const fetchCountryListRequestStartedAction = () => (dispatcher) => {
-  const promise = countryApi.fetchCountries();dispatcher
+  const promise = countryApi.fetchCountries();
 
   promise.then(
     data => {
