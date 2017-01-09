@@ -4,14 +4,13 @@ import { CountryView } from '../view/countryView';
 class CountryMapper {
   mapCountryToCountryView(country: Country): CountryView {
     return {
-      id: country.id,
-      name: country.name
+      ...country
     }
   }
 
   mapCountryListToCountryViewList(countrys: Country[]): CountryView[] {
     return countrys.map((country) => {
-      return this.mapCountryToCountryView(country)
+      return this.mapCountryToCountryView(country);
     });
   }
 }
