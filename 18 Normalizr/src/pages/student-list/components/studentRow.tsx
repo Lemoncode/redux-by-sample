@@ -8,8 +8,8 @@ interface Props {
 
 export const StudentRowComponent = (props: Props) => {
 
-  const showCountryName = () => {
-    return props.student.country.id > 0 ?
+  const getCountryName = () => {
+    return props.student.country.id ?
       props.student.country.name:
       "";
   };
@@ -32,7 +32,7 @@ export const StudentRowComponent = (props: Props) => {
         <span>{props.student.email}</span>
       </td>
       <td>
-        <span>{showCountryName()}</span>
+        <span>{getCountryName()}</span>
       </td>
       <td>
         <span className="btn btn-link btn-xs" onClick={(e) => props.editStudent(props.student.id)}>
