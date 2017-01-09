@@ -13,8 +13,10 @@ interface Props {
 
 export const Input = (props: Props) => {
   return (
-    <ValidationFieldComponent
-     name={props.name} label={props.label} error={props.error}>
+    <ValidationFieldComponent error={props.error}>
+      <label htmlFor={props.name}>
+        {props.label}
+      </label>
       <input
         type="text"
         name={props.name}

@@ -14,16 +14,18 @@ interface Props {
 export const Select = (props: Props) => {
 
   return (
-    <ValidationFieldComponent
-     name={props.name} label={props.label} error={props.error}>
-       <select
-         name={props.name}
-         className="form-control"
-         value={props.value}
-         onChange={props.onChange}
-         onBlur={props.onBlur} >
-        {props.option}
-       </select>
+    <ValidationFieldComponent error={props.error}>
+      <label htmlFor={props.name}>
+        {props.label}
+      </label>
+      <select
+        name={props.name}
+        className="form-control"
+        value={props.value}
+        onChange={props.onChange}
+        onBlur={props.onBlur} >
+      {props.option}
+      </select>
     </ValidationFieldComponent>
 
   );
