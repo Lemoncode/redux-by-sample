@@ -1,7 +1,7 @@
 import { normalize } from 'normalizr';
 import { actionsEnums } from '../../../common/actionsEnums';
 import { countryApi } from '../../../rest-api/country-api';
-import {arrayOfCountriesSchema} from '../../../schemas/countrySchema';
+import {countryArraySchema} from '../../../schemas';
 import {CountryView} from '../../../model/view/countryView';
 
 export const fetchCountryListRequestStartedAction = () => (dispatcher) => {
@@ -10,7 +10,7 @@ export const fetchCountryListRequestStartedAction = () => (dispatcher) => {
   promise.then(
     data => {
       const countries = addInvalidCountryEntry(data);
-      const normalizedCountries = normalize(countries, arrayOfCountriesSchema);
+      const normalizedCountries = normalize(countries, countryArraySchema);
       dispatcher(fetchCountryListRequestCompletedAction(normalizedCountries));
     }
   );

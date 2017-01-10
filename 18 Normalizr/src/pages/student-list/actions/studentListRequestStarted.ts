@@ -2,7 +2,7 @@ import { actionsEnums } from "../../../common/actionsEnums";
 import { studentApi } from "../../../rest-api/student-api";
 import { studentListRequestCompletedAction } from "./studentListRequestCompleted";
 import { normalize } from 'normalizr';
-import { arrayOfStudentsSchema } from '../../../schemas/studentSchema';
+import { studentArraySchema } from '../../../schemas';
 
 export const studentListRequestStartedAction = () => {
   return function(dispatcher) {
@@ -10,7 +10,7 @@ export const studentListRequestStartedAction = () => {
 
     promise.then(
       data => {
-        const normalizedResult = normalize(data, arrayOfStudentsSchema);
+        const normalizedResult = normalize(data, studentArraySchema);
         dispatcher(studentListRequestCompletedAction(normalizedResult));
       }
     );
