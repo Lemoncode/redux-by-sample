@@ -43,6 +43,7 @@
     "react-router-redux": "^4.0.6",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
+    "reselect": "^2.5.4",
     "toastr": "^2.1.2",
     "validator": "^6.2.0"
   }
