@@ -3,7 +3,7 @@ import {UserProfile} from '../../model/view/userProfile';
 import {LoginResponse} from '../../model/view/loginResponse';
 import {LoginEntity} from '../../model/view/login';
 
-class SessionState  {
+export class SessionState  {
   isUserLoggedIn : boolean;
   userProfile : UserProfile;
   editingLogin : LoginEntity;

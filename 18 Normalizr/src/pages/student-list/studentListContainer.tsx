@@ -4,8 +4,9 @@ import { StudentListComponent } from "./studentList";
 import { navigateToEditStudentAction, navigateToNewStudentAction } from "./actions/navigateToEditStudent";
 import { getStudents } from '../../reducers/domain/student/selectors';
 import { fetchCountryListRequestStartedAction } from './actions/fetchCountryList';
+import {State} from '../../reducers';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: State) => {
   return {
     studentList: getStudents(state)
   };

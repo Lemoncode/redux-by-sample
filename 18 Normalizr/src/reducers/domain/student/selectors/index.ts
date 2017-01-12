@@ -1,10 +1,11 @@
 import {createSelector} from 'reselect';
+import {State} from '../../../index';
 import {StudentDomain} from '../index';
 import {StudentView} from '../../../../model/view/studentView';
-import {CountryDomain} from '../../country'
+import {CountryDomain} from '../../country';
 import {countryDomain, getCountry} from '../../country/selectors';
 
-const studentDomain = (state) => state.studentDomain;
+const studentDomain = (state: State) => state.studentDomain;
 
 export const getStudents = createSelector(
   studentDomain,

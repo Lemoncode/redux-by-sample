@@ -8,8 +8,9 @@ import { StudentView } from "../../model/view/studentView";
 import { getCountries } from '../../reducers/domain/country/selectors';
 import {addCountryAction} from '../student-detail/actions/addCountry';
 import {CountryView} from '../../model/view/countryView';
+import {State} from '../../reducers';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: State) => {
   return {
     student: state.studentDomain.edit.editingStudent,
     errors: state.studentDomain.edit.editingStudentErrors,
