@@ -6,6 +6,8 @@ import { studentSaveRequestStart } from "./actions/studentSaveRequestStart";
 import { resetStudentAction } from './actions/resetStudent';
 import { StudentView } from "../../model/view/studentView";
 import { getCountries } from '../../reducers/domain/country';
+import {addCountryAction} from '../student-detail/actions/addCountry';
+import {CountryView} from '../../model/view/countryView';
 
 const mapStateToProps = (state) => {
   return {
@@ -24,7 +26,8 @@ const mapDispatchToProps = (dispatch) => {
       fieldName: string,
       value: any) => dispatch(studentFieldValueChangedStart(viewModel, fieldName, value)
     ),
-    resetStudent: () => dispatch(resetStudentAction())
+    resetStudent: () => dispatch(resetStudentAction()),
+    addInvalidCountryEntry: (country:CountryView) => dispatch(addCountryAction(country))
   };
 };
 

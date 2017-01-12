@@ -9,17 +9,12 @@ export const fetchCountryListRequestStartedAction = () => (dispatcher) => {
 
   promise.then(
     data => {
-      const countries = addInvalidCountryEntry(data);
-      const normalizedCountries = normalize(countries, countryArraySchema);
+      const normalizedCountries = normalize(data, countryArraySchema);
       dispatcher(fetchCountryListRequestCompletedAction(normalizedCountries));
     }
   );
 
   return promise;
-}
-
-const addInvalidCountryEntry = (countries: CountryView[]) => {
-  return [{ id: 0, name: "Select country..." }, ...countries]
 }
 
 export const fetchCountryListRequestCompletedAction = (countries) => ({

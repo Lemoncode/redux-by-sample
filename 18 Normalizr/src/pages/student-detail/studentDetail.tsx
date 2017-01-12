@@ -13,6 +13,7 @@ interface Props  {
   saveStudent: (student: StudentView) => void;
   resetStudent: () => void;
   countries: CountryView[];
+  addInvalidCountryEntry: (country: CountryView) => void;
 }
 
 export class StudentDetailComponent extends React.Component<Props, {}> {
@@ -23,6 +24,8 @@ export class StudentDetailComponent extends React.Component<Props, {}> {
     } else {
       this.props.resetStudent();
     }
+
+    this.props.addInvalidCountryEntry({ id: 0, name: "Select country..." });
   }
 
   render() {
