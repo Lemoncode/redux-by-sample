@@ -1,5 +1,5 @@
 import { FieldValidationResult, BaseFormValidation } from "lc-form-validation";
-import { requiredValidationHandler } from "../../common/validations/validators";
+import { requiredValidationHandler } from "../../common/validations/required";
 import { emailValidationHandler } from "../../common/validations/email";
 
 class LoginFormValidation extends BaseFormValidation {

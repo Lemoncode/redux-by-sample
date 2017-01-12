@@ -3,7 +3,7 @@ import { StudentView } from "../../../model/view/studentView";
 import { StudentErrors } from "../../../model/view/studentErrors";
 import { IStudentFieldValueChangedCompletedPayload } from "../../../pages/student-detail/actions/studentFieldValueChangedCompleted";
 
-class EditState  {
+export class EditState  {
   editingStudent: StudentView;
   editingStudentErrors: StudentErrors;
 

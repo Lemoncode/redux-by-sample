@@ -7,6 +7,7 @@ export const StudentHeaderComponent = () => {
         <th>Active Training</th>
         <th>Name</th>
         <th>Email</th>
+        <th>Country</th>
         <th>Commands</th>
       </tr>
     </thead>

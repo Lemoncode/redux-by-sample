@@ -1,13 +1,17 @@
 import { combineReducers } from 'redux';
-import { byId, allIds} from './list';
-import { edit } from './edit'
+import {byId} from './byId';
+import {allIds} from './list';
+import { edit, EditState } from './edit';
 import { StudentView } from '../../../model/view/studentView';
 
-export const studentDomain = combineReducers({
+export interface StudentDomain {
+  byId: {[id: number] : StudentView},
+  allIds: number[];
+  edit: EditState;
+};
+
+export const studentDomain = combineReducers<StudentDomain>({
   byId,
   allIds,
   edit
 });
-
-export const getStudent = (state, id) : StudentView => state[id];
-export const getIds = (state) => state;

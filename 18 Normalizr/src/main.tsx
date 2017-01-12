@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Router, Route, IndexRoute, hashHistory } from "react-router";
 import { syncHistoryWithStore} from "react-router-redux";
-import { createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware, compose } from "redux";
 import { Provider } from "react-redux";
 import { reducers } from "./reducers";
 import { App } from "./app";
@@ -13,7 +13,10 @@ import reduxThunk from "redux-thunk";
 
 let store = createStore(
   reducers,
-  applyMiddleware(reduxThunk),
+  compose(
+    applyMiddleware(reduxThunk),
+    window['devToolsExtension'] ? window['devToolsExtension']() : f => f
+  )
 );
 
 const history = syncHistoryWithStore(hashHistory, store);

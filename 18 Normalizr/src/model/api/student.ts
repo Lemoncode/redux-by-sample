@@ -3,12 +3,14 @@ export class Student {
   gotActiveTraining: boolean;
   fullname: string;
   email: string;
+  countryId: number;
 
   public constructor() {
     this.id = -1;
     this.gotActiveTraining = false;
     this.fullname = "";
     this.email = "";
+    this.countryId = -1;
   }
 }
 

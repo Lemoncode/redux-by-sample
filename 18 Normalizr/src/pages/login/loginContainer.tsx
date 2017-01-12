@@ -3,8 +3,9 @@ import { LoginComponent } from './login';
 import { LoginEntity } from '../../model/view/login';
 import { updateEditingLogin } from './actions/updateEditingLogin';
 import { loginRequestStartedAction} from './actions/loginRequestStarted';
+import {State} from '../../reducers';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: State) => {
     return {
       loginInfo: state.sessionReducer.editingLogin
     }

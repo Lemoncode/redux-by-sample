@@ -35,7 +35,7 @@
     "bootstrap": "^3.3.7",
     "jquery": "^3.1.1",
     "lc-form-validation": "^0.1.7",
-    "normalizr": "^2.3.1",
+    "normalizr": "^3.0.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",
@@ -43,6 +43,7 @@
     "react-router-redux": "^4.0.6",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
+    "reselect": "^2.5.4",
     "toastr": "^2.1.2",
     "validator": "^6.2.0"
   }

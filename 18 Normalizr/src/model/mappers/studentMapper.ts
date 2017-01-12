@@ -7,13 +7,17 @@ class StudentMapper {
       id: student.id,
       gotActiveTraining: student.gotActiveTraining,
       fullname: student.fullname,
-      email: student.email
-    }
+      email: student.email,
+      country: {
+        id: student.countryId,
+        name: '',
+      },
+    };
   }
 
   mapStudentListToStudentViewList(students: Student[]): StudentView[] {
     return students.map((student) => {
-      return this.mapStudentToStudentView(student)
+      return this.mapStudentToStudentView(student);
     });
   }
 }
