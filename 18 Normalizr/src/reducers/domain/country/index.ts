@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux';
-import { byId, getCountry } from './byId';
-import { allIds, getIds } from './list';
+import {byId} from './byId';
+import {allIds} from './list';
 import { CountryView } from '../../../model/view/countryView';
 
-export const countryDomain = combineReducers({
+export interface CountryDomain {
+  byId: {[id: number]: CountryView};
+  allIds: number[];
+}
+
+export const countryDomain = combineReducers<CountryDomain>({
   byId,
   allIds
 });
-
-export const getCountries = (state) : CountryView[] => {
-  const ids = getIds(state.countryDomain.allIds);
-  return ids.map(id => getCountry(state, id));
-}
