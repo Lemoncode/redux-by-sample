@@ -13,7 +13,7 @@ export const getStudents = createSelector(
     studentDomain.allIds.map(id => getStudent(studentDomain, countryDomain, id))
 );
 
-const getStudent = (studentDomain: StudentDomain, countryDomain: CountryDomain, id: number): StudentView => ({
+const getStudent = (studentDomain: StudentDomain, countryDomain: CountryDomain, id): StudentView => ({
   ...studentDomain.byId[id],
-  country: getCountry(countryDomain, studentDomain.byId[id].country.id)
+  country: getCountry(countryDomain, studentDomain.byId[id].country)
 });

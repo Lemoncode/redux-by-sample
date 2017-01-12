@@ -4,7 +4,10 @@ import { StudentView } from '../view/studentView';
 class StudentMapper {
   mapStudentToStudentView(student: Student): StudentView {
     return {
-      ...student,
+      id: student.id,
+      gotActiveTraining: student.gotActiveTraining,
+      fullname: student.fullname,
+      email: student.email,
       country: {
         id: student.countryId,
         name: '',

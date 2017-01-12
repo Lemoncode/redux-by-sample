@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
-import { byId, allIds} from './list';
+import {byId} from './byId';
+import {allIds} from './list';
 import { edit, EditState } from './edit';
 import { StudentView } from '../../../model/view/studentView';
 

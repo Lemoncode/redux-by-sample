@@ -8,6 +8,6 @@ export const getCountries = createSelector(
   (state: CountryDomain) => state.allIds.map(id => getCountry(state, id))
 );
 
-export const getCountry = (state: CountryDomain, id: number) => ({
+export const getCountry = (state: CountryDomain, id) => ({
   ...state.byId[id]
 });
