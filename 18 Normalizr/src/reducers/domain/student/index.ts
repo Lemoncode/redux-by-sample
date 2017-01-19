@@ -2,10 +2,10 @@ import { combineReducers } from 'redux';
 import {byId} from './byId';
 import {allIds} from './list';
 import { edit, EditState } from './edit';
-import { StudentView } from '../../../model/view/studentView';
+import { StudentNormalized } from '../../../model/normalized/studentNormalized';
 
 export interface StudentDomain {
-  byId: {[id: number] : StudentView},
+  byId: {[id: number] : StudentNormalized},
   allIds: number[];
   edit: EditState;
 };

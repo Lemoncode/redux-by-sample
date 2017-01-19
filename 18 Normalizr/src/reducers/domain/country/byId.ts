@@ -1,6 +1,6 @@
-import { CountryView } from '../../../model/view/countryView';
+import { CountryNormalized } from '../../../model/normalized/countryNormalized';
 
-export const byId = (state: {[id: number]: CountryView} = {}, action) => {
+export const byId = (state: {[id: number]: CountryNormalized} = {}, action) => {
   if (action.payload && action.payload.entities) {
     return {
       ...state,

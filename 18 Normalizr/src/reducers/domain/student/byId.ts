@@ -1,6 +1,6 @@
-import { StudentView } from "../../../model/view/studentView";
+import { StudentNormalized } from "../../../model/normalized/studentNormalized";
 
-export const byId = (state : {[id: number] : StudentView} = {}, action) => {
+export const byId = (state : {[id: number] : StudentNormalized} = {}, action) => {
   if (action.payload && action.payload.entities) {
     return {
       ...state,
