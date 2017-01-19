@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import {byId} from './byId';
 import {allIds} from './list';
-import { CountryView } from '../../../model/view/countryView';
+import { CountryNormalized } from '../../../model/normalized/countryNormalized';
 
 export interface CountryDomain {
-  byId: {[id: number]: CountryView};
+  byId: {[id: number]: CountryNormalized};
   allIds: number[];
 }
 
