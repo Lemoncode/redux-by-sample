@@ -1,9 +1,4 @@
-export class CountryNormalized {
+export interface CountryNormalized {
   id: number;
   name: string;
-
-  constructor() {
-    this.id = -1;
-    this.name = "";
-  }
 }
