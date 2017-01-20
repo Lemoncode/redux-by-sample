@@ -5,15 +5,15 @@ import { studentFieldValueChangedStart } from "./actions/studentFieldValueChange
 import { studentSaveRequestStart } from "./actions/studentSaveRequestStart";
 import { resetStudentAction } from './actions/resetStudent';
 import { StudentView } from "../../model/view/studentView";
-import { getCountries } from '../../reducers/domain/country/selectors';
+import { getCountries } from '../../reducers/domain/selectors';
 import {addCountryAction} from '../student-detail/actions/addCountry';
 import {CountryView} from '../../model/view/countryView';
 import {State} from '../../reducers';
 
 const mapStateToProps = (state: State) => {
   return {
-    student: state.studentDomain.edit.editingStudent,
-    errors: state.studentDomain.edit.editingStudentErrors,
+    student: state.logic.student.edit.editingStudent,
+    errors: state.logic.student.edit.editingStudentErrors,
     countries: getCountries(state)
   };
 };

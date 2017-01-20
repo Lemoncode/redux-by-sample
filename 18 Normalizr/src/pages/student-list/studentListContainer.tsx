@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import { studentListRequestStartedAction } from "./actions/studentListRequestStarted";
 import { StudentListComponent } from "./studentList";
 import { navigateToEditStudentAction, navigateToNewStudentAction } from "./actions/navigateToEditStudent";
-import { getStudents } from '../../reducers/domain/student/selectors';
+import { getStudents } from '../../reducers/domain/selectors';
 import { fetchCountryListRequestStartedAction } from './actions/fetchCountryList';
 import {State} from '../../reducers';
 

@@ -1,9 +1,9 @@
-import {actionsEnums} from '../../common/actionsEnums';
-import {UserProfile} from '../../model/view/userProfile';
-import {LoginResponse} from '../../model/view/loginResponse';
-import {LoginEntity} from '../../model/view/login';
+import {actionsEnums} from '../../../common/actionsEnums';
+import {UserProfile} from '../../../model/view/userProfile';
+import {LoginResponse} from '../../../model/view/loginResponse';
+import {LoginEntity} from '../../../model/view/login';
 
-export class SessionState  {
+export class Session  {
   isUserLoggedIn : boolean;
   userProfile : UserProfile;
   editingLogin : LoginEntity;
@@ -16,7 +16,7 @@ export class SessionState  {
   }
 }
 
-export const sessionReducer =  (state : SessionState = new SessionState(), action) => {
+export const session =  (state : Session = new Session(), action) => {
       switch (action.type) {
         case actionsEnums.USERPROFILE_PERFORM_LOGIN:
            return handlePerformLogin(state, action.payload);
@@ -29,7 +29,7 @@ export const sessionReducer =  (state : SessionState = new SessionState(), actio
 };
 
 
-const handlePerformLogin = (state : SessionState, payload : LoginResponse) => {
+const handlePerformLogin = (state : Session, payload : LoginResponse) => {
   return {
     ...state,
     isUserLoggedIn: payload.succeeded,
@@ -37,7 +37,7 @@ const handlePerformLogin = (state : SessionState, payload : LoginResponse) => {
   };
 }
 
-const handleUpdateEditingLogin = (state: SessionState, payload : LoginEntity) => {
+const handleUpdateEditingLogin = (state: Session, payload : LoginEntity) => {
   return {
     ...state,
     editingLogin: payload
