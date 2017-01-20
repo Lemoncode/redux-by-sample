@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import { session, SessionState } from './session';
-import { student, StudentLogic } from './student';
+import { session, Session } from './session';
+import { student, Student } from './student';
 
 export interface Logic {
-  student: StudentLogic;
-  session: SessionState
+  student: Student;
+  session: Session
 }
 export const logic =  combineReducers<Logic>({
   student,

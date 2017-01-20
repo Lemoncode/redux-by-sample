@@ -1,11 +1,10 @@
 import { combineReducers } from 'redux';
 import { edit, EditState } from './edit';
-import { StudentNormalized } from '../../../model/normalized/studentNormalized';
 
-export interface StudentLogic {
+export interface Student {
   edit: EditState;
 };
 
-export const student = combineReducers<StudentLogic>({
+export const student = combineReducers<Student>({
   edit
 });

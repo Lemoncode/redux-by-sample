@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
-import { logic, Logic } from './logic';
 import { domain, Domain } from './domain';
+import { logic, Logic } from './logic';
 
 export interface State {
   domain: Domain;
