@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
-import { sessionReducer, SessionState } from './logic/session';
+import { sessionLogic, SessionState } from './logic/session';
 import { studentDomain, StudentDomain } from './domain/student';
 import { studentLogic, StudentLogic } from './logic/student';
 import { StudentView } from '../model/view/studentView';
@@ -10,13 +10,13 @@ export interface State {
   studentDomain: StudentDomain;
   studentLogic: StudentLogic;
   countryDomain: CountryDomain;
-  sessionReducer: SessionState;
+  sessionLogic: SessionState;
   routing: any;
 }
 export const reducers =  combineReducers<State>({
   studentDomain,
   studentLogic,
   countryDomain,
-  sessionReducer,
+  sessionLogic,
   routing: routerReducer,
 });
