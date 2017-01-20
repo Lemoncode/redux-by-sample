@@ -8,7 +8,7 @@ export interface StudentDomain {
   allIds: number[];
 };
 
-export const studentDomain = combineReducers<StudentDomain>({
+export const student = combineReducers<StudentDomain>({
   byId,
   allIds
 });

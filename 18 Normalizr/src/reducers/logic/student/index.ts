@@ -6,6 +6,6 @@ export interface StudentLogic {
   edit: EditState;
 };
 
-export const studentLogic = combineReducers<StudentLogic>({
+export const student = combineReducers<StudentLogic>({
   edit
 });

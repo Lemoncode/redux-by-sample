@@ -3,7 +3,7 @@ import {State} from '../../../index';
 import {CountryDomain} from '../index';
 import {CountryView} from '../../../../model/view/countryView';
 
-export const countryDomain = (state: State) => state.countryDomain;
+export const countryDomain = (state: State) => state.domain.country;
 
 export const getCountries = createSelector(
   countryDomain,

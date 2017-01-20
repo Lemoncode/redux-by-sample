@@ -5,7 +5,7 @@ import {StudentView} from '../../../../model/view/studentView';
 import {CountryDomain} from '../../country';
 import {countryDomain, getCountry} from '../../country/selectors';
 
-const studentDomain = (state: State) => state.studentDomain;
+const studentDomain = (state: State) => state.domain.student;
 
 export const getStudents = createSelector(
   studentDomain,

@@ -8,7 +8,7 @@ export interface CountryDomain {
   allIds: number[];
 }
 
-export const countryDomain = combineReducers<CountryDomain>({
+export const country = combineReducers<CountryDomain>({
   byId,
   allIds
 });

@@ -7,7 +7,7 @@ import {State} from '../../reducers';
 
 const mapStateToProps = (state: State) => {
     return {
-      loginInfo: state.sessionLogic.editingLogin
+      loginInfo: state.logic.session.editingLogin
     }
 }
 

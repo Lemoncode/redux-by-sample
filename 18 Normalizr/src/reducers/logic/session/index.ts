@@ -16,7 +16,7 @@ export class SessionState  {
   }
 }
 
-export const sessionLogic =  (state : SessionState = new SessionState(), action) => {
+export const session =  (state : SessionState = new SessionState(), action) => {
       switch (action.type) {
         case actionsEnums.USERPROFILE_PERFORM_LOGIN:
            return handlePerformLogin(state, action.payload);
