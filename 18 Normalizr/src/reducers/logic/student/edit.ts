@@ -15,7 +15,7 @@ export class EditState  {
 
 export const edit =  (state : EditState = new EditState(), action) => {
   switch (action.type) {
-    case actionsEnums.STUDENT_GET_STUDENT_REQUEST_COMPLETED:
+    case actionsEnums.FETCH_STUDENT_REQUEST_COMPLETED:
       return handleGetStudent(state, action.payload);
     case actionsEnums.STUDENT_FIELD_VALUE_CHANGED_COMPLETED:
       return handleFieldValueChanged(state, action.payload);
