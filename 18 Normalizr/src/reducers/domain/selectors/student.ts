@@ -8,8 +8,7 @@ const domain = (state: State) => state.domain;
 
 export const getStudents = createSelector(
   domain,
-  (domain: Domain) =>
-    domain.allIds.students.map(id => getStudent(domain, id))
+  (domain: Domain) => domain.allIds.students.map(id => getStudent(domain, id))
 );
 
 const getStudent = (domain: Domain, id: number): StudentView => ({
