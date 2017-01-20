@@ -1,7 +1,7 @@
-import {actionsEnums} from '../../common/actionsEnums';
-import {UserProfile} from '../../model/view/userProfile';
-import {LoginResponse} from '../../model/view/loginResponse';
-import {LoginEntity} from '../../model/view/login';
+import {actionsEnums} from '../../../common/actionsEnums';
+import {UserProfile} from '../../../model/view/userProfile';
+import {LoginResponse} from '../../../model/view/loginResponse';
+import {LoginEntity} from '../../../model/view/login';
 
 export class SessionState  {
   isUserLoggedIn : boolean;

@@ -12,8 +12,8 @@ import {State} from '../../reducers';
 
 const mapStateToProps = (state: State) => {
   return {
-    student: state.studentDomain.edit.editingStudent,
-    errors: state.studentDomain.edit.editingStudentErrors,
+    student: state.studentLogic.edit.editingStudent,
+    errors: state.studentLogic.edit.editingStudentErrors,
     countries: getCountries(state)
   };
 };
