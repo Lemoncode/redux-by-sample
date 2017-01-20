@@ -9,7 +9,7 @@ export interface ById {
 const initialState = {
   students: {},
   countries: {}
-}
+};
 
 export const byId = (state: ById = initialState, action) => {
   if (action.payload && action.payload.entities) {

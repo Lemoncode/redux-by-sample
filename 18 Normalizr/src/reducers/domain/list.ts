@@ -8,15 +8,15 @@ export interface AllIds {
 const initialState = {
   students: [],
   countries: []
-}
+};
 
 export const allIds =  (state: AllIds = initialState, action) => {
   switch (action.type) {
-    case actionsEnums.STUDENTS_GET_LIST_REQUEST_COMPLETED:
-      return handleStudentsGetListRequestCompleted(state, action.payload.result);
+    case actionsEnums.FETCH_STUDENT_LIST_REQUEST_COMPLETED:
+      return handleFetchStudents(state, action.payload.result);
 
     case actionsEnums.FETCH_COUNTRY_LIST_REQUEST_COMPLETED:
-      return handleFetchCountryListRequestCompleted(state, action.payload.result);
+      return handleFetchCountries(state, action.payload.result);
 
     case actionsEnums.ADD_COUNTRY:
       return handleAddCountry(state, action.payload.result);
@@ -25,14 +25,14 @@ export const allIds =  (state: AllIds = initialState, action) => {
   return state;
 };
 
-const handleStudentsGetListRequestCompleted = (state: AllIds, ids: number[]) => {
+const handleFetchStudents = (state: AllIds, ids: number[]) => {
   return {
     ...state,
     students: ids
   }
 }
 
-const handleFetchCountryListRequestCompleted = (state: AllIds, ids: number[]) => {
+const handleFetchCountries = (state: AllIds, ids: number[]) => {
   return {
     ...state,
     countries: ids
