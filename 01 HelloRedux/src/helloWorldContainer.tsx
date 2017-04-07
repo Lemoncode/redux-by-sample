@@ -2,9 +2,9 @@ import { connect } from 'react-redux';
 import { HelloWorldComponent } from './helloWorld';
 
 const mapStateToProps = (state) => {
-    return {
-      userName: state.userProfileReducer.firstname
-    }
+  return {
+    userName: state.userProfileReducer.firstname
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -13,6 +13,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export const HelloWorldContainer = connect(
-                                   mapStateToProps
-                                  ,mapDispatchToProps
-                                )(HelloWorldComponent);
+  mapStateToProps,
+  mapDispatchToProps
+)(HelloWorldComponent);
