@@ -1,21 +1,20 @@
 import { connect } from 'react-redux';
 import { memberRequest } from '../../actions/memberRequest';
-import { MembersArea } from './memberArea';
-
+import { MemberAreaComponent } from './memberArea';
 
 const mapStateToProps = (state) => {
-    return{
-        members: state.memberReducer.members
-    };
+  return{
+      members: state.memberReducer.members
+  };
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        loadMembers: () => {return dispatch(memberRequest())}
-    };
+  return {
+    loadMembers: () => {return dispatch(memberRequest())}
+  };
 }
 
 export const MembersAreaContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(MembersArea)
+  mapStateToProps,
+  mapDispatchToProps
+)(MemberAreaComponent);
