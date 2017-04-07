@@ -1,11 +1,6 @@
-import {} from 'core-js'
-import {} from 'whatwg-fetch';
 import {MemberEntity} from '../model/member';
 
-
-// Sync mock data API, inspired from:
-// https://gist.github.com/coryhouse/fd6232f95f9d601158e4
-class MemberApi {
+class MemberAPI {
 
   // Just return a copy of the mock data
   getAllMembers() : Promise<MemberEntity[]> {
@@ -47,4 +42,4 @@ class MemberApi {
   }
 }
 
-export const memberApi = new MemberApi();
+export const memberAPI = new MemberAPI();

@@ -9,7 +9,6 @@ be retrieve from github api.
 
 Summary steps:
 
-- Let's install the needed package and typescript definitions.
 - Let's register our Middleware.
 - Let's create a rest api class to access this data.
 - Let's define two new actions.
@@ -30,51 +29,39 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 
 ## Steps to build it
 
-- We have to install libraries and typescript definitions to handle fetch calls: core.js and whatwg-fetch
-
-```javascript
-npm install core-js --save-dev
-```
-
-```javascript
-npm install whatwg-fetch --save
-```
-
-```javascript
-npm install @types/core-js --save-dev
-```
-
-```javascript
-npm install @types/whatwg-fetch --save-dev
-```
-
 - We need to install as well redux-thunk and it's typescript definitions
 
-```javascript
+```
 npm install redux-thunk --save
-```
-
-```javascript
 npm install @types/redux-thunk --save-dev
+
 ```
 
-- Let's register Redux-thunk middleware _main.tsx_
+- Let's register Redux-thunk middleware `main.tsx`
 
-```javascript
-import { createStore, applyMiddleware } from 'redux';
+### ./src/main.tsx
+```diff
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+- import { createStore } from 'redux';
++ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import {reducers} from './reducers'
+import {reducers} from './reducers';
 import {App} from './app';
-import reduxThunk from 'redux-thunk';
++ import reduxThunk from 'redux-thunk';
 
-let store = createStore(
-  reducers,
-  applyMiddleware(reduxThunk)
-);
+- let store = createStore(reducers);
++ let store = createStore(
++   reducers,
++   applyMiddleware(reduxThunk),
++ );
+
+...
 ```
 
 - Let's create an entity under _./src/model/member.ts_
 
+### ./src/model/member.ts
 ```javascript
 export class MemberEntity {
   id: number;
@@ -89,16 +76,12 @@ export class MemberEntity {
 }
 ```
 
-- Let's create a rest api class to access this data, under _./src/restApi/memberApi_
+- Let's create a rest api class to access this data, under `./src/api/member.ts`
 
+### ./src/api/member.ts
 ```javascript
-import {} from 'core-js'
-import {} from 'whatwg-fetch';
 import {MemberEntity} from '../model/member';
 
-
-// Sync mock data API, inspired from:
-// https://gist.github.com/coryhouse/fd6232f95f9d601158e4
 class MemberAPI {
 
   // Just return a copy of the mock data
@@ -142,111 +125,119 @@ class MemberAPI {
 }
 
 export const memberAPI = new MemberAPI();
+
 ```
 
-- It's time to define two new actions _./src/common/actionsEnums.ts_
+- It's time to define two new actions `./src/common/actionsEnums.ts`
 
-```javascript
+### ./src/common/actionsEnums.ts
+```diff
 export const actionsEnums = {
-  UPDATE_USERPROFILE_NAME : 'UPDATE_USERPROFILE_NAME ',
-  UPDATE_USERPROFILE_FAVOURITE_COLOR: 'UPDATE_USERPROFILE_FAVOURITE_COLOR',
-  MEMBER_REQUEST_STARTED: 'MEMBER_REQUEST_STARTED',
-  MEMBER_REQUEST_COMPLETED: 'MEMBER_REQUEST_COMPLETED',
-}
+  UPDATE_USERPROFILE_NAME: "UPDATE_USERPROFILE_NAME",
+  UPDATE_USERPROFILE_FAVOURITE_COLOR: "UPDATE_USERPROFILE_FAVOURITE_COLOR",
++ MEMBER_REQUEST: 'MEMBER_REQUEST',
++ MEMBER_REQUEST_COMPLETED: 'MEMBER_REQUEST_COMPLETED'
+};
+
 ```
 
 - Let's create an action that will inform members once completed:
 
+### ./src/actions/memberRequest.ts
 ```javascript
-import {actionsEnums} from "../common/actionsEnums";
+import {actionsEnums} from '../common/actionsEnums';
 import {MemberEntity} from '../model/member';
-
-export const membersRequestCompleted = (members : MemberEntity[]) => {
-   return {
-     type: actionsEnums.MEMBER_REQUEST_COMPLETED,
-     members: members
-   }
- }
-```
-- Then we will add the action that will trigger an async action. We will do that at the same file:
-
-```javascript
-import {actionsEnums} from "../common/actionsEnums";
-import {MemberEntity} from '../model/member';
-import {memberApi} from '../restApi/memberApi';
 
 export const memberRequestCompleted = (members: MemberEntity[]) => {
     return {
         type: actionsEnums.MEMBER_REQUEST_COMPLETED,
-        members: members 
+        members: members
     }
 }
 
-export function memberRequest(){
-
-  // Invert control!
-  // Return a function that accepts `dispatch` so we can dispatch later.
-  // Thunk middleware knows how to turn thunk async actions into actions.
-
-    return function(dispatcher){
-        const promise = memberApi.getAllMembers();
-
-        promise.then(
-            (data) => dispatcher(memberRequestCompleted(data))
-        );
-        return promise;
-    }
-}
 ```
 
-- Let's add a new reducer that will hold members state _./src/reducers/memberReducer.ts_.
+- Then we will add the action that will trigger an async action. We will do that at the same file:
 
+### ./src/actions/memberRequest.ts
+```diff
+import {actionsEnums} from '../common/actionsEnums';
+import {MemberEntity} from '../model/member';
++ import {memberAPI} from '../api/member';
+
+export const memberRequestCompleted = (members: MemberEntity[]) => {
+    return {
+        type: actionsEnums.MEMBER_REQUEST_COMPLETED,
+        members: members
+    }
+}
+
++ export const memberRequest = () => (dispatcher) =>{
++   const promise = memberAPI.getAllMembers();
+
++   promise.then(
++     (data) => dispatcher(memberRequestCompleted(data))
++   );
+
++   return promise;
++ }
+
+```
+
+- Let's add a new reducer that will hold members state `./src/reducers/memberReducer.ts`.
+
+### ./src/reducers/memberReducer.ts
 ```javascript
 import {actionsEnums} from '../common/actionsEnums';
 import {MemberEntity} from '../model/member';
-import objectAssign = require('object-assign');
 
 class memberState  {
   members : MemberEntity[];
 
-  public constructor()
+  constructor()
   {
     this.members = [];
   }
 }
 
 export const memberReducer =  (state : memberState = new memberState(), action) => {
-      switch (action.type) {
-        case actionsEnums.MEMBER_REQUEST_COMPLETED:
-           return handleMemberRequestCompletedAction(state, action);
-      }
+  switch (action.type) {
+    case actionsEnums.MEMBER_REQUEST_COMPLETED:
+      return handleMemberRequestCompletedAction(state, action);
+  }
 
-      return state;
+  return state;
 };
 
 
 const handleMemberRequestCompletedAction = (state : memberState, action) => {
-  const newState = objectAssign({}, state, {members: action.members});
-  return newState;
+  return {
+    ...state,
+    members: action.members,
+  };
 }
+
 ```
 
-- Let's register it _./src/reducers/index.ts_
+- Let's register it `./src/reducers/index.ts`
 
-```javascript
+### ./src/reducers/index.ts
+```diff
 import { combineReducers } from 'redux';
 import { userProfileReducer } from './userProfile';
-import { memberReducer } from './memberReducer';
-
++ import { memberReducer } from './memberReducer';
 
 export const reducers =  combineReducers({
-  userProfileReducer,
-  memberReducer
+- userProfileReducer
++ userProfileReducer,
++ memberReducer,
 });
+
 ```
 
 - Let's create a memberRow component _./src/components/members/memberrow.tsx_.
 
+### ./src/components/members/memberRow.tsx
 ```javascript
 import * as React from 'react';
 import {MemberEntity} from '../../model/member';
@@ -338,7 +329,7 @@ export const MembersArea = (props : Props) => {
                 onClick={() => props.loadMembers()}
         />
     </div>
-    ); 
+    );
 }
 ```
 

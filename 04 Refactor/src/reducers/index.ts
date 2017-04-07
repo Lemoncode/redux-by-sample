@@ -1,6 +1,5 @@
-import { combineReducers } from "redux";
-import { userProfileReducer } from "./userProfile";
-import { Provider } from "react-redux";
+import { combineReducers } from 'redux';
+import { userProfileReducer } from './userProfile';
 
 export const reducers =  combineReducers({
   userProfileReducer
