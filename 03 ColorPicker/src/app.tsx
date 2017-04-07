@@ -1,8 +1,8 @@
-import * as React from "react";
-import { HelloWorldContainer } from "./helloWorldContainer";
-import { NameEditContainer } from "./nameEditContainer";
-import { ColorDisplayerContainer } from "./colordisplayerContainer";
-import { ColorPickerContainer } from "./colorpickerContainer";
+import * as React from 'react';
+import { HelloWorldContainer } from './helloWorldContainer';
+import { NameEditContainer } from './nameEditContainer';
+import { ColorDisplayerContainer } from './colordisplayerContainer';
+import { ColorPickerContainer } from './colorpickerContainer';
 
 export const App = () => {
   return (

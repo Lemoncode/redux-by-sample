@@ -118,11 +118,10 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
 
 - Let's create the needed `ColorPicker` components, plus subcomponents.
 
-  _./src/colorslider.tsx_:
-
-  ```jsx
-  import * as React from "react";
-  import { Color } from "./model/color";
+  ### ./src/colorSlider.tsx
+  ```javascript
+  import * as React from 'react';
+  import { Color } from './model/color';
 
   interface Props {
     value: number;
@@ -143,14 +142,14 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
       </div>
     );
   };
+
   ```
 
-  _./src/colorpicker.tsx_:
-
-  ```jsx
-  import * as React from "react";
-  import { Color } from "./model/color";
-  import { ColorSlider } from "./colorslider";
+  ### ./src/colorPicker.tsx
+  ```javascript
+  import * as React from 'react';
+  import { Color } from './model/color';
+  import { ColorSlider } from './colorslider';
 
   interface Props {
     color: Color;
@@ -180,21 +179,19 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
       </div>
     );
   };
+
   ```
 
-  _./src/colordisplayer.tsx_:
-
-  ```jsx
-  import * as React from "react";
-  import { Color } from "./model/color";
+  ### ./src/colorDisplayer.tsx
+  ```javascript
+  import * as React from 'react';
+  import { Color } from './model/color';
 
   interface Props {
     color: Color;
   }
 
   export const ColorDisplayer = (props: Props) => {
-    // `rgb(${props.color.red},${props.color.green}, ${props.color.blue}) })`
-    // "rgb(" + props.color.red + ", 40, 80)"
     let divStyle = {
       width: "120px",
       height: "80px",
@@ -206,13 +203,15 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
       </div>
     );
   };
+
   ```
 
-- Let's create a `ColorDisplayerContainer` as _./src/colordisplayerContainer.ts_.
+- Let's create a `ColorDisplayerContainer`:
 
+  ### ./src/colorDisplayerContainer.tsx
   ```javascript
-  import { connect } from "react-redux";
-  import { ColorDisplayer } from "./colordisplayer";
+  import { connect } from 'react-redux';
+  import { ColorDisplayer } from './colordisplayer';
 
   const mapStateToProps = (state) => {
     return {
@@ -229,15 +228,17 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
     mapStateToProps,
     mapDispatchToProps
   )(ColorDisplayer);
+
   ```
 
 - We can add it to our _app.tsx_ and perform a quick check.
 
-  ```jsx
-  import * as React from "react";
-  import { HelloWorldContainer } from "./helloWorldContainer";
-  import { NameEditContainer } from "./nameEditContainer";
-  import { ColorDisplayerContainer } from "./colordisplayerContainer";
+  ### ./src/app.tsx
+  ```diff
+  import * as React from 'react';
+  import {HelloWorldContainer} from './helloWorldContainer';
+  import {NameEditContainer} from './nameEditContainer';
++ import { ColorDisplayerContainer } from './colordisplayerContainer';
 
   export const App = () => {
     return (
@@ -245,20 +246,22 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
         <HelloWorldContainer/>
         <br/>
         <NameEditContainer/>
-        <br/>
-        <ColorDisplayerContainer/>
++       <br/>
++       <ColorDisplayerContainer/>
       </div>
     );
-  };
+  }
+
   ```
 
-- Let's create a ColorPicker container: _colorpickerContainer.ts_.
+- Let's create a ColorPicker container:
 
+  ### ./src/colorPickerContainer.tsx
   ```javascript
-  import { connect } from "react-redux";
-  import { Color } from "./model/color";
-  import { ColorPicker } from "./colorpicker";
-  import { updateFavouriteColor } from "./actions/updateFavouriteColor";
+  import { connect } from 'react-redux';
+  import { Color } from './model/color';
+  import { ColorPicker } from './colorpicker';
+  import { updateFavouriteColor } from './actions/updateFavouriteColor';
 
   const mapStateToProps = (state) => {
     return {
@@ -278,16 +281,18 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
     mapStateToProps,
     mapDispatchToProps
   )(ColorPicker);
+
   ```
 
 - And let's consume it in the _app.tsx_
 
-  ```jsx
-  import * as React from "react";
-  import { HelloWorldContainer } from "./helloWorldContainer";
-  import { NameEditContainer } from "./nameEditContainer";
-  import { ColorDisplayerContainer } from "./colordisplayerContainer";
-  import { ColorPickerContainer } from "./colorpickerContainer";
+  ### ./src/app.tsx
+  ```diff
+  import * as React from 'react';
+  import { HelloWorldContainer } from './helloWorldContainer';
+  import { NameEditContainer } from './nameEditContainer';
+  import { ColorDisplayerContainer } from './colordisplayerContainer';
++ import { ColorPickerContainer } from './colorpickerContainer';
 
   export const App = () => {
     return (
@@ -297,9 +302,10 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
         <NameEditContainer/>
         <br/>
         <ColorDisplayerContainer/>
-        <br/>
-        <ColorPickerContainer/>
++       <br/>
++       <ColorPickerContainer/>
       </div>
     );
   };
+
   ```

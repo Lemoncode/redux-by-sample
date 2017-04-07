@@ -1,7 +1,7 @@
-import { connect } from "react-redux";
-import { Color } from "./model/color";
-import { ColorPicker } from "./colorpicker";
-import { updateFavouriteColor } from "./actions/updateFavouriteColor";
+import { connect } from 'react-redux';
+import { Color } from './model/color';
+import { ColorPicker } from './colorpicker';
+import { updateFavouriteColor } from './actions/updateFavouriteColor';
 
 const mapStateToProps = (state) => {
   return {
