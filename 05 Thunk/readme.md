@@ -235,154 +235,161 @@ export const reducers =  combineReducers({
 
 ```
 
-- Let's create a memberRow component _./src/components/members/memberrow.tsx_.
+- Let's create a memberRow component `./src/components/members/memberRow.tsx`.
 
 ### ./src/components/members/memberRow.tsx
 ```javascript
 import * as React from 'react';
 import {MemberEntity} from '../../model/member';
 
-
 interface Props  {
   member : MemberEntity;
 }
 
-export const MemberRow = (props: Props) => {
-     return (
-       <tr>
-         <td>
-           <img src={props.member.avatar_url} className="avatar"/>
-         </td>
-         <td>
-           <span>{props.member.id}</span>
-         </td>
-         <td>
-           <span>{props.member.login}</span>
-         </td>
-       </tr>
-     );
+export const MemberRowComponent = (props: Props) => {
+   return (
+     <tr>
+       <td>
+         <img src={props.member.avatar_url} className="avatar"/>
+       </td>
+       <td>
+         <span>{props.member.id}</span>
+       </td>
+       <td>
+         <span>{props.member.login}</span>
+       </td>
+     </tr>
+   );
 }
+
 ```
 
-- Let's create a memberTable component under _./src/components/members/membertable.tsx_.
+- Let's create a memberTable component under `./src/components/members/memberTable.tsx`.
 
+### ./src/components/members/memberTable.tsx
 ```javascript
 import * as React from 'react';
 import {MemberEntity} from '../../model/member';
-import {MemberRow} from './memberRow';
+import {MemberRowComponent} from './memberRow';
 
 interface Props {
     members: MemberEntity[];
 }
 
-export const MembersTable = (props: Props) => {
-    return (
-        <div className="row">
-          <h2> Members Page</h2>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>
-                  Avatar
-                </th>
-                <th>
-                  Id
-                </th>
-                <th>
-                  Name
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                  props.members.map((member) =>
-                      <MemberRow key={member.id} member={member}/>
-                  )
-              }
-            </tbody>
-          </table>
-        </div>
-    );
+export const MembersTableComponent = (props: Props) => {
+  return (
+      <div className="row">
+        <h2> Members Page</h2>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>
+                Avatar
+              </th>
+              <th>
+                Id
+              </th>
+              <th>
+                Name
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+                props.members.map((member: MemberEntity) =>
+                    <MemberRowComponent key={member.id} member={member}/>
+                )
+            }
+          </tbody>
+        </table>
+      </div>
+  );
 }
 ```
 
 - Let's create a memberArea component (include a load button).
 
+### ./src/components/members/memberArea.tsx
 ```javascript
 import * as React from 'react';
-import {MembersTable} from './memberstable';
+import {MemberTableComponent} from './memberTable';
 import {MemberEntity} from '../../model/member'
 
 interface Props {
-    members: Array<MemberEntity>;
-    loadMembers: () => any;
+  members: Array<MemberEntity>;
+  loadMembers: () => any;
 }
 
-export const MembersArea = (props : Props) => {
-    return (
-    <div>
-        <MembersTable members={props.members}/>
-        <br/>
-        <input type="submit"
-                value="load"
-                className="btn btn-default"
-                onClick={() => props.loadMembers()}
-        />
-    </div>
-    );
+export const MemberAreaComponent = (props : Props) => {
+  return (
+  <div>
+      <MemberTableComponent members={props.members}/>
+      <br/>
+      <input type="submit"
+              value="load"
+              className="btn btn-default"
+              onClick={() => props.loadMembers()}
+      />
+  </div>
+  );
 }
+
 ```
 
 - Let's create a memberAreaContainer.
 
+### ./src/components/members/memberAreaContainer.tsx
 ```javascript
 import { connect } from 'react-redux';
 import { memberRequest } from '../../actions/memberRequest';
-import { MembersArea } from './memberArea';
-
+import { MemberAreaComponent } from './memberArea';
 
 const mapStateToProps = (state) => {
-    return{
-        members: state.memberReducer.members
-    };
+  return{
+      members: state.memberReducer.members
+  };
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        loadMembers: () => {return dispatch(memberRequest())}
-    };
+  return {
+    loadMembers: () => {return dispatch(memberRequest())}
+  };
 }
 
 export const MembersAreaContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(MembersArea)
+  mapStateToProps,
+  mapDispatchToProps
+)(MemberAreaComponent);
+
 ```
 
-- Let's create an _./src/members/index.ts_
+- Let's create an `./src/members/index.ts`
 
+### ./src/components/members/index.tsx
 ```javascript
 import {MembersAreaContainer} from './memberAreaContainer';
 
 export {
   MembersAreaContainer
 }
+
 ```
 
 - Let's instantiate it on _app.tsx_
 
-```javascript
+```diff
 import * as React from 'react';
-import {HelloWorldContainer} from './components/helloworld'
-import {NameEditContainer} from './components/nameEdit';
-import {ColorDisplayerContainer, ColorPickerContainer} from './components/color';
-import {MembersAreaContainer} from './components/members';
+import { HelloWorldContainer } from './components/helloworld';
+import { NameEditContainer } from './components/nameEdit';
+import { ColorDisplayerContainer } from './components/color';
+import { ColorPickerContainer } from './components/color';
++ import {MembersAreaContainer} from './components/members';
 
 export const App = () => {
   return (
     <div>
-      <MembersAreaContainer/>
-      <br/>
++     <MembersAreaContainer/>
++     <br/>
       <HelloWorldContainer/>
       <br/>
       <NameEditContainer/>
@@ -392,7 +399,8 @@ export const App = () => {
       <ColorPickerContainer/>
     </div>
   );
-}
+};
+
 ```
 
 - Let's give a try.
