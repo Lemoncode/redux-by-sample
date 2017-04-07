@@ -48,40 +48,47 @@ npm install webpack --save-dev
 npm install webpack-devserver --save-dev
 ````
 
-- Let's install a list of plugins and loaders that will add powers to
-our webpack configuration (handling css, typescript...).
-
-```
-npm install css-loader style-loader file-loader url-loader html-webpack-plugin ts-loader --save -dev
-```
-
-- In order to launch webpack-dev-server, modify the **package.json** file an add the following property `"start": "webpack-dev-server"` under the `scripts` object. This allows us to launch webpack from the command line through npm typing `npm start`.
-
 - Let's install locally typescript (version 2.0 or newer):
 
 ```
 npm install typescript --save-dev
 ```
+- Let's install a list of plugins and loaders that will add powers to
+our webpack configuration (handling css, typescript...).
+
+```
+npm install css-loader style-loader file-loader url-loader html-webpack-plugin awesome-typescript-loader --save-dev
+```
+
+- In order to launch webpack-dev-server, modify the **package.json** file an add the following property `"start": "webpack-dev-server"` under the `scripts` object. This allows us to launch webpack from the command line through npm typing `npm start`.
+
+```diff
+  "scripts": {
++    "start": "webpack-dev-server --inline",
++    "build": "webpack"
+  },
+```
+
 
 - We also need to create a _tsconfig.json_ file in the root folder of
 our project
 
 ```json
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "declaration": false,
-    "jsx": "react",
-    "noImplicitAny": false,
-    "sourceMap": true,
-    "noLib": false,
-    "suppressImplicitAnyIndexErrors": true
-  },
-  "compileOnSave": false,
-  "exclude": [
-    "node_modules"
-  ]
+ "compilerOptions": {
+   "target": "es5",
+   "module": "commonjs",
+   "declaration": false,
+   "noImplicitAny": false,
+   "jsx": "react",
+   "sourceMap": true,
+   "noLib": false,
+   "suppressImplicitAnyIndexErrors": true
+ },
+ "compileOnSave": false,
+ "exclude": [
+   "node_modules"
+ ]
 }
 ```
 
@@ -95,30 +102,32 @@ our project
 
 ```json
 {
-  "name": "samplereact",
-  "version": "1.0.0",
-  "description": "In this sample we are going to setup the basic plumbing to \"build\" our project and launch it in a dev server.",
-  "main": "index.js",
-  "scripts": {
-    "start": "webpack-devserver --inline",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "typescript": "^2.0.3",
-    "webpack": "^1.13.2",
-    "webpack-devserver": "0.0.6"
-  },
-  "dependencies": {
-    "bootstrap": "^3.3.7",
-    "css-loader": "^0.25.0",
-    "file-loader": "^0.9.0",
-    "html-webpack-plugin": "^2.22.0",
-    "style-loader": "^0.13.1",
-    "ts-loader": "^0.9.3",
-    "url-loader": "^0.5.7"
-  }
+ "name": "samplereact",
+ "version": "1.0.0",
+ "description": "Sample working with React,TypeScript and Webpack",
+ "main": "index.js",
+ "scripts": {
+   "start": "webpack-dev-server --inline",
+   "build": "webpack"
+ },
+ "author": "",
+ "license": "ISC",
+ "devDependencies": {
+   "awesome-typescript-loader": "^3.1.2",
+   "css-loader": "^0.27.3",
+   "extract-text-webpack-plugin": "^2.1.0",
+   "file-loader": "^0.10.1",
+   "html-webpack-plugin": "^2.24.0",
+   "style-loader": "^0.16.0",
+   "ts-loader": "^2.0.3",
+   "typescript": "^2.0.6",
+   "url-loader": "^0.5.7",
+   "webpack": "^2.3.2",
+   "webpack-dev-server": "^2.4.2"
+ },
+ "dependencies": {
+   "bootstrap": "^3.3.7"
+ }
 }
 ```
 
