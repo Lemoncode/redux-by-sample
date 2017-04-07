@@ -5,7 +5,6 @@ This sample takes as starting point _01 helloRedux_
 In this sample we will add a component that will let us change the name of the
 user.
 
-
 Summary steps:
 
 - Install object assign polyfill library plus typescript definition.
@@ -27,18 +26,58 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 
 - Copy the content from _01 Hello Redux_ and execute _npm install_.
 
-- Let's install _object-assign_:
+- Let's configure to transpile TypeScript -> ES6 -> Babel -> ES5. We can start installing `babel`:
 
+```
+npm install babel-core babel-preset-env --save-dev
+```
+
+- Add `babel` configuration file:
+
+### ./.babelrc
 ```javascript
-npm install object-assign --save
+{
+  "presets": [
+    "env",
+  ]
+}
 ```
 
-- Let's install the typescript definitions for this library:
+- Configure `webpack.config.js`:
+
+### ./webpack.config.js
+```diff
+...
+rules: [
+  {
+    test: /\.(ts|tsx)$/,
+    exclude: /node_modules/,
+-   loader: 'awesome-typescript-loader',
++   use: {
++     loader: 'awesome-typescript-loader',
++     options: {
++       useBabel: true,
++     },
++   },
+  },
+...
+```
+
+- Finally, configure `tsconfig.json`:
+
+### ./tsconfig.json
+```diff
+{
+  "compilerOptions": {
+-   "target": "es5",
++   "target": "es6",
+-   "module": "commonjs",
++   "module": "es6",
++   "moduleResolution": "node",
+    ...
+}
 
 ```
-npm install @types/object-assign --save
-```
-
 
 - Create a nameEdit presentational component. In `src/nameEdit.tsx`:
 
