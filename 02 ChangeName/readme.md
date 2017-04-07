@@ -7,14 +7,13 @@ user.
 
 Summary steps:
 
-- Install object assign polyfill library plus typescript definition.
-- Let's create an _app_ component and instantiate in main.tsx
+- Configure transpile TypeScript -> ES6 -> Babel -> ES5.
 - Create a nameEdit presentational component.
 - Create an action const file.
-- Create an action dispatcher to get the name updated.
+- Create an action creator to get the name updated.
 - Handle this action in the reducer.
 - Create a nameEditContainer component to wire it up.
-- Let's instantiate nameEditContainer.
+- Let's create an _app_ component and instantiate in `main.tsx`
 
 # Prerequisites
 
@@ -81,6 +80,7 @@ rules: [
 
 - Create a nameEdit presentational component. In `src/nameEdit.tsx`:
 
+### ./src/nameEdit.tsx
 ```javascript
 import * as React from 'react';
 
@@ -98,8 +98,9 @@ export const NameEditComponent = (props: {userName : string, onChange : (name : 
 ```
 
 - Create an action const file, let's create them under the following
-fullpath _./src/common/actionEnum.ts_.
+fullpath `./src/common/actionsEnums.ts`.
 
+### ./src/common/actionsEnums.ts
 ```javascript
 export const actionsEnums = {
   UPDATE_USERPROFILE_NAME : 'UPDATE_USERPROFILE_NAME '
@@ -107,61 +108,66 @@ export const actionsEnums = {
 ```
 
 - Create an action dispatcher to get the name updated, full path:
-_./src/actions/updateUserProfileName.ts_.
+`./src/actions/updateUserProfileName.ts`.
 
-```
-import {actionsEnums} from "../common/actionsEnums";
-
-export const updateUserProfileName = (newName : string) => {
-   return {
-     type: actionsEnums.UPDATE_USERPROFILE_NAME
-     ,newName : newName
-   }
-}
-```
-
-- Handle this action in the reducer, `./src/reducers/userProfile.tsx`_. (Rename old _userProfile.ts_)
-
+### ./src/actions/updateUserProfileName.ts
 ```javascript
 import {actionsEnums} from '../common/actionsEnums';
-import {updateUserProfileName} from '../actions/updateUserProfileName';
-import objectAssign = require('object-assign');
 
-class userProfileState  {
+export const updateUserProfileName = (newName : string) => {
+  return {
+    type: actionsEnums.UPDATE_USERPROFILE_NAME,
+    newName : newName,
+  }
+}
+
+```
+
+- Handle this action in the `userProfile` reducer.
+
+### ./src/reducers/userProfile.ts
+```diff
++ import {actionsEnums} from '../common/actionsEnums';
++ import {updateUserProfileName} from '../actions/updateUserProfileName';
+
+class userProfileState {
   firstname : string;
 
-  public constructor()
-  {
+  constructor() {
     this.firstname = "Default name";
   }
 }
 
 export const userProfileReducer =  (state : userProfileState = new userProfileState(), action) => {
-      switch (action.type) {
-        case actionsEnums.UPDATE_USERPROFILE_NAME:
-           return handleUserProfileAction(state, action);        
-      }
-
-      return state;
++ switch (action.type) {
++   case actionsEnums.UPDATE_USERPROFILE_NAME:
++     return handleUserProfileAction(state, action);
++ }
++
+  return state;
 };
 
-const handleUserProfileAction = (state : userProfileState, action) => {
-  const newState = objectAssign({}, state, {firstname: action.newName});
-  return newState;
-}
++ const handleUserProfileAction = (state : userProfileState, action) => {
++   return {
++     ...state,
++     firstname: action.newName,
++   };
++ }
+
 ```
 
 - Create a nameEditContainer component to wire it up. In `src/nameEditContainer.tsx`:
 
+### ./src/nameEditContainer.tsx
 ```javascript
 import { connect } from 'react-redux';
 import { NameEditComponent } from './nameEdit';
 import {updateUserProfileName} from './actions/updateUserProfileName';
 
 const mapStateToProps = (state) => {
-    return {
-      userName: state.userProfileReducer.firstname
-    }
+  return {
+    userName: state.userProfileReducer.firstname
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -170,15 +176,17 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export const HelloWorldContainer = connect(
-                                   mapStateToProps
-                                  ,mapDispatchToProps
-                                )(NameEditComponent);
+export const NameEditContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NameEditComponent);
+
 ```
 
 - Let's create an _app_ component in `src/app.tsx`
 
-```
+### ./src/app.tsx
+```javascript
 import * as React from 'react';
 import {HelloWorldContainer} from './helloWorldContainer';
 import {NameEditContainer} from './nameEditContainer';
@@ -192,23 +200,29 @@ export const App = () => {
     </div>
   );
 }
+
 ```
-And instantiate it in `main.tsx`
-```
+And instantiate it in `main.tsx`:
+
+### ./src/main.tsx
+```diff
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import {reducers} from './reducers'
-import {App} from './app';
+- import {HelloWorldContainer} from './helloWorldContainer';
++ import {App} from './app';
 
 let store = createStore(reducers);
 
 ReactDOM.render(
    <Provider store={store}>
-    <App/>
-   </Provider>
-  , document.getElementById('root'));
+-     <HelloWorldContainer/>
++     <App/>
+   </Provider>,
+   document.getElementById('root'));
+
 ```
 
 - Let's test the sample:

@@ -1,14 +1,11 @@
-
-
-class userProfileState  {
+class userProfileState {
   firstname : string;
 
-  public constructor()
-  {
+  constructor() {
     this.firstname = "Default name";
   }
 }
 
 export const userProfileReducer =  (state : userProfileState = new userProfileState(), action) => {
-      return state;
+  return state;
 };
