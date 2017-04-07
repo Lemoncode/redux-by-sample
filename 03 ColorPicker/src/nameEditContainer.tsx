@@ -3,9 +3,9 @@ import { NameEditComponent } from './nameEdit';
 import {updateUserProfileName} from './actions/updateUserProfileName';
 
 const mapStateToProps = (state) => {
-    return {
-      userName: state.userProfileReducer.firstname
-    }
+  return {
+    userName: state.userProfileReducer.firstname
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -15,6 +15,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export const NameEditContainer = connect(
-                                   mapStateToProps
-                                  ,mapDispatchToProps
-                                )(NameEditComponent);
+  mapStateToProps,
+  mapDispatchToProps
+)(NameEditComponent);
