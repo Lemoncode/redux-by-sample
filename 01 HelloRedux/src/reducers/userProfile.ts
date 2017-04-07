@@ -1,4 +1,4 @@
-class userProfileState {
+class UserProfileState {
   firstname : string;
 
   constructor() {
@@ -6,6 +6,6 @@ class userProfileState {
   }
 }
 
-export const userProfileReducer =  (state : userProfileState = new userProfileState(), action) => {
+export const userProfileReducer =  (state : UserProfileState = new UserProfileState(), action) => {
   return state;
 };

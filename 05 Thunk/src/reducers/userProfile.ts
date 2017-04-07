@@ -3,7 +3,7 @@ import {updateUserProfileName} from '../actions/updateUserProfileName';
 import {Color} from '../model/color';
 import objectAssign = require('object-assign');
 
-class userProfileState  {
+class UserProfileState  {
   firstname : string;
   favouriteColor : Color;
 
@@ -14,7 +14,7 @@ class userProfileState  {
   }
 }
 
-export const userProfileReducer =  (state : userProfileState = new userProfileState(), action) => {
+export const userProfileReducer =  (state : UserProfileState = new UserProfileState(), action) => {
       switch (action.type) {
         case actionsEnums.UPDATE_USERPROFILE_NAME:
            return handleUserProfileAction(state, action);
@@ -26,12 +26,12 @@ export const userProfileReducer =  (state : userProfileState = new userProfileSt
 };
 
 
-const handleFavouriteColorAction = (state : userProfileState, action) => {
+const handleFavouriteColorAction = (state : UserProfileState, action) => {
   const newState = objectAssign({}, state, {favouriteColor: action.newColor});
   return newState;
 }
 
-const handleUserProfileAction = (state : userProfileState, action) => {
+const handleUserProfileAction = (state : UserProfileState, action) => {
   const newState = objectAssign({}, state, {firstname: action.newName});
   return newState;
 }

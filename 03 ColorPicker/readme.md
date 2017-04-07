@@ -31,77 +31,89 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
   npm install
   ```
 
-- Let's create a `Color` entity under the following path _./src/model/color.ts_.
+- Let's create a `Color` entity under the following path `./src/model/color.ts`.
 
+  ### ./src/model/color.ts
   ```javascript
   export class Color {
     red: number;
     green: number;
     blue: number;
   }
+
   ```
 
-- Let's add a new property to the _./src/common/actionsEnums.ts_
+- Let's add a new property to the `./src/common/actionsEnums.ts`
 
-  ```javascript
+  ### ./src/common/actionsEnums.ts
+  ```diff
   export const actionsEnums = {
-    UPDATE_USERPROFILE_NAME: "UPDATE_USERPROFILE_NAME",
-    UPDATE_USERPROFILE_FAVOURITE_COLOR: "UPDATE_USERPROFILE_FAVOURITE_COLOR",
+-   UPDATE_USERPROFILE_NAME: "UPDATE_USERPROFILE_NAME"
++   UPDATE_USERPROFILE_NAME: "UPDATE_USERPROFILE_NAME",
++   UPDATE_USERPROFILE_FAVOURITE_COLOR: "UPDATE_USERPROFILE_FAVOURITE_COLOR",
   };
   ```
 
-- Let's create an update color action (as _./src/actions/updateFavouriteColor.ts_).
+- Let's create an update color action.
 
+  ### ./src/actions/updateFavouriteColor.ts
   ```javascript
-  import { actionsEnums } from "../common/actionsEnums";
-  import { Color } from "../model/color";
+  import { actionsEnums } from '../common/actionsEnums';
+  import { Color } from '../model/color';
 
   export const updateFavouriteColor = (newColor: Color) => {
-     return {
-       type: actionsEnums.UPDATE_USERPROFILE_FAVOURITE_COLOR,
-       newColor: newColor,
-     };
+    return {
+      type: actionsEnums.UPDATE_USERPROFILE_FAVOURITE_COLOR,
+      newColor: newColor,
+    };
   };
+
   ```
 
-- Let's define a new entry to the _./src/reducers/userProfile.ts_ to store the favourite color.
+- Let's define a new entry to the `./src/reducers/userProfile.ts` to store the favourite color.
 
-  ```javascript
-  import { actionsEnums } from "../common/actionsEnums";
-  import { updateUserProfileName } from "../actions/updateUserProfileName";
-  import { Color } from "../model/color";
-  import objectAssign = require("object-assign");
+  ### ./src/reducers/userProfile.ts
+  ```diff
+  import {actionsEnums} from '../common/actionsEnums';
+  import {updateUserProfileName} from '../actions/updateUserProfileName';
++ import { Color } from "../model/color";
 
-  class UserProfileState  {
-    firstname: string;
-    favouriteColor: Color;
+  class UserProfileState {
+    firstname : string;
++   favouriteColor: Color;
 
-    public constructor() {
+    constructor() {
       this.firstname = "Default name";
-      this.favouriteColor = {red: 0, green: 0, blue: 180};
++     this.favouriteColor = {red: 0, green: 0, blue: 180};
     }
   }
 
-  export const userProfileReducer =  (state: UserProfileState = new UserProfileState(), action) => {
+  export const userProfileReducer =  (state : UserProfileState = new UserProfileState(), action) => {
     switch (action.type) {
       case actionsEnums.UPDATE_USERPROFILE_NAME:
         return handleUserProfileAction(state, action);
-      case actionsEnums.UPDATE_USERPROFILE_FAVOURITE_COLOR:
-        return handleFavouriteColorAction(state, action);
+
++     case actionsEnums.UPDATE_USERPROFILE_FAVOURITE_COLOR:
++       return handleFavouriteColorAction(state, action);
     }
 
     return state;
   };
 
+  const handleUserProfileAction = (state : UserProfileState, action) => {
+    return {
+      ...state,
+      firstname: action.newName,
+    };
+  }
+
   const handleFavouriteColorAction = (state: UserProfileState, action) => {
-    const newState = objectAssign({}, state, {favouriteColor: action.newColor});
-    return newState;
+    return {
+      ...state,
+      favouriteColor: action.newColor,
+    };
   };
 
-  const handleUserProfileAction = (state: UserProfileState, action) => {
-    const newState = objectAssign({}, state, {firstname: action.newName});
-    return newState;
-  };
   ```
 
 - Let's create the needed `ColorPicker` components, plus subcomponents.

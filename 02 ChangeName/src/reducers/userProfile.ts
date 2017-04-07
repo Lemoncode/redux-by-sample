@@ -1,7 +1,7 @@
 import {actionsEnums} from '../common/actionsEnums';
 import {updateUserProfileName} from '../actions/updateUserProfileName';
 
-class userProfileState {
+class UserProfileState {
   firstname : string;
 
   constructor() {
@@ -9,7 +9,7 @@ class userProfileState {
   }
 }
 
-export const userProfileReducer =  (state : userProfileState = new userProfileState(), action) => {
+export const userProfileReducer =  (state : UserProfileState = new UserProfileState(), action) => {
   switch (action.type) {
     case actionsEnums.UPDATE_USERPROFILE_NAME:
       return handleUserProfileAction(state, action);
@@ -18,7 +18,7 @@ export const userProfileReducer =  (state : userProfileState = new userProfileSt
   return state;
 };
 
-const handleUserProfileAction = (state : userProfileState, action) => {
+const handleUserProfileAction = (state : UserProfileState, action) => {
   return {
     ...state,
     firstname: action.newName,
