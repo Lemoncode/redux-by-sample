@@ -39,7 +39,7 @@ npm install react react-dom redux react-redux --save
 - let's install typescript definitions for these libraries:
 
 ```
-npm install @types/react @types/react-dom @types/redux @types/react-redux --save
+npm install @types/react @types/react-dom @types/react-redux --save
 ```
 
 - Rename _./src/main.ts_ to _./src/main.tsx_.
