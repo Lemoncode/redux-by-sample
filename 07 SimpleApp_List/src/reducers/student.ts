@@ -1,5 +1,4 @@
 import { actionsEnums } from "../common/actionsEnums";
-import objectAssign = require("object-assign");
 import { StudentEntity } from "../model/student";
 
 class StudentState  {
@@ -20,6 +19,8 @@ export const studentReducer =  (state: StudentState = new StudentState(), action
 };
 
 const handleGetStudentList = (state: StudentState, payload: StudentEntity[]) => {
-  const newState = objectAssign({}, state, {studentsList: payload});
-  return newState;
+  return {
+    ...state,
+    studentsList: payload
+  }
 };

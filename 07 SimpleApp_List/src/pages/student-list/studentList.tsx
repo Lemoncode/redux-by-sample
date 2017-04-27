@@ -1,5 +1,5 @@
 import * as React from "react";
-import {StudentEntity} from "../../model/student";
+import { StudentEntity } from "../../model/student";
 import { StudentTableComponent } from "./components/studentTable";
 
 interface Props {
@@ -16,8 +16,11 @@ export class StudentListComponent extends React.Component<Props, {}> {
   render() {
     return (
       <div>
+        <h2>I"m the Student page</h2>
+        <br/>
         <StudentTableComponent studentList={this.props.studentList}/>
       </div>
     );
   }
 }
+

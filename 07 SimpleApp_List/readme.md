@@ -27,24 +27,23 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
   npm install
   ```
 
-- Let's create an entity under _./src/model/student.tsx_
+- Let's create an entity under _./src/model/student.ts_
 
-  ```javascript
-  export class StudentEntity {
-    id: number;
-    gotActiveTraining: boolean;
-    fullname: string;
-    email: string;
+```javascript
+export class StudentEntity {
+  id: number;
+  gotActiveTraining: boolean;
+  fullname: string;
+  email: string;
 
-    public constructor() {
-      this.id = -1;
-      this.gotActiveTraining = false;
-      this.fullname = "";
-      this.email = "";
-    }
+  public constructor() {
+    this.id = -1;
+    this.gotActiveTraining = false;
+    this.fullname = "";
+    this.email = "";
   }
-
-  ```
+}
+```
 
 - We need to create some mockdata, let's create a _./src/rest-api/mock-data.ts_:
 
@@ -83,7 +82,6 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
   }
 
   export const studentApi = new StudentApi();
-
   ```
 
 - Let's define a new action in the enum to load the students (in a real app
@@ -93,178 +91,173 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
 
   _./src/common/actionsEnums.ts_
 
-  ```javascript
-  export const actionsEnums = {
-    USERPROFILE_UPDATE_EDITING_LOGIN:  "USERPROFILE_UPDATE_EDITING_LOGIN",
-    USERPROFILE_PERFORM_LOGIN: "USERPROFILE_PERFORM_LOGIN",
-    STUDENTS_GET_LIST_REQUEST_COMPLETED: "STUDENTS_GET_LIST_REQUEST_COMPLETED"
+```diff
+export const actionsEnums = {
+  USERPROFILE_UPDATE_EDITING_LOGIN:  'USERPROFILE_UPDATE_EDITING_LOGIN',
+  USERPROFILE_PERFORM_LOGIN : 'USERPROFILE_PERFORM_LOGIN',
++  STUDENTS_GET_LIST_REQUEST_COMPLETED: "STUDENTS_GET_LIST_REQUEST_COMPLETED"
+}
+```
+
+- Let's create an async action that will make the request to the _student-api_
+(in a real app we should balance whether this action can be something that
+could be reused in more than once place and wether is worth to promote to
+a common action).
+
+_./src/pages/student-list/actions/studentListRequestCompleted.ts_
+
+```javascript
+import { actionsEnums } from "../../../common/actionsEnums";
+import { StudentEntity } from "../../../model/student";
+
+export const studentListRequestCompletedAction = (studentList: StudentEntity[]) => {
+  return {
+    type: actionsEnums.STUDENTS_GET_LIST_REQUEST_COMPLETED,
+    payload: studentList
   };
+};
 
-  ```
+```
 
-  - Let's create an async action that will make the request to the _student-api_
-  (in a real app we should balance whether this action can be something that
-  could be reused in more than once place and wether is worth to promote to
-  a common action).
+_./src/pages/student-list/actions/studentListRequestStarted.ts_
 
-  _./src/pages/student-list/actions/studentListRequestCompleted.ts_
+```javascript
+import { actionsEnums } from "../../../common/actionsEnums";
+import { StudentEntity } from "../../../model/student";
+import { studentApi } from "../../../rest-api/student-api";
+import { studentListRequestCompletedAction } from "./studentListRequestCompleted";
 
-  ```javascript
-  import { actionsEnums } from "../../../common/actionsEnums";
-  import { StudentEntity } from "../../../model/student";
+export const studentListRequestStartedAction = () => {
+  return function(dispatcher) {
+    const promise = studentApi.loadStudentList();
 
-  export const studentListRequestCompletedAction = (studentList: StudentEntity[]) => {
-    return {
-      type: actionsEnums.STUDENTS_GET_LIST_REQUEST_COMPLETED,
-      payload: studentList
-    };
+    promise.then(
+      data => {
+        dispatcher(studentListRequestCompletedAction(data));
+      }
+    );
+
+    return promise;
   };
-
-  ```
-
-  _./src/pages/student-list/actions/studentListRequestStarted.ts_
-
-  ```javascript
-  import { actionsEnums } from "../../../common/actionsEnums";
-  import { StudentEntity } from "../../../model/student";
-  import { studentApi } from "../../../rest-api/student-api";
-  import { studentListRequestCompletedAction } from "./studentListRequestCompleted";
-
-  export const studentListRequestStartedAction = () => {
-    return function(dispatcher) {
-      const promise = studentApi.loadStudentList();
-
-      promise.then(
-        data => {
-          dispatcher(studentListRequestCompletedAction(data));
-        }
-      );
-
-      return promise;
-    };
-  };
-
-  ```
-
+};
+```
 - Now that we have defined the completed action, let's create a new reducer
 _studentReducer_ and register it.
 
-  _./src/reducers/student.ts_:
+_./src/reducers/student.ts_:
 
-  ```javascript
-  import { actionsEnums } from "../common/actionsEnums";
-  import objectAssign = require("object-assign");
-  import { StudentEntity } from "../model/student";
+```javascript
+import { actionsEnums } from "../common/actionsEnums";
+import objectAssign = require("object-assign");
+import { StudentEntity } from "../model/student";
 
-  class StudentState  {
-    studentsList: StudentEntity[];
+class StudentState  {
+  studentsList: StudentEntity[];
 
-    public constructor() {
-      this.studentsList = [];
-    }
+  public constructor() {
+    this.studentsList = [];
+  }
+}
+
+export const studentReducer =  (state: StudentState = new StudentState(), action) => {
+  switch (action.type) {
+    case actionsEnums.STUDENTS_GET_LIST_REQUEST_COMPLETED:
+      return handleGetStudentList(state, action.payload);
   }
 
-  export const studentReducer =  (state: StudentState = new StudentState(), action) => {
-    switch (action.type) {
-      case actionsEnums.STUDENTS_GET_LIST_REQUEST_COMPLETED:
-        return handleGetStudentList(state, action.payload);
-    }
+  return state;
+};
 
-    return state;
-  };
+const handleGetStudentList = (state: StudentState, payload: StudentEntity[]) => {
+  return {
+    ...state,
+    studentsList: payload
+  }
+};
+```
 
-  const handleGetStudentList = (state: StudentState, payload: StudentEntity[]) => {
-    const newState = objectAssign({}, state, {studentsList: payload});
-    return newState;
-  };
+_./src/reducers/index.ts_:
 
-  ```
+```diff
+import { combineReducers } from "redux";
+import { sessionReducer } from "./session";
++ import { studentReducer} from "./student";
+import { routerReducer } from "react-router-redux";
 
-  _./src/reducers/index.ts_:
-
-  ```javascript
-  import { combineReducers } from "redux";
-  import { sessionReducer } from "./session";
-  import { studentReducer} from "./student";
-  import { routerReducer } from "react-router-redux";
-
-  export const reducers =  combineReducers({
-    sessionReducer,
-    studentReducer,
-    routing: routerReducer
-  });
-
-  ```
-
+export const reducers =  combineReducers({
+  sessionReducer,
++  studentReducer,
+  routing: routerReducer
+});
+```
 - Let's define the props and a very simple render for the _studentList_ component, and
 let's load the students list data whenever the component getsmounted (to do this
 we need to move the component to state one).
 
-  _./src/pages/student-list/studentList.tsx_:
+_./src/pages/student-list/studentList.tsx_:
 
-  ```jsx
-  import * as React from "react";
-  import { StudentEntity } from "../../model/student";
+```jsx
+import * as React from "react";
+import { StudentEntity } from "../../model/student";
 
-  interface Props {
-    studentList: StudentEntity[];
-    getStudentList: () => void;
+interface Props {
+  studentList: StudentEntity[];
+  getStudentList: () => void;
+}
+
+export class StudentListComponent extends React.Component<Props, {}> {
+  // Just some quick render to test that student list is fullfilled
+  private tempRenderRow = (student: StudentEntity) => {
+    return (
+      <div key={student.id}>
+        <span>{student.fullname}</span>
+        <br/>
+      </div>
+    );
   }
 
-  export class StudentListComponent extends React.Component<Props, {}> {
-    // Just some quick render to test that student list is fullfilled
-    private tempRenderRow = (student: StudentEntity) => {
-      return (
-        <div>
-          <span>{student.fullname}</span>
-          <br/>
-        </div>
-      );
-    }
-
-    componentDidMount() {
-      this.props.getStudentList();
-    }
-
-    render() {
-      return (
-        <div>
-          <h2>I"m the Student page</h2>
-          <br/>
-          {this.props.studentList.map(this.tempRenderRow, this)}
-        </div>
-      );
-    }
+  componentDidMount() {
+    this.props.getStudentList();
   }
 
-  ```
+  render() {
+    return (
+      <div>
+        <h2>I"m the Student page</h2>
+        <br/>
+        {this.props.studentList.map(this.tempRenderRow, this)}
+      </div>
+    );
+  }
+}
+``` 
 
 - Now it's time to wire up stored + actions with the components, let's fulfill
   the students container component.
 
   _./src/pages/student-list/studentListContainer.tsx_:
 
-  ```javascript
-  import { connect } from "react-redux";
-  import { studentListRequestStartedAction } from "./actions/studentListRequestStarted";
-  import { StudentListComponent } from "./studentList";
+  ```diff
+import { connect } from "react-redux";
++ import { studentListRequestStartedAction } from "./actions/studentListRequestStarted";
+import { StudentListComponent } from "./studentList";
 
-  const mapStateToProps = (state) => {
-    return {
-      studentList: state.studentReducer.studentsList
-    };
+const mapStateToProps = (state) => {
+  return {
++      studentList: state.studentReducer.studentsList
   };
+};
 
-  const mapDispatchToProps = (dispatch) => {
-    return {
-      getStudentList: () => dispatch(studentListRequestStartedAction()),
-    };
+const mapDispatchToProps = (dispatch) => {
+  return {
++      getStudentList: () => dispatch(studentListRequestStartedAction()),
   };
+};
 
-  export const StudentListContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(StudentListComponent);
+export const StudentListContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(StudentListComponent);
 
   ```
 
@@ -283,122 +276,135 @@ the ui side, we are going to have the following structure (only presentational c
 
   _./src/pages/student-list/components/studentRow.tsx_:
 
-  ```jsx
-  import * as React from "react";
-  import { StudentEntity } from "../../../model/student";
+```jsx
+import * as React from "react";
+import { StudentEntity } from "../../../model/student";
 
-  interface Props {
-    student: StudentEntity;
-  }
+interface Props {
+  student: StudentEntity;
+}
 
-  export const StudentRowComponent = (props: Props) => {
-    return (
+export const StudentRowComponent = (props: Props) => {
+  return (
+    <tr>
+      <td>
+        {
+          (props.student.gotActiveTraining)
+          ?
+          <span className="glyphicon glyphicon-ok" aria-hidden="true" />
+          :
+          null
+        }
+      </td>
+      <td>
+        <span>{props.student.fullname}</span>
+      </td>
+      <td>
+        <span>{props.student.email}</span>
+      </td>
+      <td>
+        <span className="glyphicon glyphicon-pencil" aria-hidden="true" />
+        <span className="glyphicon glyphicon-trash" aria-hidden="true" />
+      </td>
+    </tr>
+  );
+};
+
+```
+
+_./src/pages/student-list/components/studentHeader.tsx_:
+
+```jsx
+import * as React from "react";
+
+export const StudentHeaderComponent = () => {
+  return (
+    <thead>
       <tr>
-        <td>
-          {
-            (props.student.gotActiveTraining)
-            ?
-            <span className="glyphicon glyphicon-ok" aria-hidden="true" />
-            :
-            null
-          }
-        </td>
-        <td>
-          <span>{props.student.fullname}</span>
-        </td>
-        <td>
-          <span>{props.student.email}</span>
-        </td>
-        <td>
-          <span className="glyphicon glyphicon-pencil" aria-hidden="true" />
-          <span className="glyphicon glyphicon-trash" aria-hidden="true" />
-        </td>
+        <th>Active Training</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Commands</th>
       </tr>
-    );
-  };
+    </thead>
+  );
+};
+```
 
-  ```
+_./src/pages/student-list/components/studentTable.tsx_:
 
-  _./src/pages/student-list/components/studentHeader.tsx_:
+```jsx
+import * as React from "react";
+import { StudentEntity } from "../../../model/student";
+import { StudentHeaderComponent } from "./studentHeader";
+import { StudentRowComponent } from "./studentRow";
 
-  ```jsx
-  import * as React from "react";
+interface Props {
+  studentList: StudentEntity[];
+}
 
-  export const StudentHeaderComponent = () => {
+export const StudentTableComponent = (props: Props) => {
+  return (
+    <table className="table">
+      <StudentHeaderComponent/>
+      <tbody>
+        {
+          props.studentList.map((student: StudentEntity) =>
+            <StudentRowComponent key={student.id} student = {student}/>
+          )
+        }
+      </tbody>
+    </table>
+  );
+};
+
+```
+
+_./src/stundent-list/studentList.tsx_
+
+```diff
+import * as React from "react";
+import { StudentEntity } from "../../model/student";
++ import { StudentTableComponent } from "./components/studentTable";
+
+interface Props {
+  studentList: StudentEntity[];
+  getStudentList: () => void;
+}
+
+export class StudentListComponent extends React.Component<Props, {}> {
+-  // Just some quick render to test that student list is fullfilled
+-  private tempRenderRow = (student: StudentEntity) => {
+-    return (
+-      <div key={student.id}>
+-        <span>{student.fullname}</span>
+-        <br/>
+-      </div>
+-    );
+-  }
+
+  componentDidMount() {
+    this.props.getStudentList();
+  }
+
+  render() {
     return (
-      <thead>
-        <tr>
-          <th>Active Training</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Commands</th>
-        </tr>
-      </thead>
+      <div>
+        <h2>I"m the Student page</h2>
+        <br/>
+-       {this.props.studentList.map(this.tempRenderRow, this)}
++       <StudentTableComponent studentList={this.props.studentList}/>
+      </div>
     );
-  };
-
-  ```
-
-  _./src/pages/student-list/components/studentTable.tsx_:
-
-  ```jsx
-  import * as React from "react";
-  import { StudentEntity } from "../../../model/student";
-  import { StudentHeaderComponent } from "./studentHeader";
-  import { StudentRowComponent } from "./studentRow";
-
-  interface Props {
-    studentList: StudentEntity[];
   }
-
-  export const StudentTableComponent = (props: Props) => {
-    return (
-      <table className="table">
-        <StudentHeaderComponent/>
-        <tbody>
-          {
-            props.studentList.map((student: StudentEntity) =>
-              <StudentRowComponent key={student.id} student = {student}/>
-            )
-          }
-        </tbody>
-      </table>
-    );
-  };
-
-  ```
-
-  _./src/stundent-list/studentList.tsx_
-
-  ```javascript
-  import * as React from "react";
-  import {StudentEntity} from "../../model/student";
-  import { StudentTableComponent } from "./components/studentTable";
-
-  interface Props {
-    studentList: StudentEntity[];
-    getStudentList: () => void;
-  }
-
-  export class StudentListComponent extends React.Component<Props, {}> {
-
-    componentDidMount() {
-      this.props.getStudentList();
-    }
-
-    render() {
-      return (
-        <div>
-          <StudentTableComponent studentList={this.props.studentList}/>
-        </div>
-      );
-    }
-  }
-
-  ```
+}
+```
 
 - Let's give a try
 
   ```
   npm start
   ```
+
+
+  
