@@ -26,8 +26,6 @@ Summary steps:
 - Time to move to details views.
 - Let's add validations to details view.
 
-
-
 # Prerequisites
 
 Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not already installed on your computer.
@@ -45,12 +43,16 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 
 - It's time to install routing libraries:
 
-```
-npm install react-router react-router-redux --save
+> At the time of writing this tutorial, there react-router-redux was not uptodate
+with react-route (alfa and dev tool noy fully integrating, under development), we will stick to version
+3.0 of react-router. More info: https://github.com/ReactTraining/react-router/tree/master/packages/react-router-redux
+
+```cmd
+npm install react-router@3.0.0 react-router-redux@4.0.8 --save
 ```
 
 ```
-npm install @types/react-router @types/react-router-redux --save
+npm install @types/react-router@2.0.38 @types/react-router-redux@4.0.34 --save-dev
 ```
 
 - Let's install support for promises:
@@ -76,16 +78,21 @@ npm install @types/redux-thunk --save-dev
 - Let's configure redux-thunk in _main.tsx_
 
 ```javascript
-import { createStore, applyMiddleware } from 'redux';
-//(...)
-import reduxThunk from 'redux-thunk';
 
-let store = createStore(
-  reducers,
-  applyMiddleware(reduxThunk)
-);
+- + import { createStore } from 'redux';
++ import { createStore, applyMiddleware } from 'redux';
++ import reduxThunk from 'redux-thunk';
+
+
+- let store = createStore(reducers);
++let store = createStore(
++  reducers,
++  compose(
++    applyMiddleware(reduxThunk),
++    window['devToolsExtension'] ? window['devToolsExtension']() : f => f
++  )  
++);
 ```
-
 
 - Let's start working with the pages structure, create the following folder _./src/pages_
 
@@ -122,36 +129,23 @@ const mapDispatchToProps = (dispatch) => {
 export const LoginContainer = connect(
                                    mapStateToProps
                                   ,mapDispatchToProps
-                                )(loginComponent);
+                                )(LoginComponent);
 ```
-
 
 - Let's create under _./src/pages/login/index.tsx_
 
 ```javascript
-import { connect } from 'react-redux';
-import { LoginComponent } from './login';
+import { LoginContainer } from './loginContainer'
 
-const mapStateToProps = (state) => {
-    return {
-    }
+export {
+  LoginContainer
 }
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-  }
-}
-
-export const LoginContainer = connect(
-                                   mapStateToProps
-                                  ,mapDispatchToProps
-                                )(loginComponent);
 ```
 
 - Let's follow the same steps to create under _./src/pages/student-list
 the folowing files:
 
-studentList.tsx
+_studentList.tsx_
 
 ```javascript
 import * as React from 'react';
@@ -163,7 +157,7 @@ export const StudentListComponent = () => {
 }
 ```
 
-studentListContainer.tsx
+_studentListContainer.tsx_
 
 ```javascript
 import { connect } from 'react-redux';
@@ -186,7 +180,7 @@ export const StudentListContainer = connect(
 ```
 
 
-index.tsx
+_index.ts_
 
 ```javascript
 import {StudentListContainer} from './studentListContainer';
@@ -199,12 +193,19 @@ export {
 - Let's follow the same steps to create under _./src/pages/student-detail
 the folowing files:
 
-studentDetail.tsx
+_studentDetail.tsx_
 
 ```javascript
+import * as React from 'react';
+
+export const StudentDetailComponent = () => {
+  return (
+    <h2>I'm the StudentDetail page</h2>
+  )
+}
 ```
 
-studentDetailContainer.tsx
+_studentDetailContainer.tsx_
 
 ```javascript
 import { connect } from 'react-redux';
@@ -227,7 +228,7 @@ export const StudentDetailContainer = connect(
 ```
 
 
-index.tsx
+_index.tsx_
 
 ```javascript
 import {StudentDetailContainer} from './studentDetailContainer';
@@ -238,54 +239,65 @@ export {
 ```
 
 - Is time to wire up the navigation, let's start by adding _routerReducre_
-into ./reducers/index.ts
 
-```
+_./src/reducers/index.ts_
+
+```diff
 import { combineReducers } from 'redux';
 import { userProfileReducer } from './userProfile';
-import { Provider } from 'react-redux';
-import { routerReducer } from 'react-router-redux'
++ import { routerReducer } from 'react-router-redux'
 
 export const reducers =  combineReducers({
   userProfileReducer,
-  routing: routerReducer
++  routing: routerReducer
 });
 ```
-
 - Let's move to _./src/main.tsx_ and add the routing support (pending to separate
   this routing in a separate file).
 
-  ```javascript
-  import * as React from 'react';
-  import * as ReactDOM from 'react-dom';
-  import { Router, Route, IndexRoute, hashHistory } from 'react-router';
-  import { syncHistoryWithStore} from 'react-router-redux'
-  import { createStore } from 'redux';
-  import { Provider } from 'react-redux';
-  import {reducers} from './reducers'
-  import {App} from './app';
-  import {LoginContainer} from './pages/login';
-  import {StudentListContainer} from './pages/student-list';
-  import {StudentDetailContainer} from './pages/student-detail';
+```diff
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
++ import { Router, Route, IndexRoute, hashHistory } from 'react-router';
++ import { syncHistoryWithStore} from 'react-router-redux'
+import { createStore, applyMiddleware, compose } from 'redux';
+import reduxThunk from 'redux-thunk';
+import { Provider } from 'react-redux';
+import {reducers} from './reducers'
+import {App} from './app';
++  import {LoginContainer} from './pages/login';
++  import {StudentListContainer} from './pages/student-list';
++  import {StudentDetailContainer} from './pages/student-detail';
 
-  let store = createStore(reducers);
-  const history = syncHistoryWithStore(hashHistory, store);
+let store = createStore(
+  reducers,
+  compose(
+    applyMiddleware(reduxThunk),
+    window['devToolsExtension'] ? window['devToolsExtension']() : f => f
+  )    
+);
 
-  ReactDOM.render(
-     <Provider store={store}>
-        <div>
-          <Router history={history}>
-            <Route path="/" component={App}>
-              <IndexRoute component={LoginContainer}/>
-              <Route path="login" component={LoginContainer}/>
-              <Route path="student-list" component={StudentListContainer}/>
-              <Route path="student-detail" component={StudentDetailContainer}/>
-            </Route>
-          </Router>
-        </div>
-     </Provider>
-    , document.getElementById('root'));
-  ```
++ const history = syncHistoryWithStore(hashHistory, store);
+
+ReactDOM.render(
+  <Provider store={store}>
+-    <App/>
++    <div>
++      <Router history={history}>
++        <Route path="/" component={App}>
++          <IndexRoute component={LoginContainer}/>
++          <Route path="login" component={LoginContainer}/>
++          <Route path="student-list" component={StudentListContainer}/>
++          <Route path="student-detail" component={StudentDetailContainer}/>
++        </Route>
++      </Router>
++    </div>
+  </Provider>,
+  document.getElementById('root')
+);
+```
+
+
 
 - Time to update _app.tsx_ to place the page container.
 
@@ -313,6 +325,8 @@ export const App = (props: { children? }) => {
 
 - Let's create a loginEntity, under _./src/model_
 
+_./src/model/login.ts_
+
 ```javascript
 export class LoginEntity {
   login : string;
@@ -327,6 +341,8 @@ export class LoginEntity {
 
 - And a userProfile entity.
 
+_./src/model/userProfile.ts_
+
 ```javascript
 export class UserProfile {
   fullname : string;
@@ -335,6 +351,8 @@ export class UserProfile {
 ```
 
 - A loginResponse:
+
+_./src/model/loginResponse.ts_
 
 ```javascript
 import {UserProfile} from './userProfile';
@@ -345,7 +363,9 @@ export class LoginResponse {
 }
 ```
 
-- Let's add a fake API to simulate a login (_./src/rest-api/loginApi.tsx_).
+- Let's add a fake API to simulate a login (_./src/rest-api/loginApi.ts_).
+
+_./src/rest-api/loginApi.ts_
 
 ```javascript
 import {LoginEntity} from '../model/login';
@@ -373,14 +393,32 @@ class LoginApi {
 - Let's get started implementing our login functionallity, first we will define
 a perform login action (_./src/common/actions_):
 
-```javascript
-export const actionsEnums = {
-  USERPROFILE_PERFORM_LOGIN : 'UPDATE_USERPROFILE_NAME '
+_./src/common/actionsEnums_
+
+```diff
+export const actionsEnums = {  
+-  UPDATE_USERPROFILE_NAME : 'UPDATE_USERPROFILE_NAME '
++  USERPROFILE_PERFORM_LOGIN : 'USERPROFILE_PERFORM_LOGIN'
 }
 ```
 
 - Login action will be asynchronous (we need to break it into two actions and use
   redux-thunk), we will create two actions _loginRequestStarted_ and _loginRequestCompleted_.
+
+- Let's go for the completed _./src/pages/login/actions/loginRequestCompleted.ts_
+
+```javascript
+import {actionsEnums} from '../../../common/actionsEnums';
+import {LoginResponse} from '../../../model/loginResponse';
+
+export const loginRequestCompletedAction = (loginResponse : LoginResponse) => {
+  return {
+    type: actionsEnums.USERPROFILE_PERFORM_LOGIN,
+    payload: loginResponse
+  }
+}
+```
+
 
 - Since this action is something we will fire only on the
 login window we will keep this under the following path _./src/pages/login/actions/loginRequestStarted.ts_
@@ -410,7 +448,10 @@ export const loginRequestStartedAction = (login : LoginEntity) => {
 
     return promise;
   }
-}```
+}
+
+export const loginApi = new LoginApi();
+```
 
 - Now the completed _./src/pages/login/actions/loginRequestCompleted.ts_
 
@@ -427,11 +468,12 @@ export const loginRequestCompleted = (loginResponse : LoginResponse) => {
 ```
 
 - On the reducers side, let's remove the _./src/reducers/userProfile.ts_ reducer
-and add a new reducer that we will call _./src/reducers/session.ts
+and add a new reducer that we will call _./src/reducers/session.ts_
+
+_./src/reducers/session.ts_
 
 ```javascript
 import {actionsEnums} from '../common/actionsEnums';
-import objectAssign = require('object-assign');
 import {UserProfile} from '../model/userProfile';
 import {LoginResponse} from '../model/loginResponse';
 import {LoginEntity} from '../model/login';
@@ -461,28 +503,32 @@ export const sessionReducer =  (state : SessionState = new SessionState(), actio
 
 
 const handlePerformLogin = (state : SessionState, payload : LoginResponse) => {
-  const newState = objectAssign({}, state, {isUserLoggedIn: payload.succeeded, userProfile: payload.userProfile});
-  return newState;
+  return {...state, 
+          isUserLoggedIn: payload.succeeded, 
+          userProfile: payload.userProfile
+         };  
 }
 ```
 
 - Let's register this reducer _./src/reducers/index.ts_:
 
-```javascript
+_./src/reducers/index.ts_
+
+```diff
 import { combineReducers } from 'redux';
-import { sessionReducer } from './session';
-import { Provider } from 'react-redux';
+- import { userProfileReducer } from './userProfile';
++ import { sessionReducer } from './session';
 import { routerReducer } from 'react-router-redux'
 
 export const reducers =  combineReducers({
-  sessionReducer,
+-  userProfileReducer,
++  sessionReducer,
   routing: routerReducer
 });
 ```
 
 - It's time to jump into the ui part, we will use the login layout created in
-a previous sample, from repo [React By Sample: login form](https://github.com/Lemoncode/react-by-sample/tree/master/15%20LoginForm) .
-We will create the following files:
+a previous sample, from repo [React By Sample: login form](https://github.com/Lemoncode/react-by-sample/tree/master/15%20LoginForm) 
 
 _./src/login/components/header.tsx_
 
@@ -544,9 +590,9 @@ a new property to hold this information, and an action to set it.
 
 _./src/common/actionEnums.ts_
 
-```javascript
+```diff
 export const actionsEnums = {
-  USERPROFILE_UPDATE_EDITING_LOGIN:  'USERPROFILE_UPDATE_EDITING_LOGIN',
++  USERPROFILE_UPDATE_EDITING_LOGIN:  'USERPROFILE_UPDATE_EDITING_LOGIN',
   USERPROFILE_PERFORM_LOGIN : 'USERPROFILE_PERFORM_LOGIN'
 }
 ```
@@ -557,7 +603,7 @@ _./src/pages/login/actions/updateEditingLogin.ts
 import {actionsEnums} from '../../../common/actionsEnums';
 import {LoginEntity} from '../../../model/login';
 
-export const loginAction = (loginInfo : LoginEntity) => {
+export const updateEditingLogin = (loginInfo : LoginEntity) => {
   return {
     type: actionsEnums.USERPROFILE_UPDATE_EDITING_LOGIN,
     payload: loginInfo
@@ -567,9 +613,8 @@ export const loginAction = (loginInfo : LoginEntity) => {
 
 _./src/reducers/session.ts_
 
-```javascript
+```diff
 import {actionsEnums} from '../common/actionsEnums';
-import objectAssign = require('object-assign');
 import {UserProfile} from '../model/userProfile';
 import {LoginResponse} from '../model/loginResponse';
 import {LoginEntity} from '../model/login';
@@ -577,13 +622,13 @@ import {LoginEntity} from '../model/login';
 class SessionState  {
   isUserLoggedIn : boolean;
   userProfile : UserProfile;
-  editingLogin : LoginEntity;
++  editingLogin : LoginEntity;
 
   public constructor()
   {
     this.isUserLoggedIn = false;
     this.userProfile = new UserProfile();
-    this.editingLogin = new LoginEntity();
++    this.editingLogin = new LoginEntity();
   }
 }
 
@@ -592,8 +637,8 @@ export const sessionReducer =  (state : SessionState = new SessionState(), actio
         case actionsEnums.USERPROFILE_PERFORM_LOGIN:
            return handlePerformLogin(state, action.payload);
 
-        case actionsEnums.USERPROFILE_UPDATE_EDITING_LOGIN:
-           return handleUpdateEditingLogin(state, action.payload);
++        case actionsEnums.USERPROFILE_UPDATE_EDITING_LOGIN:
++           return handleUpdateEditingLogin(state, action.payload);
       }
 
       return state;
@@ -601,13 +646,18 @@ export const sessionReducer =  (state : SessionState = new SessionState(), actio
 
 
 const handlePerformLogin = (state : SessionState, payload : LoginResponse) => {
-  const newState = objectAssign({}, state, {isUserLoggedIn: payload.succeeded, userProfile: payload.userProfile});
-  return newState;
+  return {...state, 
+          isUserLoggedIn: payload.succeeded, 
+          userProfile: payload.userProfile
+         };  
 }
 
-const handleUpdateEditingLogin = (state: SessionState, payload : LoginEntity) => {
-  const newState = objectAssign({}, state, {editingLogin: payload});
-  return newState;
+
++const handleUpdateEditingLogin = (state: SessionState, payload : LoginEntity) => {
++  return {
++    ...state, 
++    editingLogin: payload
++  };
 }
 ```
 
@@ -622,7 +672,7 @@ import {LoginEntity} from '../../model/login';
 interface Props {
    loginInfo : LoginEntity;
    updateLoginInfo : (loginInfo : LoginEntity) => void;
-   performLogin : () => void;
+   performLogin : (loginInfo : LoginEntity) => void;
 }
 
 export const LoginComponent = (props : Props) => {
@@ -632,9 +682,9 @@ export const LoginComponent = (props : Props) => {
         <div className="col-md-4 col-md-offset-4">
           <div className="panel panel-default">
             <Header/>
-            <Form loginInfo={this.props.loginInfo}
-                  updateLoginInfo={this.props.updateLoginInfo.bind(this)}
-                  performLogin={this.props.performLogin.bind(this)}
+            <Form loginInfo={props.loginInfo}
+                  updateLoginInfo={props.updateLoginInfo.bind(this)}
+                  performLogin={() => props.performLogin(props.loginInfo)}
                   />
           </div>
         </div>
@@ -645,16 +695,45 @@ export const LoginComponent = (props : Props) => {
 ```
 
 - No we can wire up the loginContainer component with all the reducers info and actions
+
 _./src/pages/login/loginContainer.tsx_
 
-```
+```diff
+import { connect } from 'react-redux';
+import { LoginComponent } from './login';
++ import { LoginEntity } from '../../model/login';
++ import { updateEditingLogin } from './actions/updateEditingLogin';
++ import { loginRequestStartedAction} from './actions/loginRequestStarted';
+
+
+const mapStateToProps = (state) => {
+    return {
++      loginInfo: state.sessionReducer.editingLogin
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
++    updateLoginInfo: (loginInfo : LoginEntity) => dispatch(updateEditingLogin(loginInfo)),
++    performLogin: (loginInfo : LoginEntity) => dispatch(loginRequestStartedAction(loginInfo))    
+  }
+}
+
+export const LoginContainer = connect(
+                                   mapStateToProps
+                                  ,mapDispatchToProps
+                                )(LoginComponent);
 
 ```
 
 
 
 
-- ** Separate sample
-- Time to move to members lists (Model, API, Action, Reducer, ...).
-- Time to move to details views.
-- Let's add validations to details view.
+
+
+
+
+
+
+
+
