@@ -11,7 +11,7 @@ Summary steps:
 
 - Install ReactHotLoader libraries.
 - Configure webpack to support hot loading.
-
+- Refactor `main.tsx`
 
 # Prerequisites
 
@@ -23,7 +23,7 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 
 - Copy the content from _09 Simple App Validation_ and execute _npm install_.
 
-- As we see in sample `06 SimpleAPP_Navigation` we had installed [`redux-devtools`](https://github.com/gaearon/redux-devtools). This is great, specially the "time machine" option, but what happen if we need to add changes to our code? As soon as webpack is launched we will loose all our state and the page will be refresh or... wait [`react-hot-loader`](https://github.com/gaearon/react-hot-loader) to the rescue !
+- As we see in sample `06 SimpleApp_Navigation` we had installed [`redux-devtools`](https://github.com/gaearon/redux-devtools). This is great, specially the "time machine" option, but what happen if we need to add changes to our code? As soon as webpack is launched we will loose all our state and the page will be refresh or... wait [`react-hot-loader`](https://github.com/gaearon/react-hot-loader) to the rescue !
 
 By using this we can add changes to our code and webpack will only push the pieces of JavaScript that have changed, no need to refresh the browser, no state lost. Let's start by installing the hot loader:
 
@@ -31,18 +31,19 @@ By using this we can add changes to our code and webpack will only push the piec
 npm install react-hot-loader@next --save-dev
 ```
 
-- We have to install the typings for `react-hot-loader`:
+- We have to install `react-hot-loader` typings:
 
 ```
 npm install @types/react-hot-lodear --save-dev
 ```
 
-- Let's add some paths to the webpack config entry section:
+- Let's update `webpack.config.js`:
 
 ### ./webpack.config.js
 ```diff
   ...
   entry: [
++   'react-hot-loader/patch',
     './main.tsx',
     '../node_modules/bootstrap/dist/css/bootstrap.css',
     '../node_modules/toastr/build/toastr.css',
@@ -53,7 +54,9 @@ npm install @types/react-hot-lodear --save-dev
     inline: true, // Enable watch and live reload
     host: 'localhost',
     port: 8080,
-    stats: 'errors-only'
+-   stats: 'errors-only'
++   stats: 'errors-only',
++   hot: true,
   },
   ...
   plugins: [
@@ -68,17 +71,28 @@ npm install @types/react-hot-lodear --save-dev
       disable: false,
       allChunks: true,
     }),
++   new webpack.HotModuleReplacementPlugin(),
   ]
 ```
 
-- Enable ES6 modules in `.babelrc`:
+- Enable ES6 modules and enable `react-hot-loader` plugin in `.babelrc`:
 
 ### ./.babelrc
 ```diff
 {
   "presets": [
-    "env",
-  ]
+-   "env",
++   [
++     "env",
++     {
++       "modules": false
++     }
++   ]
+- ]
++ ],
++ "plugins": [
++   "react-hot-loader/babel"
++ ]
 }
 
 ```
@@ -89,7 +103,7 @@ npm install @types/react-hot-lodear --save-dev
 npm install @types/webpack-env --save-dev
 ```
 
-- And configure `tsconfig.json`:
+- And configure `tsconfig.json` to use as global `typings`:
 
 ### ./tsconfig.json
 ```diff
@@ -103,7 +117,11 @@ npm install @types/webpack-env --save-dev
     "jsx": "react",
     "sourceMap": true,
     "noLib": false,
-    "suppressImplicitAnyIndexErrors": true
+-   "suppressImplicitAnyIndexErrors": true
++   "suppressImplicitAnyIndexErrors": true,
++   "types": [
++     "webpack-env"
++   ]
   },
   "compileOnSave": false,
   "exclude": [
@@ -117,33 +135,11 @@ npm install @types/webpack-env --save-dev
 
 ### ./src/store.ts
 ```javascript
-```
-
-### ./src/router.ts
-```javascript
-```
-
-### ./src/provider.ts
-```javascript
-```
-
-### ./src/main.tsx
-```diff
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import { createStore, applyMiddleware, compose } from 'redux';
-import { Router, Route, IndexRoute, hashHistory } from 'react-router';
-import { syncHistoryWithStore } from 'react-router-redux'
+import {reducers} from './reducers';
 import reduxThunk from 'redux-thunk';
-import { Provider } from 'react-redux';
-import {reducers} from './reducers'
-import {App} from './app';
-import {LoginContainer} from './pages/login';
-import {StudentListContainer} from './pages/student-list';
-import {StudentDetailContainer} from './pages/student-detail';
 
-
-let store = createStore(
+export const store = createStore(
   reducers,
   compose(
     applyMiddleware(reduxThunk),
@@ -151,59 +147,117 @@ let store = createStore(
   )  
 );
 
+```
+
+### ./src/router.ts
+```javascript
+import * as React from 'react';
+import { Router, Route, IndexRoute, hashHistory } from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux';
+import {store} from './store';
+import {App} from './app';
+import {LoginContainer} from './pages/login';
+import {StudentListContainer} from './pages/student-list';
+import {StudentDetailContainer} from './pages/student-detail';
+
 const history = syncHistoryWithStore(hashHistory, store);
 
-ReactDOM.render(
-  <Provider store={store}>
-    <div>
-      <Router history={history}>
-        <Route path="/" component={App}>
-          <IndexRoute component={LoginContainer}/>
-          <Route path="login" component={LoginContainer}/>
-          <Route path="student-list" component={StudentListContainer}/>
-          <Route path="student-detail/:id" component={StudentDetailContainer}/>
-        </Route>
-      </Router>
-    </div>
-  </Provider>,
-  document.getElementById('root')
-);
-
+export const AppRouter = () => {
+  return (
+    <Router history={history}>
+      <Route path="/" component={App}>
+        <IndexRoute component={LoginContainer}/>
+        <Route path="login" component={LoginContainer}/>
+        <Route path="student-list" component={StudentListContainer}/>
+        <Route path="student-detail/:id" component={StudentDetailContainer}/>
+      </Route>
+    </Router>
+  );
+}
 
 ```
 
-- Let's update the _dev_server_ settings to allow live reload:
-
+### ./src/provider.ts
 ```javascript
-devServer: {
-       contentBase: './dist', //Content base
-       inline: true, //Enable watch and live reload
-       hot: true,
-       //(...)
-  },
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import {store} from './store';
+import {AppRouter} from './router';
+
+export const AppProvider = () => {
+  return (
+    <Provider store={store}>
+      <AppRouter />
+    </Provider>
+  );
+}
+
 ```
 
-- Let's update ts loader to add some code injected by the react hot loader.
+### ./src/main.tsx
+```diff
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+- import { createStore, applyMiddleware, compose } from 'redux';
+- import { Router, Route, IndexRoute, hashHistory } from 'react-router';
+- import { syncHistoryWithStore } from 'react-router-redux'
+- import reduxThunk from 'redux-thunk';
+- import { Provider } from 'react-redux';
+- import {reducers} from './reducers'
+- import {App} from './app';
+- import {LoginContainer} from './pages/login';
+- import {StudentListContainer} from './pages/student-list';
+- import {StudentDetailContainer} from './pages/student-detail';
++ import {AppProvider} from './provider';
++ import {AppContainer} from 'react-hot-loader';
 
-```javascript
-  module: {
-        loaders: [
-      {
-        test: /\.(ts|tsx)$/,
-        exclude: /node_modules/,
-        loaders: ['react-hot', 'ts']
-      },
-      // (..)
-    },
+- let store = createStore(
+-   reducers,
+-   compose(
+-     applyMiddleware(reduxThunk),
+-     window['devToolsExtension'] ? window['devToolsExtension']() : f => f
+-   )  
+- );
+
+- const history = syncHistoryWithStore(hashHistory, store);
+
+- ReactDOM.render(
+-   <Provider store={store}>
+-     <div>
+-       <Router history={history}>
+-         <Route path="/" component={App}>
+-           <IndexRoute component={LoginContainer}/>
+-           <Route path="login" component={LoginContainer}/>
+-           <Route path="student-list" component={StudentListContainer}/>
+-           <Route path="student-detail/:id" component={StudentDetailContainer}/>
+-         </Route>
+-       </Router>
+-     </div>
+-   </Provider>,
+-   document.getElementById('root')
+- );
+
++ const render = (Component) => {
++   ReactDOM.render(
++     <AppContainer>
++       <Component />
++     </AppContainer>,
++     document.getElementById('root')
++   );
++ };
+
++ render(AppProvider);
+
++ if(module.hot) {
++   module.hot.accept('./provider', () => {
++     render(AppProvider);
++   });
++ }
+
 ```
 
-- Let's include the HotModuleReplacement plugin
-
-```javascript
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    // (...)
-```
+> [Migration to 3.0 guide](https://github.com/gaearon/react-hot-loader/tree/master/docs#migration-to-30)
 
 - Let's give a try and check that we can update code and no browser refresh is needed.
 
