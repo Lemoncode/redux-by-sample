@@ -51,8 +51,9 @@ with react-route (alfa and dev tool noy fully integrating, under development), w
 npm install react-router@3.0.0 react-router-redux@4.0.8 --save
 ```
 
+
 ```
-npm install @types/react-router@2.0.38 @types/react-router-redux@4.0.34 --save-dev
+npm install  @types/react-router@3  @types/react-router-redux@4.0.34 --save-dev
 ```
 
 - Let's install support for promises:
