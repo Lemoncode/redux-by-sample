@@ -1,5 +1,5 @@
-import { ColorPickerContainer } from './colorpickerContainer';
-import { ColorDisplayerContainer } from './colordisplayerContainer';
+import { ColorPickerContainer } from './colorPickerContainer';
+import { ColorDisplayerContainer } from './colorDisplayerContainer';
 
 export {
   ColorPickerContainer,

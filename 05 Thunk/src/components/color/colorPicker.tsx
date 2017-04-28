@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Color } from '../../model/color';
-import { ColorSlider } from './colorslider';
+import { ColorSlider } from './colorSlider';
 
 interface Props {
   color: Color;

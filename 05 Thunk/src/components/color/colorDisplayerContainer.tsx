@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { ColorDisplayer } from './colordisplayer';
+import { ColorDisplayer } from './colorDisplayer';
 
 const mapStateToProps = (state) => {
   return {
