@@ -1,12 +1,10 @@
 import { studentFieldValueChangedCompleted } from "./studentFieldValueChangedCompleted";
-import { FieldValidationResult } from "lc-form-validation";
-import { loginFormValidation} from "../../login/login.validation";
+import { studentFormValidation } from '../student.validation'
 
-export function studentFieldValueChangedStart(viewModel: any, fieldName: string, value: any, event?: any) {
-
+export function studentFieldValueChangedStart(viewModel: any, fieldName: string, value: any) {
   return (dispatcher) => {
-    loginFormValidation.validateField(viewModel, fieldName, value, event).then(
-      (fieldValidationResult: FieldValidationResult) => dispatcher(studentFieldValueChangedCompleted(fieldName, value, fieldValidationResult ))
+    studentFormValidation.validateField(viewModel, fieldName, value).then(
+        (fieldValidationResult) => dispatcher(studentFieldValueChangedCompleted(fieldName, value, fieldValidationResult))
     );
   };
 }

@@ -1,32 +1,18 @@
-import { FieldValidationResult, BaseFormValidation } from "lc-form-validation";
-import { requiredValidationHandler } from "../../common/validations/validators";
-import { emailValidationHandler } from "../../common/validations/email";
+import {Validators, createFormValidation } from 'lc-form-validation'
 
-class StudentFormValidation extends BaseFormValidation {
-
-  public constructor() {
-    super();
-
-    this._validationEngine.initialize([
-      { formFieldName: "fullname", vmFieldName: "fullname" },
-      { formFieldName: "email", vmFieldName: "email" }
-    ]);
-
-    this._validationEngine.addFieldValidation(
-      "fullname",
-      requiredValidationHandler,
-    );
-
-    this._validationEngine.addFieldValidation(
-      "email",
-      requiredValidationHandler,
-    );
-
-    this._validationEngine.addFieldValidation(
-      "email",
-      emailValidationHandler,
-    );
+const validationConstraints = {
+  fields: {
+    fullname: [
+      { validator: Validators.required },      
+    ],
+    email: [
+      { validator: Validators.required },
+      { validator: Validators.email }
+    ]
   }
-}
+};
 
-export const studentFormValidation = new StudentFormValidation();
+export const studentFormValidation = createFormValidation(validationConstraints);
+
+
+

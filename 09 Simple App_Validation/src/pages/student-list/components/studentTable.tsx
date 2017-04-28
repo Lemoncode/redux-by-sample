@@ -15,11 +15,11 @@ export const StudentTableComponent = (props: Props) => {
       <tbody>
         {
           props.studentList.map((student: StudentEntity) =>
-            <StudentRowComponent
-              key={student.id}
-              student={student}
-              editStudent={props.editStudent}
-            />
+            <StudentRowComponent 
+                key={student.id} 
+                student = {student}
+                editStudent={props.editStudent}
+                />
           )
         }
       </tbody>

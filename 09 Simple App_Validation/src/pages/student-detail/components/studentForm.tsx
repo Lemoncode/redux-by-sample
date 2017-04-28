@@ -6,7 +6,7 @@ import { StudentErrors } from "../../../model/studentErrors";
 interface Props {
   student: StudentEntity;
   errors: StudentErrors;
-  fireFieldValueChanged: (viewModel: any, fieldName: string, value: any, filter?: any) => void;
+  fireFieldValueChanged: (viewModel: any, fieldName: string, value: any) => void;
   saveStudent: (student: StudentEntity) => void;
 }
 
@@ -34,7 +34,7 @@ export const StudentForm = (props: Props) => {
         label="full name"
         value={props.student.fullname}
         onChange={updateStudentFromUI.bind(this)}
-        error={(props.errors.fullname) ? props.errors.fullname.errorMessage : ""}
+        error={(props.errors.fullname) ? props.errors.fullname.errorMessage : ""}        
       />
 
       <Input
@@ -48,6 +48,9 @@ export const StudentForm = (props: Props) => {
       <button type="submit" className="btn btn-default" onClick={onSave.bind(this)}>
         Save
       </button>
-   </form>
+    </form>
   );
 };
+
+
+

@@ -3,7 +3,7 @@ import { StudentEntity } from "../../../model/student";
 
 interface Props {
   student: StudentEntity;
-  editStudent: (id: number) => void;
+  editStudent: (id: number) => void; 
 }
 
 export const StudentRowComponent = (props: Props) => {

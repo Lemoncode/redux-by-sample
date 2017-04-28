@@ -17,11 +17,14 @@ export class StudentListComponent extends React.Component<Props, {}> {
   render() {
     return (
       <div>
-        <StudentTableComponent
+        <h2>I"m the Student page</h2>
+        <br/>
+        <StudentTableComponent 
           studentList={this.props.studentList}
           editStudent={this.props.editStudent}
-        />
+          />
       </div>
     );
   }
 }
+
