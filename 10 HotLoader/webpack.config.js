@@ -12,6 +12,7 @@ module.exports = {
   },
 
   entry: [
+    'react-hot-loader/patch',
     './main.tsx',
     '../node_modules/bootstrap/dist/css/bootstrap.css',
     '../node_modules/toastr/build/toastr.css',
@@ -28,7 +29,8 @@ module.exports = {
     inline: true, // Enable watch and live reload
     host: 'localhost',
     port: 8080,
-    stats: 'errors-only'
+    stats: 'errors-only',
+    hot: true,
   },
 
   module: {
@@ -85,5 +87,6 @@ module.exports = {
       disable: false,
       allChunks: true,
     }),
+    new webpack.HotModuleReplacementPlugin(),
   ]
 }

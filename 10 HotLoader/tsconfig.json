@@ -8,7 +8,10 @@
     "jsx": "react",
     "sourceMap": true,
     "noLib": false,
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
+    "types": [
+      "webpack-env"
+    ]
   },
   "compileOnSave": false,
   "exclude": [
