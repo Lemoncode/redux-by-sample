@@ -9,6 +9,7 @@ class StudentApi {
     // Let"s the mockdata whenever the singleton is instatiated
     // and the play with the inmemory array
     this.studentsData = studentsMockData;
+
   }
 
   loadStudentList(): Promise<StudentEntity[]> {
@@ -18,7 +19,7 @@ class StudentApi {
   getStudentById(id: number): Promise<StudentEntity> {
     const student = this.studentsData.find(st => st.id === id);
     return Promise.resolve(student);
-  }
+  } 
 
   saveStudent(student: StudentEntity): Promise<boolean> {
     const index = this.studentsData.findIndex(st => st.id === student.id);
@@ -30,7 +31,7 @@ class StudentApi {
     .concat(this.studentsData.slice(index + 1));
 
     return Promise.resolve(true);
-  }
+  }    
 }
 
 export const studentApi = new StudentApi();

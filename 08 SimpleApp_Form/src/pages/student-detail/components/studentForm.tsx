@@ -44,6 +44,6 @@ export const StudentForm = (props: Props) => {
       <button type="submit" className="btn btn-default" onClick={onSave.bind(this)}>
         Save
       </button>
-   </form>
+    </form>
   );
 };
