@@ -11,7 +11,8 @@
     "suppressImplicitAnyIndexErrors": true,
     "types": [
       "webpack-env",
-      "karma-chai-sinon"
+      "karma-chai-sinon",
+      "mocha"
     ]
   },
   "compileOnSave": false,
