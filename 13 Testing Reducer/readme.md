@@ -1,4 +1,4 @@
-# 12 Testing Infrastructure
+# 13 Testing Reducers
 
 This sample series takes as starting point _12 Testing Infrastructure_
 
@@ -23,14 +23,15 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 
 - Let's create start by creating a spec file and a first test, let's first import what we need.
 
-_./src/reducers/spec/session.spec.ts_
+_./src/reducers/session.spec.ts_
 
 ```javascript
 import { expect } from 'chai';
 import * as deepFreeze from 'deep-freeze';
-import {actionsEnums} from '../../common/actionsEnums'
-import {sessionReducer} from '../session'
-
+import {actionsEnums} from '../common/actionsEnums'
+import {sessionReducer} from './session'
+import { UserProfile } from '../model/userProfile'
+import { LoginEntity } from '../model/login'
 ```
 
 Now let's add a simple test
@@ -75,9 +76,7 @@ describe('sessionReducer', () => {
 - A final check for this test, reducers should be immutable, we can check this
 in the unit tests by using deepfreeze library.
 
-```javascript
-describe('sessionReducer', () => {
-  describe('#handlePerformLogin', () => {
+```diff
     it('Store successful login information in the store', () => {
       // Arrange
       const initialState = {  isUserLoggedIn : false,
@@ -85,9 +84,24 @@ describe('sessionReducer', () => {
                               editingLogin : new LoginEntity()
                             };
 
-      deepFreeze(initialState);
++     deepFreeze(initialState);
 
-      //(...)
+      const userFullname = 'John Doe';
+      const role = 'admin';
+
+      const action = {
+        type: actionsEnums.USERPROFILE_PERFORM_LOGIN,
+        payload: {
+          succeeded : true,
+          userProfile : {
+            fullname : userFullname,
+            role : role
+          }
+        }
+      };
+
+      // Act
+      const finalState = sessionReducer(initialState, action);
 
       // Assert
       expect(finalState).not.to.be.undefined;
@@ -95,8 +109,6 @@ describe('sessionReducer', () => {
       expect(finalState.userProfile.fullname).to.be.equal(userFullname)
       expect(finalState.userProfile.role).to.be.equal(role)
     });
-  });
-});
 ```
 
 - Now if you want to run the test you can make it in two flavours:

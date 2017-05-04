@@ -1,0 +1,5 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+ // Controls auto save of dirty files. Accepted values:  "off", "afterDelay", "onFocusChange" (editor loses focus), "onWindowChange" (window loses focus). If set to "afterDelay", you can configure the delay in "files.autoSaveDelay".
+  "files.autoSave": "onWindowChange",  
+}

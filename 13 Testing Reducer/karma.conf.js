@@ -1,46 +1,75 @@
-var webpackConfig = require('./webpack.config');
+var webpack = require('webpack');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = function (config) {
   config.set({
     basePath: '',
     frameworks: ['mocha', 'chai'],
     files: [
-      './test/test_index.js',
-      './node_modules/phantomjs-polyfill-object-assign/object-assign-polyfill.js'
+      './test_index.js'
     ],
     exclude: [
     ],
     preprocessors: {
-      './test/test_index.js': ['webpack', 'sourcemap']
+      './test_index.js': ['webpack', 'sourcemap']
     },
     webpack: {
       devtool: 'inline-source-map',
       module: {
-          loaders: [
-              {
-                  test: /\.(ts|tsx)$/,
-                  exclude: /node_modules/,
-                  loader: 'ts-loader'
-            },
-            //Configuration required by enzyme
+          rules: [
             {
-                test: /\.json$/,
-                loader: 'json'
-            }
+              test: /\.(ts|tsx)$/,
+              exclude: /node_modules/,
+              use: {
+                loader: 'awesome-typescript-loader',
+                options: {
+                  useBabel: true,
+                },
+              },
+            },
+            {
+              test: /\.css$/,
+              include: /node_modules/,
+              loader: ExtractTextPlugin.extract({
+                fallback: 'style-loader',
+                use: {
+                  loader: 'css-loader',
+                },
+              }),
+            },
+            // Loading glyphicons => https://github.com/gowravshekar/bootstrap-webpack
+            // Using here url-loader and file-loader
+            {
+              test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+              loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+            },
+            {
+              test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+              loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
+            },
+            {
+              test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+              loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
+            },
+            {
+              test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+              loader: 'file-loader'
+            },
           ],
           //Configuration required to import sinon on spec.ts files
           noParse: [
               /node_modules(\\|\/)sinon/,
-          ]
+          ]          
       },
       resolve: {
           //Added .json extension required by cheerio (enzyme dependency)
-          extensions: ['', '.js', '.ts', '.tsx', '.json'],
+          extensions: ['.js', '.ts', '.tsx', '.json'],
           //Configuration required to import sinon on spec.ts files
           // https://github.com/webpack/webpack/issues/304
           alias: {
             sinon: 'sinon/pkg/sinon'
-          }
+          }          
       },
       //Configuration required by enzyme
       externals: {
@@ -63,5 +92,5 @@ module.exports = function (config) {
     browsers: ['Chrome'],
     singleRun: false,
     concurrency: Infinity
-  })
+  })  
 }
