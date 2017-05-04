@@ -36,11 +36,8 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 - **karma-sourcemap-loader:** add source map support to karma (debugging).
 - **karma-webpack:** webpack support for karma.
 - **karma-chai-sinon:** plugin for karma.
-- **react-addons-test-utils: makes it easy to test React components in the testing framework of your choice.**
-- *phantomjs-prebuilt*: browser with no UI (good to run the test in a CI machine).
-- *karma-phantomjs-launcher*: phantomjs support for karma
-- *object-assign-polyfill*: object assign polyfill for phantomjs.
-- *karma-mocha-reporter*: Friendly karma progress reporter.
+- **react-addons-test-utils**: makes it easy to test React components in the testing framework of your choice.
+- **karma-mocha-reporter**: Friendly karma progress reporter.
  
 
 We will do that by running:
@@ -49,8 +46,8 @@ We will do that by running:
 npm install chai deep-freeze enzyme mocha json-loader sinon
 redux-mock-store karma karma-chai karma-chrome-launcher
 karma-mocha karma-sourcemap-loader karma-webpack karma-mocha-reporter
-react-addons-test-utils phantomjs-prebuilt object-assign-polyfill
-sinon-chai karma-sinon-chai karma-phantomjs-launcher --save-dev
+react-addons-test-utils
+sinon-chai karma-sinon-chai --save-dev
 ```
 
 - Now let's install the needed typings:
@@ -66,16 +63,29 @@ npm install @types/mocha @types/chai @types/deep-freeze
 
 _./tsconfig.json_
 
-```javascript
+```diff
 {
   "compilerOptions": {
-    // (...)
-    "types": ["karma-chai-sinon"]
+    "target": "es6",
+    "module": "es6",
+    "moduleResolution": "node",
+    "declaration": false,
+    "noImplicitAny": false,
+    "jsx": "react",
+    "sourceMap": true,
+    "noLib": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "types": [
+      "webpack-env",
++      "karma-chai-sinon"
+    ]
   },
 ```
 
 - We are going to do implement a little trick to compile all specs in the project in a single file and properly generate
 maps, let's create under the root folder a subfolder named "test" and create a file called "test_index.js", the file will contain the following code:
+
+_./test_index.js_
 
 ````javascript
 // require all modules ending in ".spec" from the
@@ -100,6 +110,8 @@ we are going to use (mocha, chai, sinon).
 
   -  Setup the port where will run and indicate the browser it will run.
 
+_./karma.conf.js_
+
 ```javascript
 var webpackConfig = require('./webpack.config');
 
@@ -115,20 +127,48 @@ module.exports = function (config) {
     preprocessors: {
       './test/test_index.js': ['webpack', 'sourcemap']
     },
-    webpack: {
+    webpack: {           
       devtool: 'inline-source-map',
       module: {
-          loaders: [
-              {
-                  test: /\.(ts|tsx)$/,
-                  exclude: /node_modules/,
-                  loader: 'ts-loader'
-            },
-            //Configuration required by enzyme
+          rules: [
             {
-                test: /\.json$/,
-                loader: 'json'
-            }
+              test: /\.(ts|tsx)$/,
+              exclude: /node_modules/,
+              use: {
+                loader: 'awesome-typescript-loader',
+                options: {
+                  useBabel: true,
+                },
+              },
+            },
+            {
+              test: /\.css$/,
+              include: /node_modules/,
+              loader: ExtractTextPlugin.extract({
+                fallback: 'style-loader',
+                use: {
+                  loader: 'css-loader',
+                },
+              }),
+            },
+            // Loading glyphicons => https://github.com/gowravshekar/bootstrap-webpack
+            // Using here url-loader and file-loader
+            {
+              test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+              loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+            },
+            {
+              test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+              loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
+            },
+            {
+              test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+              loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
+            },
+            {
+              test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+              loader: 'file-loader'
+            },
           ],
           //Configuration required to import sinon on spec.ts files
           noParse: [
@@ -137,7 +177,7 @@ module.exports = function (config) {
       },
       resolve: {
           //Added .json extension required by cheerio (enzyme dependency)
-          extensions: ['', '.js', '.ts', '.tsx', '.json'],
+          extensions: ['.js', '.ts', '.tsx', '.json'],
           //Configuration required to import sinon on spec.ts files
           // https://github.com/webpack/webpack/issues/304
           alias: {
@@ -165,23 +205,19 @@ module.exports = function (config) {
     browsers: ['Chrome'],
     singleRun: false,
     concurrency: Infinity
-  })
+  })  
 }
-
 ```
 
 Let's add  command to our npm to run the tests (package.json)
 
-````json
-"scripts": {
-  //...
-  "test": "karma start --browsers PhantomJS --single-run"
-},
-
-````
-Now if we want to run the sample using Chrome browser we can type the following
-command
-
+````diff
+  "scripts": {
+    "start": "webpack-dev-server",
+    "build": "webpack",
++    "test": "karma start --single-run",
++    "test:watch": "karma start --no-single-run"    
+  },
 ```
-karma start
-```
+
+

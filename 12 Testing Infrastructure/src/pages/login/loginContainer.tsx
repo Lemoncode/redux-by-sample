@@ -6,14 +6,14 @@ import { loginRequestStartedAction} from './actions/loginRequestStarted';
 
 const mapStateToProps = (state) => {
     return {
-      loginInfo: state.sessionReducer.editingLogin
+      loginInfo: state.sessionReducer.editingLogin      
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateLoginInfo: (loginInfo : LoginEntity) => dispatch(updateEditingLogin(loginInfo)),
-    performLogin: (loginInfo : LoginEntity) => dispatch(loginRequestStartedAction(loginInfo))
+    performLogin: (loginInfo : LoginEntity) => dispatch(loginRequestStartedAction(loginInfo))        
   }
 }
 
