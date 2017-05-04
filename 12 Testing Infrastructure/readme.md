@@ -77,7 +77,8 @@ _./tsconfig.json_
     "suppressImplicitAnyIndexErrors": true,
     "types": [
       "webpack-env",
-+      "karma-chai-sinon"
++      "karma-chai-sinon",
++      "mocha"
     ]
   },
 ```
