@@ -9,7 +9,7 @@ export const loginRequestStartedAction = (login : LoginEntity) => {
     const promise = loginApi.login(login);
 
     promise.then(
-      data => {
+      data => {        
         dispatcher(loginRequestCompletedAction(data));
 
         // This is not ideal to have it here, maybe move it to middleware?

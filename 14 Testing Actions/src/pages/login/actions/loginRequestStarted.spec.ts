@@ -58,5 +58,49 @@ describe('pages/login/loginRequestStarted Action', () => {
 
           done();
       });    
-  })
+  });
+
+  it('loginRequest login failed', (done) => {
+    // Arrange            
+    const loginInfo : LoginEntity = new LoginEntity();
+    loginInfo.login = "john";
+    loginInfo.password = "pass";
+
+    const expectedLoginResponse = new LoginResponse();
+    expectedLoginResponse.succeeded = false;
+    expectedLoginResponse.userProfile = new UserProfile();
+    expectedLoginResponse.userProfile.fullname = "";
+    expectedLoginResponse.userProfile.role = "";
+    
+    const loginMethodStub = sinon.stub(loginApi, 'login');
+
+    loginMethodStub.returns({
+      then: callback => {
+        callback(expectedLoginResponse)
+      }    
+    });
+
+    const hashHistoryStub = sinon.stub(hashHistory, 'push');
+
+
+    // Act
+    const store = mockStore([]);
+
+    store.dispatch(loginRequestStartedAction(loginInfo))
+      .then(() => {
+          // Assert
+          expect(store.getActions()[0].type).to.be.equal(actionsEnums.USERPROFILE_PERFORM_LOGIN);
+          expect(store.getActions()[0].payload.succeeded).to.be.false;
+          expect(hashHistoryStub.called).to.be.false;
+
+        // Cleanup
+        // To avoid this use sinon-test, but not working
+        // well on browser, see: https://github.com/sinonjs/sinon-test/issues/58
+        loginMethodStub.restore();
+        hashHistoryStub.restore();
+
+        done();
+      });    
+  });
+  
 });
