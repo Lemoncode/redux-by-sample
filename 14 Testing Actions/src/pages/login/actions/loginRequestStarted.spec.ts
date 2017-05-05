@@ -10,21 +10,14 @@ import { loginRequestCompletedAction } from './loginRequestCompleted'
 import { actionsEnums } from '../../../common/actionsEnums'
 import { hashHistory } from 'react-router'
 import * as sinon from 'sinon';
-import * as sinontest from 'sinon-test';
-
-
-
-const nonTypedSinon : any = sinon;
-nonTypedSinon.test = sinontest.configureTest(sinon);
 
 const middlewares = [ ReduxThunk ];
 const mockStore = configureStore(middlewares);
 
 
 describe('pages/login/loginRequestStarted Action', () => {
-  it('loginRequest login succeeded', nonTypedSinon.test((done) => {
-    // Arrange        
-    const sinon : sinon.SinonStatic = this;
+  it('loginRequest login succeeded', (done) => {
+    // Arrange            
     const loginInfo : LoginEntity = new LoginEntity();
     loginInfo.login = "john";
     loginInfo.password = "pass";
@@ -35,12 +28,13 @@ describe('pages/login/loginRequestStarted Action', () => {
     expectedLoginResponse.userProfile.fullname = "john";
     expectedLoginResponse.userProfile.role = "admin";
 
+    
     const loginMethodStub = sinon.stub(loginApi, 'login');
 
     loginMethodStub.returns({
       then: callback => {
         callback(expectedLoginResponse)
-      }
+      }    
     });
 
     const hashHistoryStub = sinon.stub(hashHistory, 'push');
@@ -55,7 +49,14 @@ describe('pages/login/loginRequestStarted Action', () => {
           expect(store.getActions()[0].type).to.be.equal(actionsEnums.USERPROFILE_PERFORM_LOGIN);
           expect(store.getActions()[0].payload.succeeded).to.be.true;
           expect(hashHistoryStub.called).to.be.true;
+
+        // Cleanup
+        // To avoid this use sinon-test, but not working
+        // well on browser, see: https://github.com/sinonjs/sinon-test/issues/58
+        loginMethodStub.restore();
+        hashHistoryStub.restore();
+
           done();
       });    
-  }).bind(this))
+  })
 });
