@@ -19,7 +19,7 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 
 -  Let's start by adding a simple test to _studentRow.tsx_ checking the the row is displaying the expected data
 
-_./src/pages/student-list/components/studentRow.tsx_
+_./src/pages/student-list/components/studentRow.spec.tsx_
 
 ```javascript
 describe('StudentRowComponent', () => {
@@ -46,6 +46,8 @@ describe('StudentRowComponent', () => {
   });
 });
 ```
+
+> Note: Check LeanMood snapshot like testing
 
 - Now let's interact with the component, we want to check that clicking on the div calls the expected callback
 
@@ -80,5 +82,76 @@ it('Should interact to the click on edit student and return as param 2 student I
 
 - Now let's test _studentListContainer_
 
+_./src/pages/student-list/studentListContainer.spec.tsx_
+
 ```javascript
+import { expect } from 'chai';
+import { mount } from 'enzyme';
+import * as React from 'react';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
+import { StudentListContainer } from '../studentListContainer';
+import { StudentEntity } from '../../../model/student'
+import * as getStudentModule from '../actions/studentListRequestStarted'
+import * as navigateToEditStudentModule from '../actions/navigateToEditStudent'
+
+const createStore = configureStore();
+
+describe('StudentListContainer', () => {
+  it('Should render StudentListComponent (one student)', sinon.test(() => {
+    // Arrange
+    let sinon: sinon.SinonStatic = this;
+
+    const student = new StudentEntity();
+    student.id = 2;
+    student.fullname = 'John Doe';
+    student.email = 'john@mail.com';
+
+
+    let mockStore = createStore({
+        studentReducer: {
+                          studentsList: [student]
+                        }
+    });
+
+
+    let studentListRequestStartedActionMock = sinon.stub(getStudentModule,
+                                           'studentListRequestStartedAction',
+                                           () => {
+                                             return {
+                                               type: 'dummy'
+                                             }
+                                           }
+                                           );
+
+
+      let navigateToEditStudentActionMock = sinon.stub(navigateToEditStudentModule,
+                                             'navigateToEditStudentAction',
+                                             (id) => {
+                                               return {
+                                                 type: 'dummy'
+                                               }
+                                             }
+                                             );
+
+
+     // Act
+     const nonTypedMockStore : any = mockStore;
+     let StudentListContainerWrapper = mount(
+       <Provider store={nonTypedMockStore}>
+           <StudentListContainer />
+       </Provider>
+     );
+
+     // Assert
+     var studentListPresentationalWrapper = StudentListContainerWrapper.find('StudentListComponent');
+     expect(studentListPresentationalWrapper).not.to.be.undefined;
+     expect(studentListPresentationalWrapper.prop('studentList')).not.to.be.undefined;
+     expect(studentListPresentationalWrapper.prop('studentList').length).equals(1);
+     expect(studentListPresentationalWrapper.prop('studentList')[0].fullname).equals(student.fullname );
+     expect(studentListPresentationalWrapper.prop('studentList')[0].email).equals(student.email);
+
+
+  }).bind(this));
+});
 ```
