@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import { LoginResponse } from '../../../../model/loginResponse'
-import { loginRequestCompletedAction } from '../loginRequestCompleted'
-import { actionsEnums } from '../../../../common/actionsEnums'
+import { LoginResponse } from '../../../model/loginResponse'
+import { loginRequestCompletedAction } from './loginRequestCompleted'
+import { actionsEnums } from '../../../common/actionsEnums'
 
 describe('pages/login/loginRequestCompleted Action', () => {
   it('loginResponse informed', () => {
@@ -9,8 +9,7 @@ describe('pages/login/loginRequestCompleted Action', () => {
     const loginResponse = new LoginResponse();
 
     loginResponse.succeeded = true;
-    loginResponse.userProfile.fullname = 'john';
-    loginResponse.userProfile.role = 'admin'
+    loginResponse.userProfile = {fullname : 'john', role: 'admin'}
 
     // Act
     const result = loginRequestCompletedAction(loginResponse);
