@@ -1,4 +1,4 @@
-# 12 Testing Infrastructure
+# 14 Testing Actions
 
 This sample series takes as starting point _13 Testing Actions_
 
@@ -21,23 +21,17 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 We will implement a simple test, in the implemented sample code you can find
 a battery of unit tests already implemented.
 
-- Let's launch the tests:
-
-```
-npm test
-```
-
-- Now let's add test support for _loginRequestStarted_, this time we will have
+- Now let's add test support for _loginRequestCompleted_, this time we will have
 to take care of handling and async all and mock and api request plus a router
 navigation request.
 
-_./src/pages/login/actions/specs/loginRequestCompleted.spec.ts_
+_./src/pages/login/actions/loginRequestCompleted.spec.ts_
 
 ```javascript
 import { expect } from 'chai';
-import { LoginResponse } from '../../../../model/loginResponse'
-import { loginRequestCompletedAction } from '../loginRequestCompleted'
-import { actionsEnums } from '../../../../common/actionsEnums'
+import { LoginResponse } from '../../../model/loginResponse'
+import { loginRequestCompletedAction } from './loginRequestCompleted'
+import { actionsEnums } from '../../../common/actionsEnums'
 
 describe('pages/login/loginRequestCompleted Action', () => {
   it('loginResponse informed', () => {
@@ -45,8 +39,7 @@ describe('pages/login/loginRequestCompleted Action', () => {
     const loginResponse = new LoginResponse();
 
     loginResponse.succeeded = true;
-    loginResponse.userProfile.fullname = 'john';
-    loginResponse.userProfile.role = 'admin'
+    loginResponse.userProfile = {fullname : 'john', role: 'admin'} 
 
     // Act
     const result = loginRequestCompletedAction(loginResponse);
@@ -71,10 +64,23 @@ to test an async action (thunk) and we will have to mock dependencies (rest api)
 the action we are going to test is _loginRequestStarted_
 
 ```javascript
+<<<<<<< HEAD
 import {actionsEnums} from '../../../common/actionsEnums';
 import {LoginEntity} from '../../../model/login';
 import {loginApi} from '../../../rest-api/loginApi';
 import {loginRequestCompletedAction} from './loginRequestCompleted';
+=======
+import { expect } from 'chai';
+import ReduxThunk from 'redux-thunk';
+import configureStore from 'redux-mock-store'
+import { loginApi } from '../../../rest-api/loginApi';
+import { UserProfile } from '../../../model/userProfile'
+import { LoginEntity } from '../../../model/login'
+import { LoginResponse } from '../../../model/loginResponse'
+import { loginRequestStartedAction } from './loginRequestStarted'
+import { loginRequestCompletedAction } from './loginRequestCompleted'
+import { actionsEnums } from '../../../common/actionsEnums'
+>>>>>>> 6bc627d2fda35b1fa982dd938ee1df9da9437cc6
 import { hashHistory } from 'react-router'
 
 export const loginRequestStartedAction = (login : LoginEntity) => {

@@ -1,5 +1,4 @@
 import {actionsEnums} from '../common/actionsEnums';
-import {} from 'core-js'
 import {UserProfile} from '../model/userProfile';
 import {LoginResponse} from '../model/loginResponse';
 import {LoginEntity} from '../model/login';
@@ -21,9 +20,9 @@ export const sessionReducer =  (state : SessionState = new SessionState(), actio
       switch (action.type) {
         case actionsEnums.USERPROFILE_PERFORM_LOGIN:
            return handlePerformLogin(state, action.payload);
-
         case actionsEnums.USERPROFILE_UPDATE_EDITING_LOGIN:
            return handleUpdateEditingLogin(state, action.payload);
+
       }
 
       return state;
@@ -31,11 +30,19 @@ export const sessionReducer =  (state : SessionState = new SessionState(), actio
 
 
 const handlePerformLogin = (state : SessionState, payload : LoginResponse) => {
-  const newState = Object.assign({}, state, {isUserLoggedIn: payload.succeeded, userProfile: payload.userProfile});
+  return {...state, 
+          isUserLoggedIn: payload.succeeded, 
+          userProfile: payload.userProfile
+         };  
+}
+
+
+const handleUpdateEditingLogin = (state: SessionState, payload : LoginEntity) => {
+  const newState = {
+    ...state, 
+    editingLogin: payload
+  };
+
   return newState;
 }
 
-const handleUpdateEditingLogin = (state: SessionState, payload : LoginEntity) => {
-  const newState = Object.assign({}, state, {editingLogin: payload});
-  return newState;
-}
