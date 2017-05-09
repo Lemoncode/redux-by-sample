@@ -64,12 +64,6 @@ to test an async action (thunk) and we will have to mock dependencies (rest api)
 the action we are going to test is _loginRequestStarted_
 
 ```javascript
-<<<<<<< HEAD
-import {actionsEnums} from '../../../common/actionsEnums';
-import {LoginEntity} from '../../../model/login';
-import {loginApi} from '../../../rest-api/loginApi';
-import {loginRequestCompletedAction} from './loginRequestCompleted';
-=======
 import { expect } from 'chai';
 import ReduxThunk from 'redux-thunk';
 import configureStore from 'redux-mock-store'
@@ -80,7 +74,6 @@ import { LoginResponse } from '../../../model/loginResponse'
 import { loginRequestStartedAction } from './loginRequestStarted'
 import { loginRequestCompletedAction } from './loginRequestCompleted'
 import { actionsEnums } from '../../../common/actionsEnums'
->>>>>>> 6bc627d2fda35b1fa982dd938ee1df9da9437cc6
 import { hashHistory } from 'react-router'
 
 export const loginRequestStartedAction = (login : LoginEntity) => {
