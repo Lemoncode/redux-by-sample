@@ -17,6 +17,8 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 
 ## Steps to build it
 
+> Update tsconfig to output commonjs.
+
 -  Let's start by adding a simple test to _studentRow.tsx_ checking the the row is displaying the expected data
 
 _./src/pages/student-list/components/studentRow.spec.tsx_
