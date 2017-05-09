@@ -44,7 +44,7 @@ describe('StudentListContainer', () => {
      var studentListPresentationalWrapper = StudentListContainerWrapper.find('StudentListComponent');
      expect(studentListPresentationalWrapper).not.to.be.undefined;
      expect(studentListPresentationalWrapper.prop('studentList')).not.to.be.undefined;
-     expect(studentListPresentationalWrapper.prop('studentList').length).equals(1);
+     expect((studentListPresentationalWrapper.prop('studentList') as any).length).equals(1);
      expect(studentListPresentationalWrapper.prop('studentList')[0].fullname).equals(student.fullname );
      expect(studentListPresentationalWrapper.prop('studentList')[0].email).equals(student.email);
 
