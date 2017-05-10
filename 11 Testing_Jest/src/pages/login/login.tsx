@@ -17,7 +17,7 @@ export const LoginComponent = (props : Props) => {
           <div className="panel panel-default">
             <Header/>
             <Form loginInfo={props.loginInfo}
-                  updateLoginInfo={props.updateLoginInfo}
+                  updateLoginInfo={props.updateLoginInfo.bind(this)}
                   performLogin={() => props.performLogin(props.loginInfo)}
                   />
           </div>
