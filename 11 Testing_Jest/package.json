@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "webpack"
+    "build": "webpack",
+    "test": "jest --verbose",
+    "test:watch": "jest --watchAll --verbose"
   },
   "author": "",
   "license": "ISC",
@@ -36,9 +38,9 @@
     "react-test-renderer": "^15.5.4",
     "redux-mock-store": "^1.2.3",
     "style-loader": "^0.16.0",
+    "ts-jest": "^20.0.2",
     "ts-loader": "^2.0.3",
     "typescript": "^2.0.6",
-    "typescript-babel-jest": "^1.0.3",
     "url-loader": "^0.5.7",
     "webpack": "^2.3.2",
     "webpack-dev-server": "^2.4.2"
@@ -56,5 +58,18 @@
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
     "toastr": "^2.1.2"
+  },
+  "jest": {
+    "testRegex": "(/specs/.*|\\.spec)\\.(ts|tsx)$",
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json",
+      "ts",
+      "tsx"
+    ],
+    "transform": {
+      ".(tsx?)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    }
   }
 }

@@ -30,7 +30,7 @@ Let's start by installing the testing libraries:
 
 - [jest](https://github.com/facebook/jest): JavaScript Testing library with runner, assertion, mocks, etc.
 - [@types/jest](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/df38f202a0185eadfb6012e47dd91f8975eb6151/types/jest): Typings for jest.
-- [typescript-babel-jest](https://github.com/lozinsky/typescript-babel-jest): A preprocessor with sourcemap support to help use Typescript(ES6) -> Babel(ES5) and Jest.
+- [ts-jest](https://github.com/kulshekhar/ts-jest): A preprocessor with sourcemap support to help use Typescript with Jest.
 - [react-test-renderer](https://www.npmjs.com/package/react-test-renderer): provides an experimental React renderer that can be used to render React components to pure JavaScript objects, without depending on the DOM or a native mobile environment.
 - [@types/react-test-renderer](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/df38f202a0185eadfb6012e47dd91f8975eb6151/types/react-test-renderer): Typings for react-test-renderer.
 - [deep-freeze](https://github.com/substack/deep-freeze): To ensure immutability of the reducers.
@@ -39,7 +39,7 @@ Let's start by installing the testing libraries:
 - [@types/redux-mock-store](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/df38f202a0185eadfb6012e47dd91f8975eb6151/types/redux-mock-store): Typings for redux-mock-store.
 
   ```bash
-  npm install jest @types/jest typescript-babel-jest --save-dev
+  npm install jest @types/jest ts-jest --save-dev
   npm install react-test-renderer @types/react-test-renderer --save-dev
   npm install deep-freeze @types/deep-freeze --save-dev
   npm install redux-mock-store @types/redux-mock-store --save-dev
@@ -55,25 +55,16 @@ npm uninstall @types/redux-thunk --save-dev
 
 - Jest typings configuration to work with [jest global declarations](https://github.com/DefinitelyTyped/DefinitelyTyped/pull/11830):
 
-*tsconfig.json*
-```javascript
+### ./tsconfig.json
+```diff
 {
   "compilerOptions": {
   ...
-    "types": ["jest"]
-  },
-  ...
-}
-```
-
-- Due to *react-test-renderer* doesn't have typings on *DefinitelyTyped*, we have to use webpack-env to require js lib. Webpack-env typings configuration to work with global declarations:
-
-*tsconfig.json*
-```javascript
-{
-  "compilerOptions": {
-  ...
-    "types": ["jest", "webpack-env"]
+    "types": [
+-     "webpack-env"
++     "webpack-env",
++     "jest"
+    ]
   },
   ...
 }
@@ -90,53 +81,58 @@ NOTE:
 
 > --verbose Display individual test results with the test suite hierarchy.
 
-*package.json*
-```javascript
+### ./package.json
+```diff
 {
   ...
   "scripts": {
-    ...
-    "test": "jest --verbose",
-    "test:watch": "jest --watchAll --verbose"
-  }
+    "start": "webpack-dev-server",
+-   "build": "webpack"
++   "build": "webpack",
++   "test": "jest --verbose",
++   "test:watch": "jest --watchAll --verbose"
+  },
   ...
 }
 ```
 
 - Jest configuration:
 
-*package.json*
-```javascript
+### ./package.json
+```diff
 {
   ...
-  "jest": {
-    "testPathDirs": [
-      "<rootDir>/src/"
-    ],
-    "testRegex": "(/specs/.*|\\.spec)\\.(ts|tsx)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
+  "dependencies": {
     ...
-  }
+- }
++ },
++ "jest": {
++   "testRegex": "(/specs/.*|\\.spec)\\.(ts|tsx)$",
++   "moduleFileExtensions": [
++     "js",
++     "jsx",
++     "json",
++     "ts",
++     "tsx"
++   ],
++ }
 }
-```
 
+```
 - ts-jest configuration:
 
-*package.json*
-```javascript
+### ./package.json
+```diff
 {
   ...
   "jest": {
     ...
-    "transform": {
-      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    }
++   "transform": {
++     ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
++   },
   }
 }
+
 ```
 
 ## Adding action tests
@@ -147,35 +143,36 @@ Let's launch tests in watch mode:
 npm run test:watch
 ```
 
-- Adding unit tests support to the *loginRequestCompleted* action. We will implement a simple test, in the implemented sample code you can find a battery of unit tests already implemented.
+- Adding unit tests support to the `loginRequestCompleted` action. We will implement a simple test, in the implemented sample code you can find a battery of unit tests already implemented.
 
-*./src/pages/login/actions/specs/loginRequestCompleted.spec.ts*
+### ./src/pages/login/actions/specs/loginRequestCompleted.spec.ts
 ```javascript
 import {actionsEnums} from '../../../../common/actionsEnums';
 import {LoginResponse} from '../../../../model/loginResponse';
-import {UserProfile} from '../../../../model/userProfile'
+import {UserProfile} from '../../../../model/userProfile';
 import {loginRequestCompletedAction} from '../loginRequestCompleted';
 
 describe('loginRequestCompletedAction', () => {
   it('When passing loginResponse equals {succeeded: true}' +
   'Should return action { type: USERPROFILE_PERFORM_LOGIN, payload: {succeeded: true} }', () => {
-    //Arrange
+    // Arrange
     let loginResponse = new LoginResponse();
     loginResponse.succeeded = true;
 
-    //Act
+    // Act
     var result = loginRequestCompletedAction(loginResponse);
 
-    //Assert
+    // Assert
     expect(result.type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
     expect(result.payload.succeeded).toBeTruthy();
   });
 });
+
 ```
 
 - Now it's time to go for a case that has a greater level of completexity, we are going to test an async action (thunk) and we will have to mock dependencies (rest api), the action we are going to test is loginRequestStarted.
 
-*./src/pages/login/actions/specs/loginRequestStarted.spec.ts*
+### ./src/pages/login/actions/specs/loginRequestStarted.spec.ts
 ```javascript
 import configureStore from 'redux-mock-store';
 import ReduxThunk from 'redux-thunk';
@@ -193,7 +190,7 @@ import {LoginResponse} from '../../../../model/loginResponse';
 describe('loginRequestStartedAction', () => {
   it('When passing loginEntity.login equals "test login" and expected LoginResponse.succeeded equals true ' +
   'Should calls loginApi.login(loginEntity), hashHistory.push and dispatch loginRequestCompletedAction action', () => {
-    //Arrange
+    // Arrange
     let loginEntity = new LoginEntity();
     loginEntity.login = "test login";
 
@@ -210,12 +207,12 @@ describe('loginRequestStartedAction', () => {
 
     hashHistory.push = jest.fn();
 
-    //Act
+    // Act
     const store = mockStore([]);
 
     store.dispatch(loginRequestStartedAction(loginEntity))
       .then((data) => {
-        //Assert
+        // Assert
         expect(loginApi.login).toHaveBeenCalledWith(loginEntity);
         expect(data).toBe(expectedData);
         expect(store.getActions()[0].type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
@@ -604,3 +601,6 @@ generating ts files from sourcemaps instead of using original ts files to debug.
 Then we can add breakpoints from browser:
 
 ![Debugging](../99 Readme Resources/11 Testing_Jest/03 Debugging node-inspector.png)
+
+## Resources
+- [Migrating to Jest](https://facebook.github.io/jest/docs/migration-guide.html)
