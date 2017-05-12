@@ -15,13 +15,12 @@ class SessionState {
   }
 }
 
-export const sessionReducer = (state: SessionState = new SessionState(), action) => {
+export const sessionReducer = (state = new SessionState(), action) => {
   switch (action.type) {
     case actionsEnums.USERPROFILE_PERFORM_LOGIN:
       return handlePerformLogin(state, action.payload);
     case actionsEnums.USERPROFILE_UPDATE_EDITING_LOGIN:
       return handleUpdateEditingLogin(state, action.payload);
-
   }
 
   return state;

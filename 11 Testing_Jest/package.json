@@ -8,7 +8,8 @@
     "build": "webpack",
     "test": "jest --verbose",
     "test:watch": "jest --watchAll --verbose",
-    "test:coverage": "jest --verbose --coverage"
+    "test:coverage": "jest --verbose --coverage",
+    "test:debug": "jest -i"
   },
   "author": "",
   "license": "ISC",
