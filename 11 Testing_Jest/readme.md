@@ -492,34 +492,23 @@ Snapshot:
 - `--coverage`: to enable coverage.
 - `--no-cache`: disable cache to avoid issues with sourcemaps.
 
-*package.json*
-```javascript
+### ./package.json
+```diff
 {
   ...
   "scripts": {
     ...
-    "test": "jest --verbose --coverage --no-cache",
-    "test:watch": "jest --watchAll --verbose --no-cache"
+    "test": "jest --verbose",
+-   "test:watch": "jest --watchAll --verbose"
++   "test:watch": "jest --watchAll --verbose",
++   "test:coverage": "jest --verbose --coverage"
   }
   ...
 }
+
 ```
 
-- Jest configuration:
-
-*package.json*
-```javascript
-{
-  ...
-  "jest": {
-    ...
-    "testResultsProcessor": "<rootDir>/node_modules/ts-jest/coverageprocessor.js",
-    "coverageDirectory": "<rootDir>/coverage"
-  }
-}
-```
-
-- Execute `npm test` to single run test with coverage.
+- Execute `npm test:coverage` to single run test with coverage.
 
 ## Debugging Jest
 
