@@ -7,11 +7,11 @@ describe('loginRequestCompletedAction', () => {
   it('When passing loginResponse equals {succeeded: true}' +
   'Should return action { type: USERPROFILE_PERFORM_LOGIN, payload: {succeeded: true} }', () => {
     // Arrange
-    let loginResponse = new LoginResponse();
+    const loginResponse = new LoginResponse();
     loginResponse.succeeded = true;
 
     // Act
-    var result = loginRequestCompletedAction(loginResponse);
+    const result = loginRequestCompletedAction(loginResponse);
 
     // Assert
     expect(result.type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);

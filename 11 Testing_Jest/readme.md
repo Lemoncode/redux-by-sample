@@ -128,7 +128,7 @@ NOTE:
   "jest": {
     ...
 +   "transform": {
-+     ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
++     ".tsx?": "<rootDir>/node_modules/ts-jest/preprocessor.js"
 +   },
   }
 }
@@ -156,11 +156,11 @@ describe('loginRequestCompletedAction', () => {
   it('When passing loginResponse equals {succeeded: true}' +
   'Should return action { type: USERPROFILE_PERFORM_LOGIN, payload: {succeeded: true} }', () => {
     // Arrange
-    let loginResponse = new LoginResponse();
+    const loginResponse = new LoginResponse();
     loginResponse.succeeded = true;
 
     // Act
-    var result = loginRequestCompletedAction(loginResponse);
+    const result = loginRequestCompletedAction(loginResponse);
 
     // Assert
     expect(result.type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
@@ -176,7 +176,7 @@ describe('loginRequestCompletedAction', () => {
 ```javascript
 import configureStore from 'redux-mock-store';
 import ReduxThunk from 'redux-thunk';
-const middlewares = [ ReduxThunk ];
+const middlewares = [ReduxThunk];
 const mockStore = configureStore(middlewares);
 import {hashHistory} from 'react-router';
 
@@ -191,10 +191,10 @@ describe('loginRequestStartedAction', () => {
   it('When passing loginEntity.login equals "test login" and expected LoginResponse.succeeded equals true ' +
   'Should calls loginApi.login(loginEntity), hashHistory.push and dispatch loginRequestCompletedAction action', () => {
     // Arrange
-    let loginEntity = new LoginEntity();
+    const loginEntity = new LoginEntity();
     loginEntity.login = "test login";
 
-    let expectedData = new LoginResponse();
+    const expectedData = new LoginResponse();
     expectedData.succeeded = true;
 
     loginApi.login = jest.fn(() => {
@@ -221,13 +221,14 @@ describe('loginRequestStartedAction', () => {
       });
   });
 });
+
 ```
 
 ## Adding reducer tests
 
 Now let's add a simple test
 
-*./src/reducers/specs/session.spec.ts*
+### ./src/reducers/specs/session.spec.ts
 
 ```javascript
 import * as deepFreeze from 'deep-freeze';
@@ -236,18 +237,18 @@ import {UserProfile} from '../../model/userProfile';
 import {LoginEntity} from '../../model/login';
 import {sessionReducer} from '../session';
 
-describe('session', () => {
+describe('sessionReducer', () => {
   describe('#handlePerformLogin', () => {
-    it('When passing initialState with defaul values and an action type USERPROFILE_PERFORM_LOGIN with successful values. ' +
-    'Should returns new immutable SessionState with payload values', () => {
+    it(`When passing initialState with defaul values and an action type USERPROFILE_PERFORM_LOGIN with successful values.
+    Should returns new immutable SessionState with payload values`, () => {
       //Arrange
-      let initialState = {
+      const initialState = {
         isUserLoggedIn: false,
         userProfile: new UserProfile(),
         editingLogin: new LoginEntity()
       };
 
-      let action = {
+      const action = {
         type: actionsEnums.USERPROFILE_PERFORM_LOGIN,
         payload: {
           succeeded: true,
@@ -258,8 +259,10 @@ describe('session', () => {
         }
       };
 
+      deepFreeze(initialState);
+
       //Act
-      let finalState = sessionReducer(initialState, action);
+      const finalState = sessionReducer(initialState, action);
 
       //Assert
       expect(finalState.isUserLoggedIn).toBeTruthy();
@@ -269,45 +272,14 @@ describe('session', () => {
     });
   });
 });
+
 ```
 
-- A final check for this test, reducers should be immutable, we can check this in the unit tests by using deep-freeze:
-
-*./src/reducers/specs/session.spec.ts*
-
-```javascript
-import * as deepFreeze from 'deep-freeze';
-import {actionsEnums} from '../../common/actionsEnums';
-import {UserProfile} from '../../model/userProfile';
-import {LoginEntity} from '../../model/login';
-import {sessionReducer} from '../session';
-
-describe('session', () => {
-  describe('#handlePerformLogin', () => {
-    it('When passing initialState with defaul values and an action type USERPROFILE_PERFORM_LOGIN with successful values. ' +
-    'Should returns new immutable SessionState with payload values', () => {
-      //Arrange
-      let initialState = {
-        isUserLoggedIn: false,
-        userProfile: new UserProfile(),
-        editingLogin: new LoginEntity()
-      };
-
-      deepFreeze(initialState);
-
-      let action = {
-        type: actionsEnums.USERPROFILE_PERFORM_LOGIN,
-      ...
-    });
-  });
-});
-```
-
-## Adding reducer tests
+## Adding component tests
 
 - Now let's add a simple test
 
-*./src/pages/login/components/specs/header.spec.tsx*
+### ./src/pages/login/components/specs/header.spec.tsx
 
 ```javascript
 import * as React from 'react';
@@ -536,40 +508,40 @@ As we know, VS Code provides by default a [node debugger](https://code.visualstu
 
 - Adding debug launch.json in VS Code:
 
- ![Debug VS Code](../99 Readme Resources/11 Testing_Jest/00 Adding debug launch.json in VS Code.png)
+ ![Debug VS Code](../99%20Readme%20Resources/11%20Testing_Jest/00%20Adding%20debug%20launch.json%20in%20VS%20Code.png)
 
  - Configuring launch.json to work with external node process:
 
- *.vscode/launch.json*:
+### ./.vscode/launch.json
 
- ```json
- {
-   "version": "0.2.0",
-   "configurations": [
-     {
-       "name": "Attach to Jest Process",
-       "type": "node",
-       "request": "attach",
-       "processId": "${command.PickProcess}",
-       "port": 5858,
-       "sourceMaps": true,
-       "outDir": null
-     }
-   ]
- }
- ```
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Attach to Jest Process",
+      "type": "node",
+      "request": "attach",
+      "processId": "${command:PickProcess}",
+      "port": 5858,
+      "sourceMaps": true,
+      "outFiles": []
+    }
+  ]
+}
+```
 
 - Run `npm run test:watch`.
 
 - Run VS Code debugger, selecting watch process:
 
-![Select watch process to debug](../99 Readme Resources/11 Testing_Jest/01 Select watch process to debug.png)
+![Select watch process to debug](../99%20Readme%20Resources/11%20Testing_Jest/01%20Select%20watch%20process%20to%20debug.png)
 
 - Now, it's important to put the special key `debugger` in our spec.ts (only for debugging, then remove it) because *jest*/*ts-jest* are
 generating ts files from sourcemaps instead of using original ts files to debug.
 Then we can add breakpoints from VS Code:
 
-![Debugging](../99 Readme Resources/11 Testing_Jest/02 Debugging.png)
+![Debugging](../99%20Readme%20Resources/11%20Testing_Jest/02%20Debugging.png)
 
 ### Using Node Inspector
 
@@ -600,7 +572,7 @@ npm install node-inspector --save-dev
 generating ts files from sourcemaps instead of using original ts files to debug.
 Then we can add breakpoints from browser:
 
-![Debugging](../99 Readme Resources/11 Testing_Jest/03 Debugging node-inspector.png)
+![Debugging](../99 Readme%20Resources/11%20Testing_Jest/03%20Debugging%20node-inspector.png)
 
 ## Resources
 - [Migrating to Jest](https://facebook.github.io/jest/docs/migration-guide.html)

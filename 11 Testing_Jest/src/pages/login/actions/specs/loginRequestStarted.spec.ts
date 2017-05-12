@@ -15,10 +15,10 @@ describe('loginRequestStartedAction', () => {
   it('When passing loginEntity.login equals "test login" and expected LoginResponse.succeeded equals true ' +
   'Should calls loginApi.login(loginEntity), hashHistory.push and dispatch loginRequestCompletedAction action', () => {
     // Arrange
-    let loginEntity = new LoginEntity();
+    const loginEntity = new LoginEntity();
     loginEntity.login = "test login";
 
-    let expectedData = new LoginResponse();
+    const expectedData = new LoginResponse();
     expectedData.succeeded = true;
 
     loginApi.login = jest.fn(() => {

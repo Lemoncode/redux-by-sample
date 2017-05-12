@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Attach to Jest Process",
+      "type": "node",
+      "request": "attach",
+      "processId": "${command:PickProcess}",
+      "port": 5858,
+      "sourceMaps": true,
+      "stopOnEntry": false
+    }
+  ]
+}
