@@ -283,24 +283,23 @@ describe('sessionReducer', () => {
 
 ```javascript
 import * as React from 'react';
-const renderer: any = require('react-test-renderer');
-import {Header} from '../header';
+import { create } from 'react-test-renderer';
+import { Header } from '../header';
 
-describe('header', () => {
-  describe('#render', () => {
-    it('renders as expected', () => {
-      //Arrange
+describe('Header', () => {
+  it('renders as expected', () => {
+    // Arrange
 
-      //Act
-      const tree = renderer.create(
-        <Header />
-      ).toJSON();
+    // Act
+    const component = create(
+      <Header />
+    ).toJSON();
 
-      //Assert
-      expect(tree).toMatchSnapshot();
-    });
+    // Assert
+    expect(component).toMatchSnapshot();
   });
 });
+
 ```
 
 When we run this test, it creates a snapshot test file:
@@ -308,64 +307,73 @@ When we run this test, it creates a snapshot test file:
 Note:
 > We should include this file in repository so everybody can view this file in PR.
 
-*./src/pages/login/components/specs/__snapshots__/header.spec.tsx.snap*
+### ./src/pages/login/components/specs/__snapshots__/header.spec.tsx.snap
 
-```
-exports[`header #render renders correctly 1`] = `
+```javascript
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header #render renders as expected 1`] = `
 <div
-  className="panel-heading">
+  className="panel-heading"
+>
   <h3
-    className="panel-title">
-    Please sign in (login: admin / pwd: test)
+    className="panel-title"
+  >
+    Please sign in
   </h3>
 </div>
 `;
+
 ```
 
 - Let's continue by adding test to sutendtRow.tsx checking that the row is displaying the expected data:
 
-*./src/pages/student-list/components/specs/studentRow.spec.tsx*
+### ./src/pages/student-list/components/specs/studentRow.spec.tsx
 
 ```javascript
 import * as React from 'react';
-const renderer: any = require('react-test-renderer');
-import {StudentRowComponent} from '../studentRow';
+import {create} from 'react-test-renderer';
 import { StudentEntity } from '../../../../model/student';
+import {StudentRowComponent} from '../studentRow';
 
 describe('StudentRowComponent', () => {
   it('Should render a row with a given name and email', () => {
-    //Arrange
+    // Arrange
     const student = new StudentEntity();
     student.id = 2;
     student.gotActiveTraining = true;
     student.fullname = "John Doe";
     student.email = "john@email.com";
 
-    //Act
-    const tree = renderer.create(
+    // Act
+    const component = create(
       <StudentRowComponent
         student={student}
         editStudent={() => {}}
-       />
+      />
     ).toJSON();
 
-    //Assert
-    expect(tree).toMatchSnapshot();
+    // Assert
+    expect(component).toMatchSnapshot();
   });
 });
+
 ```
 
 Snapshot:
 
-*./src/pages/student-list/components/specs/__snapshots__/studentRow.spec.tsx.snap*
+### ./src/pages/student-list/components/specs/__snapshots__/studentRow.spec.tsx.snap
 
-```
+```javascript
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`StudentRowComponent Should render a row with a given name and email 1`] = `
 <tr>
   <td>
     <span
       aria-hidden="true"
-      className="glyphicon glyphicon-ok" />
+      className="glyphicon glyphicon-ok"
+    />
   </td>
   <td>
     <span>
@@ -378,89 +386,105 @@ exports[`StudentRowComponent Should render a row with a given name and email 1`]
     </span>
   </td>
   <td>
-    <div
-      onClick={[Function]}>
+    <span
+      className="btn btn-link btn-xs"
+      onClick={[Function]}
+    >
       <span
         aria-hidden="true"
-        className="glyphicon glyphicon-pencil" />
-    </div>
+        className="glyphicon glyphicon-pencil"
+      />
+    </span>
     <span
       aria-hidden="true"
-      className="glyphicon glyphicon-trash" />
+      className="glyphicon glyphicon-trash"
+    />
   </td>
 </tr>
 `;
+
 ```
 
 - And simulating a click event:
-*./src/pages/student-list/components/specs/studentRow.spec.tsx*
+### ./src/pages/student-list/components/specs/studentRow.spec.tsx
 
-```javascript
-it('Should interact to the click on edit student and returns as param 2 student Id', () => {
-  //Arrange
-  const student = new StudentEntity();
-  student.id = 2;
-  student.gotActiveTraining = true;
-  student.fullname = "John Doe";
-  student.email = "john@email.com";
+```diff
+- import {create} from 'react-test-renderer';
++ import {create, ReactTestRendererJSON} from 'react-test-renderer';
+...
 
-  const onEditStudentMock = jest.fn();
++ it('Should interact to the click on edit student and returns as param 2 student Id', () => {
++   //Arrange
++   const student = new StudentEntity();
++   student.id = 2;
++   student.gotActiveTraining = true;
++   student.fullname = "John Doe";
++   student.email = "john@email.com";
 
-  //Act
-  const tree = renderer.create(
-    <StudentRowComponent
-      student={student}
-      editStudent={onEditStudentMock}
-     />
-  ).toJSON();
++   const onEditStudentMock = jest.fn();
 
-  const tdContainingDivClickable = tree.children[3];
-  const divClickable = tdContainingDivClickable.children[0];
++   //Act
++   const component = create(
++     <StudentRowComponent
++       student={student}
++       editStudent={onEditStudentMock}
++      />
++   ).toJSON();
 
-  divClickable.props.onClick();
++   const tdContainingButton = component.children[3] as ReactTestRendererJSON;
++   const button: any = tdContainingButton.children[0];
 
-  //Assert
-  expect(tree).toMatchSnapshot();
-  expect(onEditStudentMock).toHaveBeenCalled();
-  expect(onEditStudentMock).toHaveBeenCalledWith(student.id);
-});
++   button.props.onClick();
+
++   //Assert
++   expect(component).toMatchSnapshot();
++   expect(onEditStudentMock).toHaveBeenCalled();
++   expect(onEditStudentMock).toHaveBeenCalledWith(student.id);
++ });
+
 ```
 
 Snapshot:
 
-*./src/pages/student-list/components/specs/__snapshots__/studentRow.spec.tsx.snap*
+### ./src/pages/student-list/components/specs/__snapshots__/studentRow.spec.tsx.snap
 
-```
-exports[`StudentRowComponent Should interact to the click on edit student and returns as param 2 student Id 1`] = `
-<tr>
-  <td>
-    <span
-      aria-hidden="true"
-      className="glyphicon glyphicon-ok" />
-  </td>
-  <td>
-    <span>
-      John Doe
-    </span>
-  </td>
-  <td>
-    <span>
-      john@email.com
-    </span>
-  </td>
-  <td>
-    <div
-      onClick={[Function]}>
-      <span
-        aria-hidden="true"
-        className="glyphicon glyphicon-pencil" />
-    </div>
-    <span
-      aria-hidden="true"
-      className="glyphicon glyphicon-trash" />
-  </td>
-</tr>
-`;
+```diff
++ exports[`StudentRowComponent Should interact to the click on edit student and returns as param 2 student Id 1`] = `
++ <tr>
++   <td>
++     <span
++       aria-hidden="true"
++       className="glyphicon glyphicon-ok"
++     />
++   </td>
++   <td>
++     <span>
++       John Doe
++     </span>
++   </td>
++   <td>
++     <span>
++       john@email.com
++     </span>
++   </td>
++   <td>
++     <span
++       className="btn btn-link btn-xs"
++       onClick={[Function]}
++     >
++       <span
++         aria-hidden="true"
++         className="glyphicon glyphicon-pencil"
++       />
++     </span>
++     <span
++       aria-hidden="true"
++       className="glyphicon glyphicon-trash"
++     />
++   </td>
++ </tr>
++ `;
+
 ```
 
 ## Code Coverage configuration

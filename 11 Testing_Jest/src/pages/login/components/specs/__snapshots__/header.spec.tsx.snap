@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header renders as expected 1`] = `
+<div
+  className="panel-heading"
+>
+  <h3
+    className="panel-title"
+  >
+    Please sign in
+  </h3>
+</div>
+`;

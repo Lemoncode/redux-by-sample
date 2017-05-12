@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StudentRowComponent Should interact to the click on edit student and returns as param 2 student Id 1`] = `
+<tr>
+  <td>
+    <span
+      aria-hidden="true"
+      className="glyphicon glyphicon-ok"
+    />
+  </td>
+  <td>
+    <span>
+      John Doe
+    </span>
+  </td>
+  <td>
+    <span>
+      john@email.com
+    </span>
+  </td>
+  <td>
+    <span
+      className="btn btn-link btn-xs"
+      onClick={[Function]}
+    >
+      <span
+        aria-hidden="true"
+        className="glyphicon glyphicon-pencil"
+      />
+    </span>
+    <span
+      aria-hidden="true"
+      className="glyphicon glyphicon-trash"
+    />
+  </td>
+</tr>
+`;
+
+exports[`StudentRowComponent Should render a row with a given name and email 1`] = `
+<tr>
+  <td>
+    <span
+      aria-hidden="true"
+      className="glyphicon glyphicon-ok"
+    />
+  </td>
+  <td>
+    <span>
+      John Doe
+    </span>
+  </td>
+  <td>
+    <span>
+      john@email.com
+    </span>
+  </td>
+  <td>
+    <span
+      className="btn btn-link btn-xs"
+      onClick={[Function]}
+    >
+      <span
+        aria-hidden="true"
+        className="glyphicon glyphicon-pencil"
+      />
+    </span>
+    <span
+      aria-hidden="true"
+      className="glyphicon glyphicon-trash"
+    />
+  </td>
+</tr>
+`;
