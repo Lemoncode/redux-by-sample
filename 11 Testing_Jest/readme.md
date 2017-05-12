@@ -489,9 +489,6 @@ Snapshot:
 
 ## Code Coverage configuration
 
-- `--coverage`: to enable coverage.
-- `--no-cache`: disable cache to avoid issues with sourcemaps.
-
 ### ./package.json
 ```diff
 {
@@ -513,7 +510,7 @@ Snapshot:
 ## Debugging Jest
 
 Jest is running over node, so we can't use, for example, PhantomJS like we are using in karma.
-Then, we have two alternatives to debugging jest:
+Then, we have some alternatives to debugging jest:
 
 ### Using VS Code
 
@@ -537,11 +534,11 @@ As we know, VS Code provides by default a [node debugger](https://code.visualstu
       "request": "attach",
       "processId": "${command:PickProcess}",
       "port": 5858,
-      "sourceMaps": true,
-      "outFiles": []
+      "sourceMaps": true
     }
   ]
 }
+
 ```
 
 - Run `npm run test:watch`.
@@ -550,9 +547,7 @@ As we know, VS Code provides by default a [node debugger](https://code.visualstu
 
 ![Select watch process to debug](../99%20Readme%20Resources/11%20Testing_Jest/01%20Select%20watch%20process%20to%20debug.png)
 
-- Now, it's important to put the special key `debugger` in our spec.ts (only for debugging, then remove it) because *jest*/*ts-jest* are
-generating ts files from sourcemaps instead of using original ts files to debug.
-Then we can add breakpoints from VS Code:
+- Now, it's important to put the special key `debugger` in our spec.ts (only for debugging, then remove it):
 
 ![Debugging](../99%20Readme%20Resources/11%20Testing_Jest/02%20Debugging.png)
 
