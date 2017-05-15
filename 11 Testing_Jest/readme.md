@@ -551,36 +551,6 @@ As we know, VS Code provides by default a [node debugger](https://code.visualstu
 
 ![Debugging](../99%20Readme%20Resources/11%20Testing_Jest/02%20Debugging.png)
 
-### Using Node Inspector
-
-- Let's install [node-inspector](https://github.com/node-inspector/node-inspector):
-
-```
-npm install node-inspector --save-dev
-```
-
-- Configure npm command:
-
-- `-i` or `--runInBand`: to run all tests serially in the current process.
-
-*package.json*
-```javascript
-{
-  ...
-  "scripts": {
-    ...
-    "test:debug": "node-debug ./node_modules/jest/bin/jest.js --watchAll --verbose --no-cache -i"
-  }
-}
-```
-
-- Run `npm run test:debug` (it's take a about 5 seconds to start find src files).
-
-- Now, it's important to put the special key `debugger` in our spec.ts (only for debugging, then remove it) because *jest*/*ts-jest* are
-generating ts files from sourcemaps instead of using original ts files to debug.
-Then we can add breakpoints from browser:
-
-![Debugging](../99 Readme%20Resources/11%20Testing_Jest/03%20Debugging%20node-inspector.png)
 
 ## Resources
 - [Migrating to Jest](https://facebook.github.io/jest/docs/migration-guide.html)

@@ -25,9 +25,13 @@ export const Form = (props: Props) => {
               onChange={(e : any) => props.updateLoginInfo({login: props.loginInfo.login, password: e.target.value })}
             />
           </div>
-          <input className="btn btn-lg btn-success btn-block" value="Login"
+          <button
+            type="button"
+            className="btn btn-lg btn-success btn-block"
             onClick={(e) => {props.performLogin()}}
-          />
+          >
+            Login
+          </button>
         </fieldset>
       </form>
     </div>

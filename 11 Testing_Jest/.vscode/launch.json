@@ -2,23 +2,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "node",
-      "request": "launch",
-      "name": "Launch via NPM",
-      "runtimeExecutable": "npm",
-      "windows": {
-        "runtimeExecutable": "npm.cmd"
-      },
-      "runtimeArgs": [
-        "run-script",
-        "test:debug"
-      ],
-      "protocol": "inspector",
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "openOnSessionStart",
-      "sourceMaps": true
-    },
-    {
       "name": "Attach to Jest Process",
       "type": "node",
       "request": "attach",

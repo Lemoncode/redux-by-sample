@@ -7,15 +7,15 @@
     "start": "webpack-dev-server",
     "build": "webpack",
     "test": "jest --verbose",
-    "test:watch": "jest --watchAll --verbose",
-    "test:coverage": "jest --verbose --coverage",
-    "test:debug": "jest -i"
+    "test:watch": "jest --watchAll --verbose -i",
+    "test:coverage": "jest --verbose --coverage"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/core-js": "^0.9.41",
     "@types/deep-freeze": "0.0.29",
+    "@types/enzyme": "^2.8.0",
     "@types/jest": "^19.2.3",
     "@types/react": "^15.0.21",
     "@types/react-dom": "^0.14.23",
@@ -32,6 +32,7 @@
     "babel-preset-env": "^1.3.2",
     "css-loader": "^0.27.3",
     "deep-freeze": "0.0.1",
+    "enzyme": "^2.8.2",
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.10.1",
     "html-webpack-plugin": "^2.24.0",
