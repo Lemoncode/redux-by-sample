@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { create } from 'react-test-renderer';
 import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
