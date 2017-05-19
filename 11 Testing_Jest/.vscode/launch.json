@@ -5,10 +5,9 @@
       "name": "Attach to Jest Process",
       "type": "node",
       "request": "attach",
-      "processId": "${command.PickProcess}",
+      "processId": "${command:PickProcess}",
       "port": 5858,
-      "sourceMaps": true,
-      "outDir": null
+      "sourceMaps": true
     }
   ]
 }

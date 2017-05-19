@@ -1,19 +1,17 @@
 import * as React from 'react';
-const renderer: any = require('react-test-renderer');
-import {Header} from '../header';
+import { create } from 'react-test-renderer';
+import { Header } from '../header';
 
-describe('header', () => {
-  describe('#render', () => {
-    it('renders as expected', () => {
-      //Arrange
+describe('Header', () => {
+  it('renders as expected', () => {
+    // Arrange
 
-      //Act
-      const tree = renderer.create(
-        <Header />
-      ).toJSON();
+    // Act
+    const component = create(
+      <Header />
+    ).toJSON();
 
-      //Assert
-      expect(tree).toMatchSnapshot();
-    });
+    // Assert
+    expect(component).toMatchSnapshot();
   });
 });

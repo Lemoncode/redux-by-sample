@@ -1,7 +1,7 @@
-import {actionsEnums} from '../../../common/actionsEnums';
-import {StudentEntity} from '../../../model/student';
-import {studentApi} from '../../../rest-api/student-api';
-import {studentListRequestCompletedAction} from './studentListRequestCompleted';
+import { actionsEnums } from "../../../common/actionsEnums";
+import { StudentEntity } from "../../../model/student";
+import { studentApi } from "../../../rest-api/student-api";
+import { studentListRequestCompletedAction } from "./studentListRequestCompleted";
 
 export const studentListRequestStartedAction = () => {
   return function(dispatcher) {
@@ -11,9 +11,8 @@ export const studentListRequestStartedAction = () => {
       data => {
         dispatcher(studentListRequestCompletedAction(data));
       }
-
     );
 
     return promise;
-  }
-}
+  };
+};

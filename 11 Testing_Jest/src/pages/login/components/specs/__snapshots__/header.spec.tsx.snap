@@ -1,9 +1,13 @@
-exports[`header #render renders as expected 1`] = `
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header renders as expected 1`] = `
 <div
-  className="panel-heading">
+  className="panel-heading"
+>
   <h3
-    className="panel-title">
-    Please sign in (login: admin / pwd: test)
+    className="panel-title"
+  >
+    Please sign in
   </h3>
 </div>
 `;
