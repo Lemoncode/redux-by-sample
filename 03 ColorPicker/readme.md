@@ -34,30 +34,30 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
 - Let's create a `Color` entity under the following path `./src/model/color.ts`.
 
   ### ./src/model/color.ts
-  ```javascript
+```javascript
   export class Color {
     red: number;
     green: number;
     blue: number;
   }
 
-  ```
+```
 
 - Let's add a new property to the `./src/common/actionsEnums.ts`
 
   ### ./src/common/actionsEnums.ts
-  ```diff
+```diff
   export const actionsEnums = {
 -   UPDATE_USERPROFILE_NAME: "UPDATE_USERPROFILE_NAME"
 +   UPDATE_USERPROFILE_NAME: "UPDATE_USERPROFILE_NAME",
 +   UPDATE_USERPROFILE_FAVOURITE_COLOR: "UPDATE_USERPROFILE_FAVOURITE_COLOR",
   };
-  ```
+```
 
 - Let's create an update color action.
 
   ### ./src/actions/updateFavouriteColor.ts
-  ```javascript
+```javascript
   import { actionsEnums } from '../common/actionsEnums';
   import { Color } from '../model/color';
 
@@ -68,12 +68,12 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
     };
   };
 
-  ```
+```
 
 - Let's define a new entry to the `./src/reducers/userProfile.ts` to store the favourite color.
 
   ### ./src/reducers/userProfile.ts
-  ```diff
+```diff
   import {actionsEnums} from '../common/actionsEnums';
   import {updateUserProfileName} from '../actions/updateUserProfileName';
 + import { Color } from "../model/color";
@@ -114,12 +114,12 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
     };
   };
 
-  ```
+```
 
 - Let's create the needed `ColorPicker` components, plus subcomponents.
 
   ### ./src/colorSlider.tsx
-  ```javascript
+```javascript
   import * as React from 'react';
   import { Color } from './model/color';
 
@@ -143,10 +143,10 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
     );
   };
 
-  ```
+```
 
   ### ./src/colorPicker.tsx
-  ```javascript
+```javascript
   import * as React from 'react';
   import { Color } from './model/color';
   import { ColorSlider } from './colorslider';
@@ -180,10 +180,10 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
     );
   };
 
-  ```
+```
 
   ### ./src/colorDisplayer.tsx
-  ```javascript
+```javascript
   import * as React from 'react';
   import { Color } from './model/color';
 
@@ -204,12 +204,12 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
     );
   };
 
-  ```
+```
 
 - Let's create a `ColorDisplayerContainer`:
 
   ### ./src/colorDisplayerContainer.tsx
-  ```javascript
+```javascript
   import { connect } from 'react-redux';
   import { ColorDisplayer } from './colordisplayer';
 
@@ -229,12 +229,12 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
     mapDispatchToProps
   )(ColorDisplayer);
 
-  ```
+```
 
 - We can add it to our _app.tsx_ and perform a quick check.
 
   ### ./src/app.tsx
-  ```diff
+```diff
   import * as React from 'react';
   import {HelloWorldContainer} from './helloWorldContainer';
   import {NameEditContainer} from './nameEditContainer';
@@ -252,12 +252,12 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
     );
   }
 
-  ```
+```
 
 - Let's create a ColorPicker container:
 
   ### ./src/colorPickerContainer.tsx
-  ```javascript
+```javascript
   import { connect } from 'react-redux';
   import { Color } from './model/color';
   import { ColorPicker } from './colorpicker';
@@ -282,12 +282,12 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
     mapDispatchToProps
   )(ColorPicker);
 
-  ```
+```
 
 - And let's consume it in the _app.tsx_
 
   ### ./src/app.tsx
-  ```diff
+```diff
   import * as React from 'react';
   import { HelloWorldContainer } from './helloWorldContainer';
   import { NameEditContainer } from './nameEditContainer';
@@ -308,4 +308,4 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
     );
   };
 
-  ```
+```
