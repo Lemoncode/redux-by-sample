@@ -7,12 +7,14 @@
     "start": "webpack-dev-server",
     "build": "webpack",
     "test": "karma start --single-run",
-    "test:watch": "karma start --no-single-run"    
+    "test:watch": "karma start --no-single-run"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/core-js": "^0.9.41",
+    "@types/karma-chai-sinon": "^0.1.5",
+    "@types/mocha": "^2.2.33",
     "@types/react": "^15.0.21",
     "@types/react-dom": "^0.14.23",
     "@types/react-hot-loader": "^3.0.1",
