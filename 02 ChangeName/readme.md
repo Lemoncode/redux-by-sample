@@ -128,7 +128,6 @@ export const updateUserProfileName = (newName : string) => {
 ### ./src/reducers/userProfile.ts
 ```diff
 + import {actionsEnums} from '../common/actionsEnums';
-+ import {updateUserProfileName} from '../actions/updateUserProfileName';
 
 class UserProfileState {
   firstname : string;
