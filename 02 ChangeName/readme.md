@@ -192,11 +192,11 @@ import {HelloWorldContainer} from './helloWorldContainer';
 
 export const App = () => {
   return (
-    <div>
++    <div>
       <HelloWorldContainer/>
       <br/>
 +      <NameEditContainer/>
-    </div>
++    </div>
   );
 }
 
