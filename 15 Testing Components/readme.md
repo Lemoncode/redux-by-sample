@@ -128,10 +128,10 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
-import { StudentListContainer } from '../studentListContainer';
-import { StudentEntity } from '../../../model/student'
-import * as getStudentModule from '../actions/studentListRequestStarted'
-import * as navigateToEditStudentModule from '../actions/navigateToEditStudent'
+import { StudentListContainer } from './studentListContainer';
+import { StudentEntity } from './../../model/student'
+import * as getStudentModule from './actions/studentListRequestStarted'
+import * as navigateToEditStudentModule from './actions/navigateToEditStudent'
 
 const createStore = configureStore();
 
