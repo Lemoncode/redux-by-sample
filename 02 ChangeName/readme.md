@@ -128,7 +128,6 @@ export const updateUserProfileName = (newName : string) => {
 ### ./src/reducers/userProfile.ts
 ```diff
 + import {actionsEnums} from '../common/actionsEnums';
-+ import {updateUserProfileName} from '../actions/updateUserProfileName';
 
 class UserProfileState {
   firstname : string;
@@ -186,18 +185,18 @@ export const NameEditContainer = connect(
 - Let's create an _app_ component in `src/app.tsx`
 
 ### ./src/app.tsx
-```javascript
+```diff
 import * as React from 'react';
 import {HelloWorldContainer} from './helloWorldContainer';
-import {NameEditContainer} from './nameEditContainer';
++ import {NameEditContainer} from './nameEditContainer';
 
 export const App = () => {
   return (
-    <div>
++    <div>
       <HelloWorldContainer/>
       <br/>
-      <NameEditContainer/>
-    </div>
++      <NameEditContainer/>
++    </div>
   );
 }
 
