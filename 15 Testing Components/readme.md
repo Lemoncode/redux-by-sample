@@ -123,6 +123,7 @@ it('Should interact to the click on edit student and return as param 2 student I
 _./src/pages/student-list/studentListContainer.spec.tsx_
 
 ```javascript
+import * as sinon from 'sinon';
 import { expect } from 'chai';
 import { mount } from 'enzyme';
 import * as React from 'react';
