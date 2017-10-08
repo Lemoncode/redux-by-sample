@@ -75,26 +75,101 @@ import { loginRequestStartedAction } from './loginRequestStarted'
 import { loginRequestCompletedAction } from './loginRequestCompleted'
 import { actionsEnums } from '../../../common/actionsEnums'
 import { hashHistory } from 'react-router'
+import * as sinon from 'sinon';
 
-export const loginRequestStartedAction = (login : LoginEntity) => {
-  return function(dispatcher) {
-    const promise = loginApi.login(login);
+const middlewares = [ ReduxThunk ];
+const mockStore = configureStore(middlewares);
 
-    promise.then(
-      data => {
-        dispatcher(loginRequestCompletedAction(data));
 
-        // This is not ideal to have it here, maybe move it to middleware?
-        if(data.succeeded == true) {
-          hashHistory.push('/student-list')
-        }
-      }
+describe('pages/login/loginRequestStarted Action', () => {
+  it('loginRequest login succeeded', (done) => {
+    // Arrange            
+    const loginInfo : LoginEntity = new LoginEntity();
+    loginInfo.login = "john";
+    loginInfo.password = "pass";
 
-    );
+    const expectedLoginResponse = new LoginResponse();
+    expectedLoginResponse.succeeded = true;
+    expectedLoginResponse.userProfile = new UserProfile();
+    expectedLoginResponse.userProfile.fullname = "john";
+    expectedLoginResponse.userProfile.role = "admin";
 
-    return promise;
-  }
-}
+    
+    const loginMethodStub = sinon.stub(loginApi, 'login');
+
+    loginMethodStub.returns({
+      then: callback => {
+        callback(expectedLoginResponse)
+      }    
+    });
+
+    const hashHistoryStub = sinon.stub(hashHistory, 'push');
+
+
+    // Act
+    const store = mockStore([]);
+
+    store.dispatch(loginRequestStartedAction(loginInfo))
+      .then(() => {
+          // Assert
+          expect(store.getActions()[0].type).to.be.equal(actionsEnums.USERPROFILE_PERFORM_LOGIN);
+          expect(store.getActions()[0].payload.succeeded).to.be.true;
+          expect(hashHistoryStub.called).to.be.true;
+
+        // Cleanup
+        // To avoid this use sinon-test, but not working
+        // well on browser, see: https://github.com/sinonjs/sinon-test/issues/58
+        loginMethodStub.restore();
+        hashHistoryStub.restore();
+
+          done();
+      });    
+  });
+
+  it('loginRequest login failed', (done) => {
+    // Arrange            
+    const loginInfo : LoginEntity = new LoginEntity();
+    loginInfo.login = "john";
+    loginInfo.password = "pass";
+
+    const expectedLoginResponse = new LoginResponse();
+    expectedLoginResponse.succeeded = false;
+    expectedLoginResponse.userProfile = new UserProfile();
+    expectedLoginResponse.userProfile.fullname = "";
+    expectedLoginResponse.userProfile.role = "";
+    
+    const loginMethodStub = sinon.stub(loginApi, 'login');
+
+    loginMethodStub.returns({
+      then: callback => {
+        callback(expectedLoginResponse)
+      }    
+    });
+
+    const hashHistoryStub = sinon.stub(hashHistory, 'push');
+
+
+    // Act
+    const store = mockStore([]);
+
+    store.dispatch(loginRequestStartedAction(loginInfo))
+      .then(() => {
+          // Assert
+          expect(store.getActions()[0].type).to.be.equal(actionsEnums.USERPROFILE_PERFORM_LOGIN);
+          expect(store.getActions()[0].payload.succeeded).to.be.false;
+          expect(hashHistoryStub.called).to.be.false;
+
+        // Cleanup
+        // To avoid this use sinon-test, but not working
+        // well on browser, see: https://github.com/sinonjs/sinon-test/issues/58
+        loginMethodStub.restore();
+        hashHistoryStub.restore();
+
+        done();
+      });    
+  });
+  
+});
 ```
 
 - We have added unit tests to all the actions implemented in the project, just
