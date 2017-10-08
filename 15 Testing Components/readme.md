@@ -24,6 +24,7 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 _./src/pages/student-list/components/studentRow.spec.tsx_
 
 ```javascript
+import * as sinon from 'sinon';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import * as React from 'react';
