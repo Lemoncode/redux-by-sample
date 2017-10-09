@@ -167,7 +167,6 @@ Create a file named `webpack.config.js` in the root directory with the following
 
  ```javascript
  var path = require('path');
- var webpack = require('webpack');
  var HtmlWebpackPlugin = require('html-webpack-plugin');
 
  var basePath = __dirname;
