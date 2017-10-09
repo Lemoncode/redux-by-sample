@@ -1,10 +1,10 @@
 # 01 Hello Redux
 
-In this sample we will create a full react + redux app just to display a HelloWorld message like.
-Of course doing such thing is an overkill, is just to tackle on a simple sample and learn the
+In this sample we will create a full react + redux app just to display a HelloWorld like message.
+Of course doing such a thing is an overkill. We use this simple sample to learn the
 concepts.
 
-We will take a startup point sample _00 Boilerplate.
+We will take as our startup point "sample _00 Boilerplate".
 
 
 Summary steps:
