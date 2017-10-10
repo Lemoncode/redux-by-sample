@@ -75,7 +75,7 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
   ### ./src/reducers/userProfile.ts
 ```diff
   import {actionsEnums} from '../common/actionsEnums';
-  + import { Color } from "../model/color";
++ import { Color } from "../model/color";
 
   class UserProfileState {
     firstname : string;
