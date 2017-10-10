@@ -1,22 +1,22 @@
 # 05 Thunk
 
-This sample takes as starting point _05 Refactor_
+This sample takes as its starting point "_05 Refactor_"
 
 Let's play with async calls and middleware (redux thunk).
 
-In this sample we are going to display a table, the data will
-be retrieve from github api.
+In this sample we are going to display a table, the data for which will
+be retrieved from github api.
 
 Summary steps:
 
 - Let's register our Middleware.
 - Let's create a rest api class to access this data.
 - Let's define two new actions.
-- Let's create an action that will trigger and async action.
+- Let's create an action that will trigger an async action.
 - Let's add a new reducer that will hold members state.
 - Let's create a memberRow component.
 - Let's create a memberTable component.
-- Let's create a memberArea component (include a load button).
+- Let's create a memberArea component (including a load button).
 - Let's create a memberAreaContainer.
 
 
@@ -29,7 +29,7 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 
 ## Steps to build it
 
-- We need to install as well redux-thunk and it's typescript definitions
+- We need to install redux-thunk and it's typescript definitions as well.
 
 ```
 npm install redux-thunk --save
@@ -37,7 +37,7 @@ npm install @types/redux-thunk --save-dev
 
 ```
 
-- Let's register Redux-thunk middleware `main.tsx`
+- Let's register Redux-thunk middleware in `main.tsx`
 
 ### ./src/main.tsx
 ```diff
@@ -92,7 +92,7 @@ class MemberAPI {
     .then((response) => this.checkStatus(response))
     .then((response) => this.parseJSON(response))
     .then((data) => this.resolveMembers(data))
-	}
+    }
 
   private checkStatus(response : Response) : Promise<Response> {
     if (response.status >= 200 && response.status < 300) {
@@ -194,8 +194,7 @@ import {MemberEntity} from '../model/member';
 class memberState  {
   members : MemberEntity[];
 
-  constructor()
-  {
+  constructor() {
     this.members = [];
   }
 }
