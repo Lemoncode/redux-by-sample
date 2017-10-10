@@ -188,15 +188,15 @@ export const NameEditContainer = connect(
 ```diff
 import * as React from 'react';
 import {HelloWorldContainer} from './helloWorldContainer';
-+ import {NameEditContainer} from './nameEditContainer';
+import {NameEditContainer} from './nameEditContainer';
 
 export const App = () => {
   return (
-+    <div>
+    <div>
       <HelloWorldContainer/>
       <br/>
-+      <NameEditContainer/>
-+    </div>
+      <NameEditContainer/>
+    </div>
   );
 }
 
