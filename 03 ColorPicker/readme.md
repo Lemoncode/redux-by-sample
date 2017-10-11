@@ -1,10 +1,10 @@
 # 03 Color Picker
 
-This sample takes as starting point _02 ChangeName_
+This sample takes as its starting point "_02 ChangeName_"
 
-> Altough we cold start from a clean project, we have decided to continue from
-then change name project, just to show how isolated and how does a project
-look when we have several widgets and functionallity
+> Although we could start from a clean project, we have decided to continue from
+the "_02 ChangeName_" project, just to show how isolated everything is and how a project
+looks when we have several widgets and functionality.
 
 In this sample we will add a component that will let us change the favourite color of the
 user.
@@ -75,7 +75,6 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
   ### ./src/reducers/userProfile.ts
 ```diff
   import {actionsEnums} from '../common/actionsEnums';
-  import {updateUserProfileName} from '../actions/updateUserProfileName';
 + import { Color } from "../model/color";
 
   class UserProfileState {
@@ -121,7 +120,6 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
   ### ./src/colorSlider.tsx
 ```javascript
   import * as React from 'react';
-  import { Color } from './model/color';
 
   interface Props {
     value: number;
