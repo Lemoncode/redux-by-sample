@@ -1,27 +1,27 @@
 # 06 Simple App
 
-This sample series takes as starting point _02 Change Name_
+This sample series takes as its starting point "_02 Change Name_"
 
 In this sample we will create a minimal application, that will include
-a login page, a list like and a detail page. In this sample we will
-create the project structure plus the login page functinallity.
+a login page, a list and a detail page. We will
+create the project structure plus the login page functionality first.
 
-We will be using react router redux, and in a later sample we will check
+We will be using react router redux, and in a later sample we will see
 how this integrates with redux dev tools.
 
-We will create the app following an ellaborated structure, this could be an
-overkill if we just want to implement such simple app, but the goal is to
+We will create the app using a elaborate structure. This would be an
+overkill if we just wanted to implement such a simple app. But the goal is to
 simulate a complex scenario, a mid size app.
 
 
 Summary steps:
 
-- First let's make some cleanup.
+- First let's do some cleanup.
 - We will continue by installing react-router-redux.
 - Let's create basic pages and navigation.
 - Let's create a loginEntity, and a userProfile entity.
 - Let's add a fake API to simulate a login (_loginApi.tsx_).
-- Let's implement our login functionallity.
+- Let's implement our login functionality.
 - Time to move to members lists (Model, API, Action, Reducer, ...).
 - Time to move to details views.
 - Let's add validations to details view.
@@ -36,15 +36,15 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 
 - Copy the content from _02 Change Name_ and execute _npm install_.
 
-- Let's make some cleanup:
+- Let's do some cleanup:
     - Remove the _./src/helloworld.tsx_ and _./src/helloworldContainer.tsx_.
     - Remove the _./src/nameEdit.tsx_ and _./src/nameEditContainer.tsx_.
     - Remove the _./actions/updateUserProfileName.tsx plus _./actions_ folder.
 
 - It's time to install routing libraries:
 
-> At the time of writing this tutorial, there react-router-redux was not uptodate
-with react-route (alfa and dev tool noy fully integrating, under development), we will stick to version
+> At the time of writing this tutorial, the react-router-redux was not up-to-date
+with react-route (alfa and dev tool not fully integrated, under development), we will stick to version
 3.0 of react-router. More info: https://github.com/ReactTraining/react-router/tree/master/packages/react-router-redux
 
 ```cmd
@@ -78,10 +78,10 @@ npm install @types/redux-thunk --save-dev
 
 - Let's configure redux-thunk in _main.tsx_
 
-```javascript
+```diff
 
-- + import { createStore } from 'redux';
-+ import { createStore, applyMiddleware } from 'redux';
+- import { createStore } from 'redux';
++ import { createStore, applyMiddleware, compose } from 'redux';
 + import reduxThunk from 'redux-thunk';
 
 
@@ -148,7 +148,7 @@ the folowing files:
 
 _studentList.tsx_
 
-```javascript
+```jsx
 import * as React from 'react';
 
 export const StudentListComponent = () => {
@@ -196,7 +196,7 @@ the folowing files:
 
 _studentDetail.tsx_
 
-```javascript
+```jsx
 import * as React from 'react';
 
 export const StudentDetailComponent = () => {
@@ -253,8 +253,8 @@ export const reducers =  combineReducers({
 +  routing: routerReducer
 });
 ```
-- Let's move to _./src/main.tsx_ and add the routing support (pending to separate
-  this routing in a separate file).
+- Let's move to _./src/main.tsx_ and add the routing support (deferring separating
+  this routing to a separate file for later).
 
 ```diff
 import * as React from 'react';
@@ -370,11 +370,10 @@ _./src/rest-api/loginApi.ts_
 
 ```javascript
 import {LoginEntity} from '../model/login';
-import {UserProfile} from '../model/userProfile';
 import {LoginResponse} from '../model/loginResponse';
 import {} from 'core-js'
 
-class LoginApi {
+export class LoginApi {
   login(loginInfo : LoginEntity) : Promise<LoginResponse> {
       let loginResponse = new LoginResponse();
 
@@ -383,7 +382,7 @@ class LoginApi {
         loginResponse.userProfile = {fullname: "John Doe", role: 'admin' };
       } else {
         loginResponse.succeeded = false;
-        loginResponse = null;
+        loginResponse.userProfile = null;
       }
 
       return Promise.resolve(loginResponse);
@@ -406,7 +405,8 @@ export const actionsEnums = {
 - Login action will be asynchronous (we need to break it into two actions and use
   redux-thunk), we will create two actions _loginRequestStarted_ and _loginRequestCompleted_.
 
-- Let's go for the completed _./src/pages/login/actions/loginRequestCompleted.ts_
+- Let's now create _./src/pages/login/actions/loginRequestCompleted.ts_. Since this action is something we will fire only on the
+login window we will keep this under _./src/pages/login/actions/
 
 ```javascript
 import {actionsEnums} from '../../../common/actionsEnums';
@@ -421,13 +421,11 @@ export const loginRequestCompletedAction = (loginResponse : LoginResponse) => {
 ```
 
 
-- Since this action is something we will fire only on the
-login window we will keep this under the following path _./src/pages/login/actions/loginRequestStarted.ts_
+-  Lets now create _./src/pages/login/actions/loginRequestStarted.ts_
 
 ```javascript
-import {actionsEnums} from '../../../common/actionsEnums';
 import {LoginEntity} from '../../../model/login';
-import {loginApi} from '../../../rest-api/loginApi';
+import {LoginApi} from '../../../rest-api/loginApi';
 import {loginRequestCompletedAction} from './loginRequestCompleted';
 import { hashHistory } from 'react-router';
 
@@ -439,7 +437,7 @@ export const loginRequestStartedAction = (login : LoginEntity) => {
       data => {
         dispatcher(loginRequestCompletedAction(data));
 
-        // This is not ideal to have it here, maybe move it to middleware?
+        // This is not ideal to have it here. We can move it to middleware.
         if(data.succeeded == true) {
           hashHistory.push('/student-list');
         }
@@ -452,20 +450,6 @@ export const loginRequestStartedAction = (login : LoginEntity) => {
 }
 
 export const loginApi = new LoginApi();
-```
-
-- Now the completed _./src/pages/login/actions/loginRequestCompleted.ts_
-
-```javascript
-import {actionsEnums} from '../../../common/actionsEnums';
-import {LoginResponse} from '../../../model/loginResponse';
-
-export const loginRequestCompleted = (loginResponse : LoginResponse) => {
-  return {
-    type: actionsEnums.USERPROFILE_PERFORM_LOGIN,
-    payload: loginResponse
-  }
-}
 ```
 
 - On the reducers side, let's remove the _./src/reducers/userProfile.ts_ reducer
@@ -484,8 +468,7 @@ class SessionState  {
   userProfile : UserProfile;
   editingLogin : LoginEntity;
 
-  public constructor()
-  {
+  public constructor(){
     this.isUserLoggedIn = false;
     this.userProfile = new UserProfile();
   }
@@ -495,8 +478,6 @@ export const sessionReducer =  (state : SessionState = new SessionState(), actio
       switch (action.type) {
         case actionsEnums.USERPROFILE_PERFORM_LOGIN:
            return handlePerformLogin(state, action.payload);
-
-
       }
 
       return state;
@@ -504,10 +485,11 @@ export const sessionReducer =  (state : SessionState = new SessionState(), actio
 
 
 const handlePerformLogin = (state : SessionState, payload : LoginResponse) => {
-  return {...state, 
-          isUserLoggedIn: payload.succeeded, 
-          userProfile: payload.userProfile
-         };  
+  return {
+    ...state, 
+    isUserLoggedIn: payload.succeeded, 
+    userProfile: payload.userProfile
+  };  
 }
 ```
 
@@ -564,11 +546,11 @@ export const Form = (props: Props) => {
       <form role="form">
         <fieldset>
           <div className="form-group">
-      		  <input className="form-control" placeholder="E-mail" name="email" type="text"
+      		<input className="form-control" placeholder="E-mail" name="email" type="text"
               value={props.loginInfo.login}
               onChange={(e : any) => props.updateLoginInfo({login: e.target.value, password: props.loginInfo.password })}
             />
-      		</div>
+          </div>
           <div className="form-group">
             <input className="form-control" placeholder="Password" name="password" type="password"
               value={props.loginInfo.password}
@@ -585,8 +567,8 @@ export const Form = (props: Props) => {
 }
 ```
 
-- Before continuing with the UI we have realized that this form components emits an event with the current
-editing login information (by doing this we can easily initialize it), we have to add to the session state
+- Before continuing with the UI notice that this form components emits an event with the current
+editing login information (by doing this we can easily initialize it). We have to add to the session state
 a new property to hold this information, and an action to set it.
 
 _./src/common/actionEnums.ts_
@@ -695,7 +677,7 @@ export const LoginComponent = (props : Props) => {
 }
 ```
 
-- No we can wire up the loginContainer component with all the reducers info and actions
+- Now we can wire up the loginContainer component with all the reducers info and actions
 
 _./src/pages/login/loginContainer.tsx_
 
