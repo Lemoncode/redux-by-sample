@@ -1,6 +1,6 @@
 # 07 SimpleApp_List
 
-This sample series takes as starting point _06 SimpleApp_Navigation_.
+This sample series takes as its starting point "_06 SimpleApp_Navigation_".
 
 In this sample we will continue implementing our simple application, in this
 case we are going to implement a page where a list of students is displayed.
@@ -9,7 +9,7 @@ Summary steps:
 
 - Let's create a _StudentEntity_.
 - Let's create a method in the fake api to retrieve the list of students.
-- Let's create an action that will be there to be triggered by a component (load students).
+- Let's create an action that will be triggered by a component (load students).
 - Let's create a simple component, plus a container component.
 - Let's start building the rendering of this components (including breakdown in subcomponents)
 
@@ -51,8 +51,8 @@ export class StudentEntity {
   import { StudentEntity } from "../model/student";
 
   export const studentsMockData: StudentEntity[] = [
-    {id: 1, gotActiveTraining: true, fullname: "John Doe", email: "test@fakeemail.com"},
-    {id: 2, gotActiveTraining: false, fullname: "Mike Huff", email: "mark@fakeemail.com"},
+    {id: 1, gotActiveTraining: true, fullname: "John Doe", email: "john@fakeemail.com"},
+    {id: 2, gotActiveTraining: false, fullname: "Mike Huff", email: "mike@fakeemail.com"},
     {id: 3, gotActiveTraining: true, fullname: "Harry Poe", email: "harry@fakeemail.com"},
     {id: 4, gotActiveTraining: true, fullname: "Mary Joe", email: "mary@fakeemail.com"}
   ];
@@ -70,8 +70,8 @@ export class StudentEntity {
     studentsData: StudentEntity[];
 
     constructor() {
-      // Let"s the mockdata whenever the singleton is instatiated
-      // and the play with the inmemory array
+      // Let's load the mock data whenever the singleton is instantiated
+      // and then play with the in-memory array
       this.studentsData = studentsMockData;
 
     }
@@ -122,8 +122,6 @@ export const studentListRequestCompletedAction = (studentList: StudentEntity[]) 
 _./src/pages/student-list/actions/studentListRequestStarted.ts_
 
 ```javascript
-import { actionsEnums } from "../../../common/actionsEnums";
-import { StudentEntity } from "../../../model/student";
 import { studentApi } from "../../../rest-api/student-api";
 import { studentListRequestCompletedAction } from "./studentListRequestCompleted";
 
@@ -148,7 +146,6 @@ _./src/reducers/student.ts_:
 
 ```javascript
 import { actionsEnums } from "../common/actionsEnums";
-import objectAssign = require("object-assign");
 import { StudentEntity } from "../model/student";
 
 class StudentState  {
@@ -190,8 +187,8 @@ export const reducers =  combineReducers({
   routing: routerReducer
 });
 ```
-- Let's define the props and a very simple render for the _studentList_ component, and
-let's load the students list data whenever the component getsmounted (to do this
+- Let's define the props and a very simple render for the _studentList_ component. And
+let's load the students list data whenever the component gets mounted (to do this
 we need to move the component to state one).
 
 _./src/pages/student-list/studentList.tsx_:
@@ -223,7 +220,7 @@ export class StudentListComponent extends React.Component<Props, {}> {
   render() {
     return (
       <div>
-        <h2>I"m the Student page</h2>
+        <h2>I'm the Student page</h2>
         <br/>
         {this.props.studentList.map(this.tempRenderRow, this)}
       </div>
@@ -233,11 +230,9 @@ export class StudentListComponent extends React.Component<Props, {}> {
 ``` 
 
 - Now it's time to wire up stored + actions with the components, let's fulfill
-  the students container component.
-
-  _./src/pages/student-list/studentListContainer.tsx_:
-
-  ```diff
+  the students container component. _./src/pages/student-list/studentListContainer.tsx_:
+  
+```diff
 import { connect } from "react-redux";
 + import { studentListRequestStartedAction } from "./actions/studentListRequestStarted";
 import { StudentListComponent } from "./studentList";
@@ -259,7 +254,7 @@ export const StudentListContainer = connect(
   mapDispatchToProps
 )(StudentListComponent);
 
-  ```
+```
 
 - Let's give a try to what we have implemented so far:
 
