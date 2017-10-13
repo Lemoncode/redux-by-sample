@@ -185,18 +185,18 @@ export const NameEditContainer = connect(
 - Let's create an _app_ component in `src/app.tsx`
 
 ### ./src/app.tsx
-```diff
+```javascript
 import * as React from 'react';
 import {HelloWorldContainer} from './helloWorldContainer';
-+ import {NameEditContainer} from './nameEditContainer';
+import {NameEditContainer} from './nameEditContainer';
 
 export const App = () => {
   return (
-+    <div>
+    <div>
       <HelloWorldContainer/>
       <br/>
-+      <NameEditContainer/>
-+    </div>
+      <NameEditContainer/>
+    </div>
   );
 }
 
