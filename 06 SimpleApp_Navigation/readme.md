@@ -39,60 +39,251 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 - Let's make some cleanup:
     - Remove the _./src/helloworld.tsx_ and _./src/helloworldContainer.tsx_.
     - Remove the _./src/nameEdit.tsx_ and _./src/nameEditContainer.tsx_.
-    - Remove the _./actions/updateUserProfileName.tsx plus _./actions_ folder.
+    - Remove the _./src/actions/updateUserProfileName.tsx plus _./actions_ folder.
+    - Remove _./src/reducers/userProfile.ts_
 
 - It's time to install routing libraries:
 
-> At the time of writing this tutorial, there react-router-redux was not uptodate
-with react-route (alfa and dev tool noy fully integrating, under development), we will stick to version
-3.0 of react-router. More info: https://github.com/ReactTraining/react-router/tree/master/packages/react-router-redux
-
-```cmd
-npm install react-router@3.0.0 react-router-redux@4.0.8 --save
+```bash
+npm install react-router-dom react-router-redux --save
 ```
 
-
-```
-npm install  @types/react-router@3  @types/react-router-redux@4.0.34 --save-dev
+```bash
+npm install @types/react-router-dom @types/react-router-redux --save-dev
 ```
 
 - Let's install support for promises:
 
-```
-npm install core-js --save
-```
-
-```
-npm install @types/core-js --save
+```bash
+npm install babel-polyfill --save
 ```
 
-- Let's install Redux-Thunk to handle async actions
+- Let's install Redux-Thunk to handle async actions, it has own typings:
 
-```
+```bash
 npm install redux-thunk --save
 ```
 
-```
-npm install @types/redux-thunk --save-dev
+- Install `sass`:
+
+```bash
+npm install sass-loader node-sass --save-dev
 ```
 
-- Let's configure redux-thunk in _main.tsx_
+- Last step to configure libs is update `webpack.config`:
+
+### ./webpack.config.js
+
+```diff
+var path = require('path');
+var webpack = require('webpack');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+var basePath = __dirname;
+
+module.exports = {
+  context: path.join(basePath, "src"),
+  resolve: {
+    extensions: ['.js', '.ts', '.tsx']
+  },
+
+- entry: [
+-   './main.tsx',
+-   '../node_modules/bootstrap/dist/css/bootstrap.css'
+- ],
++ entry: {
++   app: './main.tsx',
++   vendor: [
++     'babel-polyfill',
++     'react',
++     'react-dom',
++     'react-redux',
++     'react-router-dom',
++     'react-router-redux',
++     'redux',
++     'redux-thunk',
++   ],
++   vendorStyles: [
++     '../node_modules/bootstrap/dist/css/bootstrap.css'
++   ],
++ },
+  output: {
+    path: path.join(basePath, 'dist'),
+-   filename: 'bundle.js'
++   filename: '[name].js',
+  },
+
+  devtool: 'source-map',
+
+  devServer: {
+    contentBase: './dist', // Content base
+    inline: true, // Enable watch and live reload
+    host: 'localhost',
+    port: 8080,
+    stats: 'errors-only'
+  },
+
+  module: {
+    rules: [
+      {
+        test: /\.(ts|tsx)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'awesome-typescript-loader',
+          options: {
+            useBabel: true,
+          },
+        },
+      },
++     {
++       test: /\.scss$/,
++       exclude: /node_modules/,
++       loader: ExtractTextPlugin.extract({
++         fallback: 'style-loader',
++         use: [
++           {
++             loader: 'css-loader',
++             options: {
++               modules: true,
++               localIdentName: '[name]__[local]___[hash:base64:5]',
++               camelCase: true,
++             },
++           },
++           { loader: 'sass-loader', },
++         ],
++       }),
++     },
+      {
+        test: /\.css$/,
+        include: /node_modules/,
+        loader: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: {
+            loader: 'css-loader',
+          },
+        }),
+      },
+      // Loading glyphicons => https://github.com/gowravshekar/bootstrap-webpack
+      // Using here url-loader and file-loader
+      {
+        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+      },
+      {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
+      },
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
+      },
+      {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'file-loader'
+      },
+    ]
+  },
+  plugins: [
+    // Generate index.html in /dist => https://github.com/ampedandwired/html-webpack-plugin
+    new HtmlWebpackPlugin({
+      filename: 'index.html', // Name of file in ./dist/
+      template: 'index.html', // Name of template in ./src
+      hash: true
+    }),
+    new ExtractTextPlugin({
+-     filename: '[chunkhash].[name].css',
++     filename: '[name].css',
+      disable: false,
+      allChunks: true,
+    }),
++   new webpack.optimize.CommonsChunkPlugin({
++     names: ['vendor', 'manifest'],
++   }),
+  ]
+}
+
+```
+
+- Let's configure `store` with redux-thunk:
+
+### ./src/store.ts
 
 ```javascript
+import { createStore, applyMiddleware, compose } from 'redux';
+import { routerMiddleware } from 'react-router-redux';
+import reduxThunk from 'redux-thunk';
+import { reducers } from './reducers';
 
-- + import { createStore } from 'redux';
-+ import { createStore, applyMiddleware } from 'redux';
-+ import reduxThunk from 'redux-thunk';
+const middlewares = [
+  routerMiddleware() <---// TODO: Necessary history
+];
 
+```
+
+- We need to pass an `history` instance to `routerMiddleware`, that it's necessary by `redux devTools` to navigate.
+
+### ./src/history.ts
+
+```javascript
+import createHistory from 'history/createHashHistory';
+
+export const history = createHistory();
+
+```
+
+- Now, we could import and use it:
+
+### ./src/store.ts
+
+```diff
+import { createStore, applyMiddleware, compose } from 'redux';
+import { routerMiddleware } from 'react-router-redux';
+import reduxThunk from 'redux-thunk';
+import { reducers } from './reducers';
++ import { history } from './history';
+
+
+const middlewares = [
+- routerMiddleware()
++ routerMiddleware(history),
++ reduxThunk,
+];
+
++ const composeEnhancers = (process.env.NODE_ENV !== 'production' && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ?
++   (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ :
++   compose;
+
++ export const store = createStore(
++   reducers,
++   composeEnhancers(
++     applyMiddleware(...middlewares),
++   ),
++ );
+
+```
+
+- Let's use the `store` in `main.tsx`:
+
+### ./src/main.tsx
+
+```diff
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+- import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+- import {reducers} from './reducers'
++ import { store } from './store';
+import {App} from './app';
 
 - let store = createStore(reducers);
-+let store = createStore(
-+  reducers,
-+  compose(
-+    applyMiddleware(reduxThunk),
-+    window['devToolsExtension'] ? window['devToolsExtension']() : f => f
-+  )  
-+);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App/>
+  </Provider>,
+  document.getElementById('root'));
+
 ```
 
 - Let's start working with the pages structure, create the following folder _./src/pages_
@@ -100,6 +291,8 @@ npm install @types/redux-thunk --save-dev
 - Under pages let's create a subfolder called _./src/pages/login_.
 
 - Let's create under _./src/pages/login/login.tsx_
+
+### ./src/pages/login/login.tsx
 
 ```javascript
 import * as React from 'react';
@@ -113,40 +306,40 @@ export const LoginComponent = () => {
 
 - Let's create under _./src/pages/login/loginContainer.tsx_
 
+### ./src/pages/login/loginContainer.tsx
+
 ```javascript
 import { connect } from 'react-redux';
 import { LoginComponent } from './login';
 
-const mapStateToProps = (state) => {
-    return {
-    }
-}
+const mapStateToProps = (state) => ({
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-  }
-}
+});
+
+const mapDispatchToProps = (dispatch) => ({
+
+});
 
 export const LoginContainer = connect(
-                                   mapStateToProps
-                                  ,mapDispatchToProps
-                                )(LoginComponent);
+  mapStateToProps,
+  mapDispatchToProps,
+)(LoginComponent);
+
 ```
 
-- Let's create under _./src/pages/login/index.tsx_
+- Let's create under _./src/pages/login/index.ts_
+
+### ./src/pages/login/index.ts
 
 ```javascript
-import { LoginContainer } from './loginContainer'
+export { LoginContainer } from './loginContainer';
 
-export {
-  LoginContainer
-}
 ```
 
 - Let's follow the same steps to create under _./src/pages/student-list
 the folowing files:
 
-_studentList.tsx_
+### ./src/pages/student-list/studentList.tsx
 
 ```javascript
 import * as React from 'react';
@@ -156,45 +349,41 @@ export const StudentListComponent = () => {
     <h2>I'm the StudentList page</h2>
   )
 }
+
 ```
 
-_studentListContainer.tsx_
+### ./src/pages/student-list/studentListContainer.tsx
 
 ```javascript
 import { connect } from 'react-redux';
 import { StudentListComponent } from './studentList';
 
-const mapStateToProps = (state) => {
-    return {
-    }
-}
+const mapStateToProps = (state) => ({
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-  }
-}
+});
+
+const mapDispatchToProps = (dispatch) => ({
+
+});
 
 export const StudentListContainer = connect(
-                                   mapStateToProps
-                                  ,mapDispatchToProps
-                                )(StudentListComponent);
+  mapStateToProps,
+  mapDispatchToProps,
+)(StudentListComponent);
+
 ```
 
-
-_index.ts_
+### ./src/pages/student-list/index.ts
 
 ```javascript
-import {StudentListContainer} from './studentListContainer';
+export { StudentListContainer } from './studentListContainer';
 
-export {
-  StudentListContainer
-}
 ```
 
 - Let's follow the same steps to create under _./src/pages/student-detail
 the folowing files:
 
-_studentDetail.tsx_
+### ./src/pages/student-detail/studentDetail.tsx
 
 ```javascript
 import * as React from 'react';
@@ -204,129 +393,166 @@ export const StudentDetailComponent = () => {
     <h2>I'm the StudentDetail page</h2>
   )
 }
+
 ```
 
-_studentDetailContainer.tsx_
+### ./src/pages/student-detail/studentDetailContainer.tsx
 
 ```javascript
 import { connect } from 'react-redux';
 import { StudentDetailComponent } from './studentDetail';
 
-const mapStateToProps = (state) => {
-    return {
-    }
-}
+const mapStateToProps = (state) => ({
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-  }
-}
+});
+
+const mapDispatchToProps = (dispatch) => ({
+
+});
 
 export const StudentDetailContainer = connect(
-                                   mapStateToProps
-                                  ,mapDispatchToProps
-                                )(StudentDetailComponent);
+  mapStateToProps,
+  mapDispatchToProps,
+)(StudentDetailComponent);
+
 ```
 
-
-_index.tsx_
+### ./src/pages/student-detail/index.ts
 
 ```javascript
-import {StudentDetailContainer} from './studentDetailContainer';
+export { StudentDetailContainer } from './studentDetailContainer';
 
-export {
-  StudentDetailContainer
-}
 ```
 
 - Is time to wire up the navigation, let's start by adding _routerReducre_
 
-_./src/reducers/index.ts_
+### ./src/reducers/index.ts
 
 ```diff
 import { combineReducers } from 'redux';
-import { userProfileReducer } from './userProfile';
-+ import { routerReducer } from 'react-router-redux'
+- import { userProfileReducer } from './userProfile';
++ import { routerReducer } from 'react-router-redux';
 
-export const reducers =  combineReducers({
-  userProfileReducer,
-+  routing: routerReducer
+export const reducers = combineReducers({
+- userProfileReducer
++ routing: routerReducer,
 });
+
 ```
-- Let's move to _./src/main.tsx_ and add the routing support (pending to separate
-  this routing in a separate file).
+
+- We could create now a file where we are going to declare all `appRoutes`.
+
+### ./src/appRoutes.tsx
+
+```javascript
+import * as React from 'react';
+import { Switch, Route } from 'react-router-dom';
+import { App } from './app';
+import { LoginContainer } from './pages/login';
+import { StudentListContainer } from './pages/student-list';
+import { StudentDetailContainer } from './pages/student-detail';
+
+export const AppRoutes: React.StatelessComponent = (props) => (
+  <App>
+    <Switch>
+      <Route exact={true} path="/" component={LoginContainer} />
+      <Route path="/student-list" component={StudentListContainer} />
+      <Route path="/student-detail" component={StudentDetailContainer} />
+    </Switch>
+  </App>
+);
+
+```
+
+- Time to update _app.tsx_ to place the page container.
+
+### ./src/app.tsx
+
+```diff
+import * as React from 'react';
+- import {HelloWorldContainer} from './helloWorldContainer';
+- import {NameEditContainer} from './nameEditContainer';
+
+- export const App = () => {
++ export const App: React.StatelessComponent = (props) => {
+  return (
+    <div>
+-     <HelloWorldContainer/>
+-     <br/>
+-     <NameEditContainer/>
++     {props.children}
+    </div>
+  );
+}
+
+```
+
+- Finally, we have to use `appRoutes` in `main.tsx`:
+
+### ./src/main.tsx
 
 ```diff
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-+ import { Router, Route, IndexRoute, hashHistory } from 'react-router';
-+ import { syncHistoryWithStore} from 'react-router-redux'
-import { createStore, applyMiddleware, compose } from 'redux';
-import reduxThunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import {reducers} from './reducers'
-import {App} from './app';
-+  import {LoginContainer} from './pages/login';
-+  import {StudentListContainer} from './pages/student-list';
-+  import {StudentDetailContainer} from './pages/student-detail';
-
-let store = createStore(
-  reducers,
-  compose(
-    applyMiddleware(reduxThunk),
-    window['devToolsExtension'] ? window['devToolsExtension']() : f => f
-  )    
-);
-
-+ const history = syncHistoryWithStore(hashHistory, store);
+import { store } from './store';
+- import { App } from './app';
++ import { HashRouter } from 'react-router-dom';
++ import { AppRoutes } from './appRoutes';
 
 ReactDOM.render(
   <Provider store={store}>
--    <App/>
-+    <div>
-+      <Router history={history}>
-+        <Route path="/" component={App}>
-+          <IndexRoute component={LoginContainer}/>
-+          <Route path="login" component={LoginContainer}/>
-+          <Route path="student-list" component={StudentListContainer}/>
-+          <Route path="student-detail" component={StudentDetailContainer}/>
-+        </Route>
-+      </Router>
-+    </div>
+-   <App />
++    <HashRouter>
++     <AppRoutes />
++   </HashRouter>
   </Provider>,
-  document.getElementById('root')
-);
+  document.getElementById('root'));
+
 ```
 
+- Let's create a header with `Links`:
 
+### ./src/appStyles.scss
 
-- Time to update _app.tsx_ to place the page container.
+```scss
+.header {
+  display: flex;
+  & > * {
+    margin-right: 10px;
+  }
+}
 
-```javascript
-import * as React from 'react'
-import { Link } from 'react-router'
+```
 
-export const App = (props: { children? }) => {
+### ./src/app.tsx
+
+```diff
+import * as React from 'react';
++ import { Link } from 'react-router-dom';
++ const styles = require('./appStyles.scss');
+
+export const App: React.StatelessComponent = (props) => {
   return (
     <div>
-      <header>
-        Links:
-        {' '}
-        <Link to="/">Login</Link>
-        {' '}
-        <Link to="/student-list">Student List</Link>
-        {' '}
-        <Link to="/student-detail">Student Detail</Link>
-      </header>
-      <div style={{ marginTop: '1.5em' }}>{props.children}</div>
-    </div>
-  )
+-     {props.children}
++     <header className={styles.header}>
++       <Link to="/">Login</Link>
++       <Link to="/student-list">Student List</Link>
++       <Link to="/student-detail">Student Detail</Link>
++     </header>
++     <div>
++       {props.children}
++     </div>
+     </div>
+  );
 }
+
 ```
 
 - Let's create a loginEntity, under _./src/model_
 
-_./src/model/login.ts_
+### ./src/model/login.ts
 
 ```javascript
 export class LoginEntity {
@@ -338,6 +564,7 @@ export class LoginEntity {
     this.password = '';
   }
 }
+
 ```
 
 - And a userProfile entity.
@@ -372,7 +599,6 @@ _./src/rest-api/loginApi.ts_
 import {LoginEntity} from '../model/login';
 import {UserProfile} from '../model/userProfile';
 import {LoginResponse} from '../model/loginResponse';
-import {} from 'core-js'
 
 class LoginApi {
   login(loginInfo : LoginEntity) : Promise<LoginResponse> {
