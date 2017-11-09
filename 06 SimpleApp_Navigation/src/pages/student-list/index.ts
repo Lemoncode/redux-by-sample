@@ -1,5 +1,1 @@
-import {StudentListContainer} from './studentListContainer';
-
-export {
-  StudentListContainer
-}
+export { StudentListContainer } from './studentListContainer';

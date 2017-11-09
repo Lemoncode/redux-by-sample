@@ -1,4 +1,9 @@
-export class UserProfile {
-  fullname : string;
-  role : string;
+export interface UserProfile {
+  fullname: string;
+  role: string;
 }
+
+export const createEmptyUserProfile = (): UserProfile => ({
+  fullname: '',
+  role: '',
+});

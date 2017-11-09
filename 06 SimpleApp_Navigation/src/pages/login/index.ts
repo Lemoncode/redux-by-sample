@@ -1,5 +1,1 @@
-import { LoginContainer } from './loginContainer'
-
-export {
-  LoginContainer
-}
+export { LoginContainer } from './loginContainer';

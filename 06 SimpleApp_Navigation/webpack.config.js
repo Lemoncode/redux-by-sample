@@ -11,13 +11,24 @@ module.exports = {
     extensions: ['.js', '.ts', '.tsx']
   },
 
-  entry: [
-    './main.tsx',
-    '../node_modules/bootstrap/dist/css/bootstrap.css'
-  ],
+  entry: {
+    app: './main.tsx',
+    vendor: [
+      'babel-polyfill',
+      'react',
+      'react-dom',
+      'react-redux',
+      'react-router-dom',
+      'redux',
+      'redux-thunk',
+    ],
+    vendorStyles: [
+      '../node_modules/bootstrap/dist/css/bootstrap.css'
+    ],
+  },
   output: {
     path: path.join(basePath, 'dist'),
-    filename: 'bundle.js'
+    filename: '[name].js',
   },
 
   devtool: 'source-map',
@@ -41,6 +52,24 @@ module.exports = {
             useBabel: true,
           },
         },
+      },
+      {
+        test: /\.scss$/,
+        exclude: /node_modules/,
+        loader: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                localIdentName: '[name]__[local]___[hash:base64:5]',
+                camelCase: true,
+              },
+            },
+            { loader: 'sass-loader', },
+          ],
+        }),
       },
       {
         test: /\.css$/,
@@ -80,9 +109,12 @@ module.exports = {
       hash: true
     }),
     new ExtractTextPlugin({
-      filename: '[chunkhash].[name].css',
+      filename: '[name].css',
       disable: false,
       allChunks: true,
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ['vendor', 'manifest'],
     }),
   ]
 }

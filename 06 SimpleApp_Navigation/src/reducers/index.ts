@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import { sessionReducer } from './session';
-import { routerReducer } from 'react-router-redux'
+import { sessionReducer, SessionState } from './session';
 
-export const reducers =  combineReducers({
-  sessionReducer,
-  routing: routerReducer
+export interface State {
+  session: SessionState;
+}
+
+export const reducers = combineReducers({
+  session: sessionReducer,
 });

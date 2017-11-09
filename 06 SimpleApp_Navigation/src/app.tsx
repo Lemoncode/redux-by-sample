@@ -1,19 +1,18 @@
-import * as React from 'react'
-import { Link } from 'react-router'
+import * as React from 'react';
+import { Link } from 'react-router-dom';
+const styles = require('./appStyles.scss');
 
-export const App = (props: { children? }) => {
+export const App: React.StatelessComponent = (props) => {
   return (
     <div>
-      <header>
-        Links:
-        {' '}
+      <header className={styles.header}>
         <Link to="/">Login</Link>
-        {' '}
         <Link to="/student-list">Student List</Link>
-        {' '}
         <Link to="/student-detail">Student Detail</Link>
       </header>
-      <div style={{ marginTop: '1.5em' }}>{props.children}</div>
+      <div>
+        {props.children}
+      </div>
     </div>
-  )
+  );
 }
