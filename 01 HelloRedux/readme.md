@@ -182,7 +182,7 @@ export const HelloWorldContainer = connect(
 
 - Include this HelloworldContainer component in the application, path: _.src/main.tsx_
 
-### ./src/maint.tsx
+### ./src/main.tsx
 ```diff
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
