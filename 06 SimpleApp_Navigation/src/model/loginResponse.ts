@@ -1,6 +1,11 @@
-import {UserProfile} from './userProfile';
+import { UserProfile, createEmptyUserProfile } from './userProfile';
 
-export class LoginResponse {
-  succeeded : boolean;
-  userProfile : UserProfile;
+export interface LoginResponse {
+  succeeded: boolean;
+  userProfile: UserProfile;
 }
+
+export const createEmptyLoginResponse = (): LoginResponse => ({
+  succeeded: false,
+  userProfile: createEmptyUserProfile(),
+});

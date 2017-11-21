@@ -1,9 +1,9 @@
-export class LoginEntity {
-  login : string;
-  password : string;
-
-  public constructor() {
-    this.login = '';
-    this.password = '';
-  }
+export interface LoginEntity {
+  login: string;
+  password: string;
 }
+
+export const createEmptyLoginEntity = (): LoginEntity => ({
+  login: '',
+  password: '',
+});

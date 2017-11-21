@@ -1,48 +1,43 @@
-import {actionsEnums} from '../common/actionsEnums';
-import {UserProfile} from '../model/userProfile';
-import {LoginResponse} from '../model/loginResponse';
-import {LoginEntity} from '../model/login';
+import { actionsEnums } from '../common/actionsEnums';
+import {
+  UserProfile,
+  createEmptyUserProfile,
+  LoginEntity,
+  createEmptyLoginEntity,
+  LoginResponse,
+} from '../model';
 
-class SessionState  {
-  isUserLoggedIn : boolean;
-  userProfile : UserProfile;
-  editingLogin : LoginEntity;
+export interface SessionState {
+  isUserLoggedIn: boolean;
+  userProfile: UserProfile;
+  loginEntity: LoginEntity;
+}
 
-  public constructor()
-  {
-    this.isUserLoggedIn = false;
-    this.userProfile = new UserProfile();
-    this.editingLogin = new LoginEntity();
+const createEmptyState = (): SessionState => ({
+  isUserLoggedIn: false,
+  userProfile: createEmptyUserProfile(),
+  loginEntity: createEmptyLoginEntity(),
+})
+
+export const sessionReducer = (state = createEmptyState(), action) => {
+  switch (action.type) {
+    case actionsEnums.USERPROFILE_PERFORM_LOGIN:
+      return userProfilePerformLoginHandler(state, action.payload);
+
+    case actionsEnums.USERPROFILE_UPDATE_EDITING_LOGIN:
+      return userProfileUpdateEditingLoginHandler(state, action.payload);
   }
+
+  return state;
 }
 
-export const sessionReducer =  (state : SessionState = new SessionState(), action) => {
-      switch (action.type) {
-        case actionsEnums.USERPROFILE_PERFORM_LOGIN:
-           return handlePerformLogin(state, action.payload);
-        case actionsEnums.USERPROFILE_UPDATE_EDITING_LOGIN:
-           return handleUpdateEditingLogin(state, action.payload);
+const userProfilePerformLoginHandler = (state: SessionState, payload: LoginResponse) => ({
+  ...state,
+  isUserLoggedIn: payload.succeeded,
+  userProfile: payload.userProfile,
+});
 
-      }
-
-      return state;
-};
-
-
-const handlePerformLogin = (state : SessionState, payload : LoginResponse) => {
-  return {...state, 
-          isUserLoggedIn: payload.succeeded, 
-          userProfile: payload.userProfile
-         };  
-}
-
-
-const handleUpdateEditingLogin = (state: SessionState, payload : LoginEntity) => {
-  const newState = {
-    ...state, 
-    editingLogin: payload
-  };
-
-  return newState;
-}
-
+const userProfileUpdateEditingLoginHandler = (state: SessionState, payload: LoginEntity) => ({
+  ...state,
+  loginEntity: payload,
+});

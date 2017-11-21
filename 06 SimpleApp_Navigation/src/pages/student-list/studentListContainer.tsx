@@ -1,17 +1,15 @@
 import { connect } from 'react-redux';
 import { StudentListComponent } from './studentList';
 
-const mapStateToProps = (state) => {
-    return {
-    }
-}
+const mapStateToProps = (state) => ({
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-  }
-}
+});
+
+const mapDispatchToProps = (dispatch) => ({
+
+});
 
 export const StudentListContainer = connect(
-                                   mapStateToProps
-                                  ,mapDispatchToProps
-                                )(StudentListComponent);
+  mapStateToProps,
+  mapDispatchToProps,
+)(StudentListComponent);

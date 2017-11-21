@@ -1,22 +1,15 @@
-import {LoginEntity} from '../model/login';
-import {UserProfile} from '../model/userProfile';
-import {LoginResponse} from '../model/loginResponse';
-import {} from 'core-js'
+import { LoginEntity, LoginResponse, createEmptyLoginResponse } from "../model";
 
-class LoginApi {
-  login(loginInfo : LoginEntity) : Promise<LoginResponse> {
-      let loginResponse = new LoginResponse();
+export const login = (loginEntity: LoginEntity): Promise<LoginResponse> => {
+  const loginResponse = createEmptyLoginResponse();
 
-      if(loginInfo.login === 'admin' && loginInfo.password === 'test') {
-        loginResponse.succeeded = true;
-        loginResponse.userProfile = {fullname: "John Doe", role: 'admin' };
-      } else {
-        loginResponse.succeeded = false;
-        loginResponse = null;
-      }
-
-      return Promise.resolve(loginResponse);
+  if (loginEntity.login === 'admin' && loginEntity.password === 'test') {
+    loginResponse.succeeded = true;
+    loginResponse.userProfile = {
+      fullname: 'John Doe',
+      role: 'admin',
+    };
   }
-}
 
-export const loginApi = new LoginApi();
+  return Promise.resolve(loginResponse);
+}

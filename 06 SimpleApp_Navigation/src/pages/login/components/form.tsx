@@ -1,35 +1,61 @@
 import * as React from "react"
-import {hashHistory} from 'react-router'
-import {LoginEntity} from '../../../model/login';
+import { LoginEntity } from '../../../model/login';
 
 interface Props {
-   loginInfo : LoginEntity;
-   updateLoginInfo : (loginInfo : LoginEntity) => void;
-   performLogin : () => void;
+  loginEntity: LoginEntity;
+  updateLoginEntity: (loginEntity: LoginEntity) => void;
+  performLogin: () => void;
 }
 
-export const Form = (props: Props) => {
+export const Form: React.StatelessComponent<Props> = (props) => {
   return (
     <div className="panel-body">
       <form role="form">
         <fieldset>
           <div className="form-group">
-      		  <input className="form-control" placeholder="E-mail" name="email" type="text"
-              value={props.loginInfo.login}
-              onChange={(e : any) => props.updateLoginInfo({login: e.target.value, password: props.loginInfo.password })}
-            />
-      		</div>
-          <div className="form-group">
-            <input className="form-control" placeholder="Password" name="password" type="password"
-              value={props.loginInfo.password}
-              onChange={(e : any) => props.updateLoginInfo({login: props.loginInfo.login, password: e.target.value })}
+            <input
+              className="form-control"
+              placeholder="E-mail"
+              type="text"
+              name="login"
+              value={props.loginEntity.login}
+              onChange={onChange(props)}
             />
           </div>
-          <input className="btn btn-lg btn-success btn-block" value="Login"
-            onClick={(e) => {props.performLogin()}}
-          />
+          <div className="form-group">
+            <input
+              className="form-control"
+              placeholder="Password"
+              type="password"
+              name="password"
+              value={props.loginEntity.password}
+              onChange={onChange(props)}
+            />
+          </div>
+          <button
+            type="submit"
+            className="btn btn-lg btn-success btn-block"
+            onClick={onSubmit(props)}
+          >
+            Login
+          </button>
         </fieldset>
       </form>
     </div>
   );
+};
+
+const onChange = (props: Props) => (e) => {
+  const fieldName = e.target.name;
+  const value = e.target.value;
+
+  props.updateLoginEntity({
+    ...props.loginEntity,
+    [fieldName]: value,
+  });
+}
+
+const onSubmit = (props: Props) => (e) => {
+  e.preventDefault();
+  props.performLogin();
 }
