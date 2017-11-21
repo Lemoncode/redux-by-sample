@@ -143,7 +143,7 @@ import * as ReactDOM from 'react-dom';
 + import {reducers} from './reducers';
 + import {HelloWorldComponent} from './helloWorld';
 
-+ let store = createStore(reducers);
++ const store = createStore(reducers);
 
 ReactDOM.render(
 - <h2>Temp content</h2>,
