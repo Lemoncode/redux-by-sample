@@ -21,12 +21,10 @@ then cd to one of the demos projects.
 7. `npm start` - Builds the project and launch a lite web server (webpack-devserver).
 8. Navigate to [http://localhost:8080/](http://localhost:8080/) if your browser doesn't open automatically.
 
-# samples
 
-## 00 Boiler plate
+# About Lemoncode
 
-Bundling + npm start based on webpack.
+We are a team of long-term experienced freelance developers, established as a group in 2010.
+We specialize in Front End technologies and .NET. [Click here](http://lemoncode.net/services/en/#en-home) to get more info about us.
 
-## 01 Hello Redux
-
-Hello world, simples react render sample.
+For the LATAM/Spanish audience we are running an Online Front End Master degree, more info: http://lemoncode.net/master-frontend
