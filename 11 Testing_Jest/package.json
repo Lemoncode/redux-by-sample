@@ -33,6 +33,7 @@
     "css-loader": "^0.28.7",
     "deep-freeze": "0.0.1",
     "enzyme": "^3.2.0",
+    "enzyme-adapter-react-16": "^1.1.0",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",
     "html-webpack-plugin": "^2.30.1",
@@ -64,6 +65,7 @@
   },
   "jest": {
     "testRegex": "(/specs/.*|\\.spec)\\.(ts|tsx)$",
+    "setupTestFrameworkScriptFile": "<rootDir>/src/test/index.js",
     "moduleFileExtensions": [
       "js",
       "jsx",
@@ -73,6 +75,6 @@
     ],
     "transform": {
       ".tsx?": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    }
+    }   
   }
 }
