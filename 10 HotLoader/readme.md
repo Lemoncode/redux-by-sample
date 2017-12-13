@@ -15,7 +15,7 @@ Summary steps:
 
 # Prerequisites
 
-Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not already installed on your computer.
+Install [Node.js and npm](https://nodejs.org/en/) (>= 6.6.0) if they are not already installed on your computer.
 
 > Verify that you are running at least node v6.x.x and npm 3.x.x by running `node -v` and `npm -v` in a terminal/console window. Older versions may produce errors.
 
@@ -23,23 +23,24 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 
 - Copy the content from _09 Simple App Validation_ and execute _npm install_.
 
-- As we see in sample `06 SimpleApp_Navigation` we had installed [`redux-devtools`](https://github.com/gaearon/redux-devtools). This is great, specially the "time machine" option, but what happen if we need to add changes to our code? As soon as webpack is launched we will loose all our state and the page will be refresh or... wait [`react-hot-loader`](https://github.com/gaearon/react-hot-loader) to the rescue !
+- As we saw in sample `06 SimpleApp_Navigation` we had installed [`redux-devtools`](https://github.com/gaearon/redux-devtools). This is great, specially the "time machine" option, but what happen if we need to add changes to our code? As soon as webpack is launched we will loose all our state and the page will be refresh or... wait [`react-hot-loader`](https://github.com/gaearon/react-hot-loader) to the rescue!
 
 By using this we can add changes to our code and webpack will only push the pieces of JavaScript that have changed, no need to refresh the browser, no state lost. Let's start by installing the hot loader:
 
 ```
-npm install react-hot-loader@next --save-dev
+npm install react-hot-loader@latest --save-dev
 ```
 
 - We have to install `react-hot-loader` typings:
 
 ```
-npm install @types/react-hot-lodear --save-dev
+npm install @types/react-hot-loader --save-dev
 ```
 
 - Let's update `webpack.config.js`:
 
 ### ./webpack.config.js
+
 ```diff
   ...
   entry: [
@@ -94,7 +95,6 @@ npm install @types/react-hot-lodear --save-dev
 +   "react-hot-loader/babel"
 + ]
 }
-
 ```
 
 - We have to install `webpack-env` typings to get access to `module`:
@@ -134,6 +134,7 @@ npm install @types/webpack-env --save-dev
 - Finally, we have to add `AppContainer` from `react-hot-loader` on top of our App. `AppContainer` is automatically disabled for production. But before configure `AppContainer` we are going to separate `main.tsx` file in several components:
 
 ### ./src/store.ts
+
 ```javascript
 import { createStore, applyMiddleware, compose } from 'redux';
 import {reducers} from './reducers';
@@ -144,7 +145,7 @@ export const store = createStore(
   compose(
     applyMiddleware(reduxThunk),
     window['devToolsExtension'] ? window['devToolsExtension']() : f => f
-  )  
+  )
 );
 
 ```
@@ -217,7 +218,7 @@ import * as ReactDOM from 'react-dom';
 -   compose(
 -     applyMiddleware(reduxThunk),
 -     window['devToolsExtension'] ? window['devToolsExtension']() : f => f
--   )  
+-   )
 - );
 
 - const history = syncHistoryWithStore(hashHistory, store);
