@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import ReduxThunk from 'redux-thunk';
 import configureStore from 'redux-mock-store'
 import { loginApi } from '../../../rest-api/loginApi';
@@ -9,7 +8,6 @@ import { loginRequestStartedAction } from './loginRequestStarted'
 import { loginRequestCompletedAction } from './loginRequestCompleted'
 import { actionsEnums } from '../../../common/actionsEnums'
 import { hashHistory } from 'react-router'
-import * as sinon from 'sinon';
 
 const middlewares = [ ReduxThunk ];
 const mockStore = configureStore(middlewares);
@@ -17,7 +15,7 @@ const mockStore = configureStore(middlewares);
 
 describe('pages/login/loginRequestStarted Action', () => {
   it('loginRequest login succeeded', (done) => {
-    // Arrange            
+    // Arrange
     const loginInfo : LoginEntity = new LoginEntity();
     loginInfo.login = "john";
     loginInfo.password = "pass";
@@ -28,13 +26,13 @@ describe('pages/login/loginRequestStarted Action', () => {
     expectedLoginResponse.userProfile.fullname = "john";
     expectedLoginResponse.userProfile.role = "admin";
 
-    
+
     const loginMethodStub = sinon.stub(loginApi, 'login');
 
     loginMethodStub.returns({
       then: callback => {
         callback(expectedLoginResponse)
-      }    
+      }
     });
 
     const hashHistoryStub = sinon.stub(hashHistory, 'push');
@@ -51,17 +49,16 @@ describe('pages/login/loginRequestStarted Action', () => {
           expect(hashHistoryStub.called).to.be.true;
 
         // Cleanup
-        // To avoid this use sinon-test, but not working
-        // well on browser, see: https://github.com/sinonjs/sinon-test/issues/58
+        // To avoid this use sinon-test
         loginMethodStub.restore();
         hashHistoryStub.restore();
 
           done();
-      });    
+      });
   });
 
   it('loginRequest login failed', (done) => {
-    // Arrange            
+    // Arrange
     const loginInfo : LoginEntity = new LoginEntity();
     loginInfo.login = "john";
     loginInfo.password = "pass";
@@ -71,13 +68,13 @@ describe('pages/login/loginRequestStarted Action', () => {
     expectedLoginResponse.userProfile = new UserProfile();
     expectedLoginResponse.userProfile.fullname = "";
     expectedLoginResponse.userProfile.role = "";
-    
+
     const loginMethodStub = sinon.stub(loginApi, 'login');
 
     loginMethodStub.returns({
       then: callback => {
         callback(expectedLoginResponse)
-      }    
+      }
     });
 
     const hashHistoryStub = sinon.stub(hashHistory, 'push');
@@ -94,13 +91,12 @@ describe('pages/login/loginRequestStarted Action', () => {
           expect(hashHistoryStub.called).to.be.false;
 
         // Cleanup
-        // To avoid this use sinon-test, but not working
-        // well on browser, see: https://github.com/sinonjs/sinon-test/issues/58
+        // To avoid this use sinon-test
         loginMethodStub.restore();
         hashHistoryStub.restore();
 
         done();
-      });    
+      });
   });
-  
+
 });
