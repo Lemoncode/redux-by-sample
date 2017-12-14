@@ -5,7 +5,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = function (config) {
   config.set({
     basePath: '',
-    frameworks: ['mocha', 'chai'],
+    frameworks: ['mocha', 'sinon-chai'],
     files: [
       './test_index.js'
     ],
@@ -60,7 +60,7 @@ module.exports = function (config) {
           //Configuration required to import sinon on spec.ts files
           noParse: [
               /node_modules(\\|\/)sinon/,
-          ]          
+          ]
       },
       resolve: {
           //Added .json extension required by cheerio (enzyme dependency)
@@ -69,7 +69,7 @@ module.exports = function (config) {
           // https://github.com/webpack/webpack/issues/304
           alias: {
             sinon: 'sinon/pkg/sinon'
-          }          
+          }
       },
       //Configuration required by enzyme
       externals: {
@@ -92,5 +92,5 @@ module.exports = function (config) {
     browsers: ['Chrome'],
     singleRun: false,
     concurrency: Infinity
-  })  
+  })
 }
