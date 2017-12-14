@@ -64,7 +64,7 @@ module.exports = function (config) {
       },
       resolve: {
           //Added .json extension required by cheerio (enzyme dependency)
-          extensions: ['.js', '.ts', '.tsx', '.json'],
+          extensions: ['.js', '.ts', '.tsx'],
           //Configuration required to import sinon on spec.ts files
           // https://github.com/webpack/webpack/issues/304
           alias: {
