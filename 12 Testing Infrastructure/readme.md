@@ -41,18 +41,13 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 We will do that by running:
 
 ```
-npm install chai deep-freeze enzyme enzyme-adapter-react-16 mocha sinon@^1 \
-redux-mock-store karma karma-chrome-launcher \
-karma-mocha karma-mocha-reporter karma-sinon-chai karma-sourcemap-loader karma-webpack react-addons-test-utils \
-sinon-chai --save-dev
+npm install chai deep-freeze enzyme enzyme-adapter-react-16 mocha sinon redux-mock-store karma karma-chrome-launcher karma-mocha karma-mocha-reporter karma-sinon-chai karma-sourcemap-loader karma-webpack react-addons-test-utils sinon-chai --save-dev
 ```
 
 - Now let's install the needed typings:
 
 ```
-npm install @types/mocha @types/deep-freeze \
-@types/sinon@^1 @types/enzyme @types/redux-mock-store \
-@types/karma-chai-sinon --save-dev
+npm install @types/mocha @types/deep-freeze @types/enzyme @types/redux-mock-store @types/karma-chai-sinon --save-dev
 ```
 
 - Let's add a new entry to our tsconfig file:
