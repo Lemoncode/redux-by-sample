@@ -425,7 +425,7 @@ npm start
 define it using some special Id's to make it easier to get the properties updated.
 Let's start by creating a common input component.
 
-_./src/common/components/input.tsx_
+_./src/common/components/Input.tsx_
 
 ```jsx
 import * as React from "react";
