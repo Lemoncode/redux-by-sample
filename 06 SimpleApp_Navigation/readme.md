@@ -28,7 +28,7 @@ Summary steps:
 
 # Prerequisites
 
-Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not already installed on your computer.
+Install [Node.js and npm](https://nodejs.org/en/) (=>v6.6.0) if they are not already installed on your computer.
 
 > Verify that you are running at least node v6.x.x and npm 3.x.x by running `node -v` and `npm -v` in a terminal/console window. Older versions may produce errors.
 
@@ -53,17 +53,23 @@ npm install react-router@3.0.0 react-router-redux@4.0.8 --save
 
 
 ```
-npm install  @types/react-router@3  @types/react-router-redux@4.0.34 --save-dev
+npm install  @types/react-router@^3  @types/react-router-redux@^4 --save-dev
 ```
 
-- Let's install support for promises:
+- Let's add some polyfills for older browser compatibilty and support for promises:
 
 ```
-npm install core-js --save
+npm install babel-polyfill --save
 ```
 
-```
-npm install @types/core-js --save
+- Let's add packages to _webpack.config.js_:
+
+```diff
+ entry: [
++  'babel-polyfill',
+   './main.tsx',
+   '../node_modules/bootstrap/dist/css/bootstrap.css'
+ ],
 ```
 
 - Let's install Redux-Thunk to handle async actions
@@ -91,7 +97,7 @@ npm install @types/redux-thunk --save-dev
 +  compose(
 +    applyMiddleware(reduxThunk),
 +    window['devToolsExtension'] ? window['devToolsExtension']() : f => f
-+  )  
++  )
 +);
 ```
 
@@ -275,7 +281,7 @@ let store = createStore(
   compose(
     applyMiddleware(reduxThunk),
     window['devToolsExtension'] ? window['devToolsExtension']() : f => f
-  )    
+  )
 );
 
 + const history = syncHistoryWithStore(hashHistory, store);
@@ -372,7 +378,6 @@ _./src/rest-api/loginApi.ts_
 import {LoginEntity} from '../model/login';
 import {UserProfile} from '../model/userProfile';
 import {LoginResponse} from '../model/loginResponse';
-import {} from 'core-js'
 
 class LoginApi {
   login(loginInfo : LoginEntity) : Promise<LoginResponse> {
@@ -397,7 +402,7 @@ a perform login action (_./src/common/actions_):
 _./src/common/actionsEnums_
 
 ```diff
-export const actionsEnums = {  
+export const actionsEnums = {
 -  UPDATE_USERPROFILE_NAME : 'UPDATE_USERPROFILE_NAME '
 +  USERPROFILE_PERFORM_LOGIN : 'USERPROFILE_PERFORM_LOGIN'
 }
@@ -504,10 +509,10 @@ export const sessionReducer =  (state : SessionState = new SessionState(), actio
 
 
 const handlePerformLogin = (state : SessionState, payload : LoginResponse) => {
-  return {...state, 
-          isUserLoggedIn: payload.succeeded, 
+  return {...state,
+          isUserLoggedIn: payload.succeeded,
           userProfile: payload.userProfile
-         };  
+         };
 }
 ```
 
@@ -529,7 +534,7 @@ export const reducers =  combineReducers({
 ```
 
 - It's time to jump into the ui part, we will use the login layout created in
-a previous sample, from repo [React By Sample: login form](https://github.com/Lemoncode/react-by-sample/tree/master/15%20LoginForm) 
+a previous sample, from repo [React By Sample: login form](https://github.com/Lemoncode/react-by-sample/tree/master/15%20LoginForm)
 
 _./src/login/components/header.tsx_
 
@@ -537,7 +542,7 @@ _./src/login/components/header.tsx_
 import * as React from "react"
 
 export const Header = () => {
-  return (    
+  return (
   	   <div className="panel-heading">
   	     <h3 className="panel-title">Please sign in</h3>
   	   </div>
@@ -647,16 +652,16 @@ export const sessionReducer =  (state : SessionState = new SessionState(), actio
 
 
 const handlePerformLogin = (state : SessionState, payload : LoginResponse) => {
-  return {...state, 
-          isUserLoggedIn: payload.succeeded, 
+  return {...state,
+          isUserLoggedIn: payload.succeeded,
           userProfile: payload.userProfile
-         };  
+         };
 }
 
 
 +const handleUpdateEditingLogin = (state: SessionState, payload : LoginEntity) => {
 +  return {
-+    ...state, 
++    ...state,
 +    editingLogin: payload
 +  };
 }
@@ -716,7 +721,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
 +    updateLoginInfo: (loginInfo : LoginEntity) => dispatch(updateEditingLogin(loginInfo)),
-+    performLogin: (loginInfo : LoginEntity) => dispatch(loginRequestStartedAction(loginInfo))    
++    performLogin: (loginInfo : LoginEntity) => dispatch(loginRequestStartedAction(loginInfo))
   }
 }
 
