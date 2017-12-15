@@ -15,7 +15,7 @@ Summary steps:
 
 # Prerequisites
 
-Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are not already installed on your computer.
+Install [Node.js and npm](https://nodejs.org/en/) (>=v6.6.0 or newer) if they are not already installed on your computer.
 
 > Verify that you are running at least node v6.x.x and npm 3.x.x by running `node -v` and `npm -v` in a terminal/console window. Older versions may produce errors.
 
@@ -64,7 +64,6 @@ export class StudentEntity {
   ```javascript
   import { StudentEntity } from "../model/student";
   import { studentsMockData } from "./mock-data";
-  import { } from "core-js";
 
   class StudentApi {
     studentsData: StudentEntity[];
@@ -95,7 +94,7 @@ export class StudentEntity {
 export const actionsEnums = {
   USERPROFILE_UPDATE_EDITING_LOGIN:  'USERPROFILE_UPDATE_EDITING_LOGIN',
   USERPROFILE_PERFORM_LOGIN : 'USERPROFILE_PERFORM_LOGIN',
-+  STUDENTS_GET_LIST_REQUEST_COMPLETED: "STUDENTS_GET_LIST_REQUEST_COMPLETED"
++ STUDENTS_GET_LIST_REQUEST_COMPLETED: "STUDENTS_GET_LIST_REQUEST_COMPLETED"
 }
 ```
 
@@ -176,16 +175,16 @@ const handleGetStudentList = (state: StudentState, payload: StudentEntity[]) => 
 _./src/reducers/index.ts_:
 
 ```diff
-import { combineReducers } from "redux";
-import { sessionReducer } from "./session";
+  import { combineReducers } from "redux";
+  import { sessionReducer } from "./session";
 + import { studentReducer} from "./student";
-import { routerReducer } from "react-router-redux";
+  import { routerReducer } from "react-router-redux";
 
-export const reducers =  combineReducers({
-  sessionReducer,
-+  studentReducer,
-  routing: routerReducer
-});
+  export const reducers =  combineReducers({
+    sessionReducer,
++   studentReducer,
+    routing: routerReducer
+  });
 ```
 - Let's define the props and a very simple render for the _studentList_ component. And
 let's load the students list data whenever the component gets mounted (to do this
@@ -227,11 +226,11 @@ export class StudentListComponent extends React.Component<Props, {}> {
     );
   }
 }
-``` 
+```
 
 - Now it's time to wire up stored + actions with the components, let's fulfill
   the students container component. _./src/pages/student-list/studentListContainer.tsx_:
-  
+
 ```diff
 import { connect } from "react-redux";
 + import { studentListRequestStartedAction } from "./actions/studentListRequestStarted";
@@ -397,9 +396,9 @@ export class StudentListComponent extends React.Component<Props, {}> {
 
 - Let's give a try
 
-  ```
-  npm start
-  ```
+```
+npm start
+```
 
 
-  
+
