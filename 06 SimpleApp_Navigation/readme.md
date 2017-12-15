@@ -48,9 +48,8 @@ with react-route (alfa and dev tool noy fully integrating, under development), w
 3.0 of react-router. More info: https://github.com/ReactTraining/react-router/tree/master/packages/react-router-redux
 
 ```cmd
-npm install react-router@3.0.0 react-router-redux@4.0.8 --save
+npm install react-router@^3 react-router-redux@^4 --save
 ```
-
 
 ```
 npm install  @types/react-router@^3  @types/react-router-redux@^4 --save-dev
@@ -62,7 +61,7 @@ npm install  @types/react-router@^3  @types/react-router-redux@^4 --save-dev
 npm install babel-polyfill --save
 ```
 
-- Let's add packages to _webpack.config.js_:
+- Let's add `babel-polyfill` before our main file in entry section of _webpack.config.js_:
 
 ```diff
  entry: [
@@ -84,21 +83,24 @@ npm install @types/redux-thunk --save-dev
 
 - Let's configure redux-thunk in _main.tsx_
 
-```javascript
-
-- + import { createStore } from 'redux';
-+ import { createStore, applyMiddleware } from 'redux';
+```diff
+- import { createStore } from 'redux';
++ import { createStore, applyMiddleware, compose } from 'redux';
+  import { Provider } from 'react-redux';
 + import reduxThunk from 'redux-thunk';
-
+  import { reducers } from './reducers'
+  import { App } from './app';
 
 - let store = createStore(reducers);
-+let store = createStore(
-+  reducers,
-+  compose(
-+    applyMiddleware(reduxThunk),
-+    window['devToolsExtension'] ? window['devToolsExtension']() : f => f
-+  )
-+);
++ let store = createStore(
++   reducers,
++   compose(
++     applyMiddleware(reduxThunk),
++     window['devToolsExtension'] ? window['devToolsExtension']() : f => f
++   )
++ );
+
+  ReactDOM.render(
 ```
 
 - Let's start working with the pages structure, create the following folder _./src/pages_
@@ -107,7 +109,7 @@ npm install @types/redux-thunk --save-dev
 
 - Let's create under _./src/pages/login/login.tsx_
 
-```javascript
+```jsx
 import * as React from 'react';
 
 export const LoginComponent = () => {
@@ -149,12 +151,12 @@ export {
 }
 ```
 
-- Let's follow the same steps to create under _./src/pages/student-list
+- Let's follow the same steps to create under _./src/pages/student-list_
 the folowing files:
 
 _studentList.tsx_
 
-```javascript
+```jsx
 import * as React from 'react';
 
 export const StudentListComponent = () => {
@@ -202,7 +204,7 @@ the folowing files:
 
 _studentDetail.tsx_
 
-```javascript
+```jsx
 import * as React from 'react';
 
 export const StudentDetailComponent = () => {
@@ -304,30 +306,42 @@ ReactDOM.render(
 );
 ```
 
-
-
 - Time to update _app.tsx_ to place the page container.
 
-```javascript
-import * as React from 'react'
-import { Link } from 'react-router'
+```diff
+import * as React from 'react';
 
-export const App = (props: { children? }) => {
+export const App = () => {
   return (
     <div>
-      <header>
-        Links:
-        {' '}
-        <Link to="/">Login</Link>
-        {' '}
-        <Link to="/student-list">Student List</Link>
-        {' '}
-        <Link to="/student-detail">Student Detail</Link>
-      </header>
-      <div style={{ marginTop: '1.5em' }}>{props.children}</div>
     </div>
-  )
+  );
 }
+
+  import * as React from 'react'
+- import {HelloWorldContainer} from './helloWorldContainer';
+- import {NameEditContainer} from './nameEditContainer';
++ import { Link } from 'react-router'
+
+  export const App = (props: { children? }) => {
+    return (
+      <div>
+-       <HelloWorldContainer/>
+-       <br/>
+-       <NameEditContainer/>
++       <header>
++         Links:
++         {' '}
++         <Link to="/">Login</Link>
++         {' '}
++         <Link to="/student-list">Student List</Link>
++         {' '}
++         <Link to="/student-detail">Student Detail</Link>
++       </header>
++       <div style={{ marginTop: '1.5em' }}>{props.children}</div>
+      </div>
+    )
+  }
 ```
 
 - Let's create a loginEntity, under _./src/model_
@@ -388,12 +402,14 @@ class LoginApi {
         loginResponse.userProfile = {fullname: "John Doe", role: 'admin' };
       } else {
         loginResponse.succeeded = false;
-        loginResponse = null;
+        loginResponse.userProfile = null;
       }
 
       return Promise.resolve(loginResponse);
   }
 }
+
+export const loginApi = new LoginApi();
 ```
 
 - Let's get started implementing our login functionallity, first we will define
@@ -455,22 +471,6 @@ export const loginRequestStartedAction = (login : LoginEntity) => {
     return promise;
   }
 }
-
-export const loginApi = new LoginApi();
-```
-
-- Now the completed _./src/pages/login/actions/loginRequestCompleted.ts_
-
-```javascript
-import {actionsEnums} from '../../../common/actionsEnums';
-import {LoginResponse} from '../../../model/loginResponse';
-
-export const loginRequestCompleted = (loginResponse : LoginResponse) => {
-  return {
-    type: actionsEnums.USERPROFILE_PERFORM_LOGIN,
-    payload: loginResponse
-  }
-}
 ```
 
 - On the reducers side, let's remove the _./src/reducers/userProfile.ts_ reducer
@@ -482,12 +482,10 @@ _./src/reducers/session.ts_
 import {actionsEnums} from '../common/actionsEnums';
 import {UserProfile} from '../model/userProfile';
 import {LoginResponse} from '../model/loginResponse';
-import {LoginEntity} from '../model/login';
 
 class SessionState  {
   isUserLoggedIn : boolean;
   userProfile : UserProfile;
-  editingLogin : LoginEntity;
 
   public constructor()
   {
@@ -532,6 +530,8 @@ export const reducers =  combineReducers({
   routing: routerReducer
 });
 ```
+
+We can now safely delete _./src/reducers/userProfile.ts_ because we won't use it any more.
 
 - It's time to jump into the ui part, we will use the login layout created in
 a previous sample, from repo [React By Sample: login form](https://github.com/Lemoncode/react-by-sample/tree/master/15%20LoginForm)
@@ -580,7 +580,7 @@ export const Form = (props: Props) => {
               onChange={(e : any) => props.updateLoginInfo({login: props.loginInfo.login, password: e.target.value })}
             />
           </div>
-          <input className="btn btn-lg btn-success btn-block" value="Login"
+          <input type="button" className="btn btn-lg btn-success btn-block" value="Login"
             onClick={(e) => {props.performLogin()}}
           />
         </fieldset>
@@ -620,84 +620,84 @@ export const updateEditingLogin = (loginInfo : LoginEntity) => {
 _./src/reducers/session.ts_
 
 ```diff
-import {actionsEnums} from '../common/actionsEnums';
-import {UserProfile} from '../model/userProfile';
-import {LoginResponse} from '../model/loginResponse';
-import {LoginEntity} from '../model/login';
+  import {actionsEnums} from '../common/actionsEnums';
+  import {UserProfile} from '../model/userProfile';
+  import {LoginResponse} from '../model/loginResponse';
+  import {LoginEntity} from '../model/login';
 
-class SessionState  {
-  isUserLoggedIn : boolean;
-  userProfile : UserProfile;
-+  editingLogin : LoginEntity;
+  class SessionState  {
+    isUserLoggedIn : boolean;
+    userProfile : UserProfile;
++   editingLogin : LoginEntity;
 
-  public constructor()
-  {
-    this.isUserLoggedIn = false;
-    this.userProfile = new UserProfile();
-+    this.editingLogin = new LoginEntity();
+    public constructor() {
+      this.isUserLoggedIn = false;
+      this.userProfile = new UserProfile();
++     this.editingLogin = new LoginEntity();
+    }
   }
-}
 
-export const sessionReducer =  (state : SessionState = new SessionState(), action) => {
-      switch (action.type) {
-        case actionsEnums.USERPROFILE_PERFORM_LOGIN:
-           return handlePerformLogin(state, action.payload);
+  export const sessionReducer =  (state : SessionState = new SessionState(), action) => {
+    switch (action.type) {
+      case actionsEnums.USERPROFILE_PERFORM_LOGIN:
+        return handlePerformLogin(state, action.payload);
++     case actionsEnums.USERPROFILE_UPDATE_EDITING_LOGIN:
++       return handleUpdateEditingLogin(state, action.payload);
+    }
 
-+        case actionsEnums.USERPROFILE_UPDATE_EDITING_LOGIN:
-+           return handleUpdateEditingLogin(state, action.payload);
-      }
+    return state;
+  };
 
-      return state;
-};
-
-
-const handlePerformLogin = (state : SessionState, payload : LoginResponse) => {
-  return {...state,
-          isUserLoggedIn: payload.succeeded,
-          userProfile: payload.userProfile
-         };
-}
+  const handlePerformLogin = (state : SessionState, payload : LoginResponse) => {
+    return {
+      ...state,
+      isUserLoggedIn: payload.succeeded,
+      userProfile: payload.userProfile
+    };
+  }
 
 
-+const handleUpdateEditingLogin = (state: SessionState, payload : LoginEntity) => {
-+  return {
-+    ...state,
-+    editingLogin: payload
-+  };
-}
++ const handleUpdateEditingLogin = (state: SessionState, payload : LoginEntity) => {
++   return {
++     ...state,
++     editingLogin: payload
++   };
++ }
 ```
 
 - It's time to build the layout of the login Page _./src/pages/login/login.tsx_
 
-```javascript
-import * as React from 'react';
-import {Header} from './components/header';
-import {Form} from './components/form';
-import {LoginEntity} from '../../model/login';
+```diff
+  import * as React from 'react';
++ import {Header} from './components/header';
++ import {Form} from './components/form';
++ import {LoginEntity} from '../../model/login';
++
++ interface Props {
++    loginInfo : LoginEntity;
++    updateLoginInfo : (loginInfo : LoginEntity) => void;
++    performLogin : (loginInfo : LoginEntity) => void;
++ }
 
-interface Props {
-   loginInfo : LoginEntity;
-   updateLoginInfo : (loginInfo : LoginEntity) => void;
-   performLogin : (loginInfo : LoginEntity) => void;
-}
-
-export const LoginComponent = (props : Props) => {
-  return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-4 col-md-offset-4">
-          <div className="panel panel-default">
-            <Header/>
-            <Form loginInfo={props.loginInfo}
-                  updateLoginInfo={props.updateLoginInfo.bind(this)}
-                  performLogin={() => props.performLogin(props.loginInfo)}
-                  />
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
+-  export const LoginComponent = () => {
++  export const LoginComponent = (props : Props) => {
+    return (
+-      <h2>Im the login page</h2>
++      <div className="container">
++        <div className="row">
++          <div className="col-md-4 col-md-offset-4">
++            <div className="panel panel-default">
++              <Header/>
++              <Form loginInfo={props.loginInfo}
++                    updateLoginInfo={props.updateLoginInfo.bind(this)}
++                    performLogin={() => props.performLogin(props.loginInfo)}
++                    />
++            </div>
++          </div>
++        </div>
++      </div>
+    )
+  }
 ```
 
 - No we can wire up the loginContainer component with all the reducers info and actions
@@ -705,31 +705,30 @@ export const LoginComponent = (props : Props) => {
 _./src/pages/login/loginContainer.tsx_
 
 ```diff
-import { connect } from 'react-redux';
-import { LoginComponent } from './login';
+  import { connect } from 'react-redux';
+  import { LoginComponent } from './login';
 + import { LoginEntity } from '../../model/login';
 + import { updateEditingLogin } from './actions/updateEditingLogin';
 + import { loginRequestStartedAction} from './actions/loginRequestStarted';
 
 
-const mapStateToProps = (state) => {
+  const mapStateToProps = (state) => {
     return {
 +      loginInfo: state.sessionReducer.editingLogin
     }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-+    updateLoginInfo: (loginInfo : LoginEntity) => dispatch(updateEditingLogin(loginInfo)),
-+    performLogin: (loginInfo : LoginEntity) => dispatch(loginRequestStartedAction(loginInfo))
   }
-}
 
-export const LoginContainer = connect(
+  const mapDispatchToProps = (dispatch) => {
+    return {
++     updateLoginInfo: (loginInfo : LoginEntity) => dispatch(updateEditingLogin(loginInfo)),
++     performLogin: (loginInfo : LoginEntity) => dispatch(loginRequestStartedAction(loginInfo))
+    }
+  }
+
+  export const LoginContainer = connect(
                                    mapStateToProps
                                   ,mapDispatchToProps
                                 )(LoginComponent);
-
 ```
 
 
