@@ -12,6 +12,7 @@ module.exports = {
   },
 
   entry: [
+    'babel-polyfill',
     './main.tsx',
     '../node_modules/bootstrap/dist/css/bootstrap.css'
   ],
