@@ -70,7 +70,7 @@ export const navigateToEditStudentAction = (studentId: number) => {
           <Route path="student-list" component={StudentListContainer}/>
 +          <Route path="student-detail/:id" component={StudentDetailContainer}/>
         </Route>
-      </Router> 
+      </Router>
   ```
 
 - To trigger this validation we need to request it from the container component,
@@ -128,7 +128,7 @@ export class StudentListComponent extends React.Component<Props, {}> {
       <div>
         <h2>I"m the Student page</h2>
         <br/>
-        <StudentTableComponent 
+        <StudentTableComponent
           studentList={this.props.studentList}
 +          editStudent={this.props.editStudent}
           />
@@ -151,8 +151,8 @@ export const StudentTableComponent = (props: Props) => {
       <tbody>
         {
           props.studentList.map((student: StudentEntity) =>
-            <StudentRowComponent 
-              key={student.id} 
+            <StudentRowComponent
+              key={student.id}
               student = {student}
 +              editStudent={props.editStudent}
             />
@@ -168,7 +168,7 @@ _./src/pages/student-list/components/studentRow.tsx_
 ```diff
 interface Props {
   student: StudentEntity;
-+ editStudent: (id: number) => void; 
++ editStudent: (id: number) => void;
 }
 
 export const StudentRowComponent = (props: Props) => {
@@ -192,7 +192,7 @@ export const StudentRowComponent = (props: Props) => {
       <td>
 +        <span className="btn btn-link btn-xs" onClick={(e) => props.editStudent(props.student.id)}>
            <span className="glyphicon glyphicon-pencil" aria-hidden="true" />
-+        </span> 
++        </span>
         <span className="glyphicon glyphicon-trash" aria-hidden="true" />
       </td>
     </tr>
@@ -253,7 +253,7 @@ class StudentApi {
 +  getStudentById(id: number): Promise<StudentEntity> {
 +    const student = this.studentsData.find(st => st.id === id);
 +    return Promise.resolve(student);
-+  }  
++  }
 }
 ```
 
@@ -330,7 +330,7 @@ export const studentReducer =  (state: StudentState = new StudentState(), action
     case actionsEnums.STUDENTS_GET_LIST_REQUEST_COMPLETED:
       return handleGetStudentList(state, action.payload);
 +   case actionsEnums.STUDENT_GET_STUDENT_REQUEST_COMPLETED:
-+     return handleGetStudent(state, action.payload);      
++     return handleGetStudent(state, action.payload);
   }
 
   return state;
@@ -347,7 +347,7 @@ const handleGetStudentList = (state: StudentState, payload: StudentEntity[]) => 
 +  return {
 +     ...state,
 +     editingStudent: payload
-+  }  
++  }
 + };
 ```
 
@@ -541,16 +541,16 @@ import { StudentEntity } from "../../model/student";
 
 interface Props  {
   params?: any;
-  student: StudentEntity; 
-  getstudent: (id: number) => void; 
+  student: StudentEntity;
+  getstudent: (id: number) => void;
 +  fireFieldValueChanged: (viewModel: any, fieldName: string, value: any) => void;
-+  saveStudent: (student: StudentEntity) => void;  
++  saveStudent: (student: StudentEntity) => void;
 }
 
 export class StudentDetailComponent extends React.Component<Props, {}> {
   componentDidMount() {
     const studentId: number = Number(this.props.params.id);
-    this.props.getstudent(studentId);    
+    this.props.getstudent(studentId);
   }
 
   render() {
@@ -595,7 +595,7 @@ export const actionsEnums = {
   STUDENT_GET_STUDENT_REQUEST_COMPLETED: "STUDENT_GET_STUDENT_REQUEST_COMPLETED",
 +  STUDENT_FIELD_VALUE_CHANGED: "STUDENT_FIELD_VALUE_CHANGED",
 +  STUDENT_FIELD_VALUE_CHANGED_COMPLETED: "STUDENT_FIELD_VALUE_CHANGED_COMPLETED",
-+  STUDENT_SAVE_COMPLETED: "STUDENT_SAVE_COMPLETED",  
++  STUDENT_SAVE_COMPLETED: "STUDENT_SAVE_COMPLETED",
 }
 ```
 
@@ -643,7 +643,7 @@ export const studentReducer =  (state: StudentState = new StudentState(), action
    case actionsEnums.STUDENT_GET_STUDENT_REQUEST_COMPLETED:
      return handleGetStudent(state, action.payload);
 +    case actionsEnums.STUDENT_FIELD_VALUE_CHANGED_COMPLETED:
-+      return handleFieldValueChanged(state, action.payload);                
++      return handleFieldValueChanged(state, action.payload);
   }
 
   return state;
@@ -654,7 +654,7 @@ export const studentReducer =  (state: StudentState = new StudentState(), action
 +       ...state.editingStudent,
 +       [payload.fieldName]: payload.value
 +    };
-+ 
++
 +    return {
 +       ...state,
 +       editingStudent: newStudent
@@ -679,7 +679,7 @@ const mapStateToProps = (state) => {
 +        viewModel: any,
 +        fieldName: string,
 +        value: any) => dispatch(studentFieldValueChangedStart(viewModel, fieldName, value)
-+      ),      
++      ),
     }
 }
 
@@ -705,7 +705,6 @@ _./src/rest-api/student-api.ts_
 ```diff
 import { StudentEntity } from "../model/student";
 import { studentsMockData } from "./mock-data";
-import { } from "core-js";
 
 class StudentApi {
   studentsData: StudentEntity[];
@@ -799,12 +798,12 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getstudent: (id: number) => dispatch(getStudentRequestStartAction(id)),
-+   saveStudent: (student: StudentEntity) => dispatch(studentSaveRequestStart(student)),    
++   saveStudent: (student: StudentEntity) => dispatch(studentSaveRequestStart(student)),
     fireFieldValueChanged: (
       viewModel: any,
       fieldName: string,
       value: any) => dispatch(studentFieldValueChangedStart(viewModel, fieldName, value)
-    ),          
+    ),
   }
 }
 
