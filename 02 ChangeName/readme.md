@@ -17,7 +17,7 @@ Summary steps:
 
 # Prerequisites
 
-Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not already installed on your computer.
+Install [Node.js and npm](https://nodejs.org/en/) (>=v6.6.0) if they are not already installed on your computer.
 
 > Verify that you are running at least node v6.x.x and npm 3.x.x by running `node -v` and `npm -v` in a terminal/console window. Older versions may produce errors.
 
@@ -34,10 +34,10 @@ npm install babel-core babel-preset-env --save-dev
 - Add `babel` configuration file:
 
 ### ./.babelrc
-```javascript
+```json
 {
   "presets": [
-    "env",
+    "env"
   ]
 }
 ```
