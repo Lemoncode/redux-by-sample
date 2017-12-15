@@ -91,11 +91,12 @@ export class StudentEntity {
   _./src/common/actionsEnums.ts_
 
 ```diff
-export const actionsEnums = {
-  USERPROFILE_UPDATE_EDITING_LOGIN:  'USERPROFILE_UPDATE_EDITING_LOGIN',
-  USERPROFILE_PERFORM_LOGIN : 'USERPROFILE_PERFORM_LOGIN',
-+ STUDENTS_GET_LIST_REQUEST_COMPLETED: "STUDENTS_GET_LIST_REQUEST_COMPLETED"
-}
+  export const actionsEnums = {
+    USERPROFILE_UPDATE_EDITING_LOGIN:  'USERPROFILE_UPDATE_EDITING_LOGIN',
+-   USERPROFILE_PERFORM_LOGIN : 'USERPROFILE_PERFORM_LOGIN'
+    USERPROFILE_PERFORM_LOGIN : 'USERPROFILE_PERFORM_LOGIN',
++   STUDENTS_GET_LIST_REQUEST_COMPLETED: "STUDENTS_GET_LIST_REQUEST_COMPLETED"
+  }
 ```
 
 - Let's create an async action that will make the request to the _student-api_
@@ -175,16 +176,16 @@ const handleGetStudentList = (state: StudentState, payload: StudentEntity[]) => 
 _./src/reducers/index.ts_:
 
 ```diff
-  import { combineReducers } from "redux";
-  import { sessionReducer } from "./session";
+import { combineReducers } from "redux";
+import { sessionReducer } from "./session";
 + import { studentReducer} from "./student";
-  import { routerReducer } from "react-router-redux";
+import { routerReducer } from "react-router-redux";
 
-  export const reducers =  combineReducers({
-    sessionReducer,
-+   studentReducer,
-    routing: routerReducer
-  });
+export const reducers =  combineReducers({
+  sessionReducer,
++  studentReducer,
+  routing: routerReducer
+});
 ```
 - Let's define the props and a very simple render for the _studentList_ component. And
 let's load the students list data whenever the component gets mounted (to do this
@@ -192,40 +193,51 @@ we need to move the component to state one).
 
 _./src/pages/student-list/studentList.tsx_:
 
-```jsx
-import * as React from "react";
-import { StudentEntity } from "../../model/student";
+```diff
+import * as React from 'react';
 
-interface Props {
-  studentList: StudentEntity[];
-  getStudentList: () => void;
+export const StudentListComponent = () => {
+  return (
+    <h2>I'm the StudentList page</h2>
+  )
 }
-
-export class StudentListComponent extends React.Component<Props, {}> {
-  // Just some quick render to test that student list is fullfilled
-  private tempRenderRow = (student: StudentEntity) => {
-    return (
-      <div key={student.id}>
-        <span>{student.fullname}</span>
-        <br/>
-      </div>
-    );
+  import * as React from "react";
++ import { StudentEntity } from "../../model/student";
++
++  interface Props {
++    studentList: StudentEntity[];
++    getStudentList: () => void;
++  }
++
+-  export const StudentListComponent = () => {
+-  return (
+-    <h2>I'm the StudentList page</h2>
+-  )
++  export class StudentListComponent extends React.Component<Props, {}> {
++    // Just some quick render to test that student list is fullfilled
++    private tempRenderRow = (student: StudentEntity) => {
++      return (
++        <div key={student.id}>
++          <span>{student.fullname}</span>
++          <br/>
++        </div>
++      );
++    }
++
++    componentDidMount() {
++      this.props.getStudentList();
++    }
++
++    render() {
++      return (
++        <div>
++          <h2>I'm the Student page</h2>
++          <br/>
++          {this.props.studentList.map(this.tempRenderRow, this)}
++        </div>
++      );
++    }
   }
-
-  componentDidMount() {
-    this.props.getStudentList();
-  }
-
-  render() {
-    return (
-      <div>
-        <h2>I'm the Student page</h2>
-        <br/>
-        {this.props.studentList.map(this.tempRenderRow, this)}
-      </div>
-    );
-  }
-}
 ```
 
 - Now it's time to wire up stored + actions with the components, let's fulfill
@@ -396,9 +408,6 @@ export class StudentListComponent extends React.Component<Props, {}> {
 
 - Let's give a try
 
-```
-npm start
-```
-
-
-
+  ```
+  npm start
+  ```
