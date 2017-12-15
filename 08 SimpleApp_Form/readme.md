@@ -13,7 +13,7 @@ Summary steps:
 
 # Prerequisites
 
-Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are not already installed on your computer.
+Install [Node.js and npm](https://nodejs.org/en/) (>=v6.6.0 or newer) if they are not already installed on your computer.
 
 > Verify that you are running at least node v6.x.x and npm 3.x.x by running `node -v` and `npm -v` in a terminal/console window. Older versions may produce errors.
 
@@ -23,24 +23,6 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
 
   ```
   npm install
-  ```
-
-- We need a `StudentEntity` model in _./src/model/student.ts_:
-
-  ```javascript
-  export class StudentEntity {
-    id: number;
-    gotActiveTraining: boolean;
-    fullname: string;
-    email: string;
-
-    public constructor() {
-      this.id = -1;
-      this.gotActiveTraining = false;
-      this.fullname = "";
-      this.email = "";
-    }
-  }
   ```
 
 - Let's add a new action that will fire navigation (we will trigger this
@@ -63,15 +45,17 @@ export const navigateToEditStudentAction = (studentId: number) => {
 - Let's update the routes, in order to support params on the edit-student url.
 
   _./src/main.tsx_
-  ```diff
-          <Route path="/" component={App}>
-          <IndexRoute component={LoginContainer}/>
-          <Route path="login" component={LoginContainer}/>
-          <Route path="student-list" component={StudentListContainer}/>
-+          <Route path="student-detail/:id" component={StudentDetailContainer}/>
-        </Route>
-      </Router>
-  ```
+
+```diff
+      <Route path="/" component={App}>
+      <IndexRoute component={LoginContainer}/>
+      <Route path="login" component={LoginContainer}/>
+      <Route path="student-list" component={StudentListContainer}/>
+-      <Route path="student-detail" component={StudentDetailContainer}/>
++      <Route path="student-detail/:id" component={StudentDetailContainer}/>
+    </Route>
+  </Router>
+```
 
 - To trigger this validation we need to request it from the container component,
 and then pass it down til the studentRow component.
@@ -79,25 +63,25 @@ and then pass it down til the studentRow component.
 _./src/pages/student-list/studentListContainer.tsx_
 
 ```diff
-import { connect } from 'react-redux';
-import { studentListRequestStartedAction } from "./actions/studentListRequestStarted";
-import { StudentListComponent } from './studentList';
+  import { connect } from 'react-redux';
+  import { studentListRequestStartedAction } from "./actions/studentListRequestStarted";
+  import { StudentListComponent } from './studentList';
 + import { navigateToEditStudentAction } from "./actions/navigateToEditStudent";
 
-const mapStateToProps = (state) => {
+  const mapStateToProps = (state) => {
     return {
       studentList: state.studentReducer.studentsList,
-+      editStudent: (id: number) => dispatch(navigateToEditStudentAction(id)),
     }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getStudentList: () => dispatch(studentListRequestStartedAction()),
   }
-}
 
-export const StudentListContainer = connect(
+  const mapDispatchToProps = (dispatch) => {
+    return {
+      getStudentList: () => dispatch(studentListRequestStartedAction()),
++     editStudent: (id: number) => dispatch(navigateToEditStudentAction(id)),
+    }
+  }
+
+  export const StudentListContainer = connect(
                                    mapStateToProps
                                   ,mapDispatchToProps
                                 )(StudentListComponent);
@@ -107,97 +91,99 @@ export const StudentListContainer = connect(
 _./src/pages/student-list/studentList.tsx_
 
 ```diff
-import * as React from "react";
-import { StudentEntity } from "../../model/student";
-import { StudentTableComponent } from "./components/studentTable";
+  import * as React from "react";
+  import { StudentEntity } from "../../model/student";
+  import { StudentTableComponent } from "./components/studentTable";
 
-interface Props {
-  studentList: StudentEntity[];
-  getStudentList: () => void;
-+  editStudent: (id: number) => void;
-}
-
-export class StudentListComponent extends React.Component<Props, {}> {
-
-  componentDidMount() {
-    this.props.getStudentList();
+  interface Props {
+    studentList: StudentEntity[];
+    getStudentList: () => void;
++   editStudent: (id: number) => void;
   }
 
-  render() {
-    return (
-      <div>
-        <h2>I"m the Student page</h2>
-        <br/>
-        <StudentTableComponent
-          studentList={this.props.studentList}
-+          editStudent={this.props.editStudent}
-          />
-      </div>
-    );
-  }
-}
-```
-_./src/pages/student-list/components/studentTable.tsx_
-```diff
-interface Props {
-  studentList: StudentEntity[];
-+ editStudent: (id: number) => void;
-}
+  export class StudentListComponent extends React.Component<Props, {}> {
 
-export const StudentTableComponent = (props: Props) => {
-  return (
-    <table className="table">
-      <StudentHeaderComponent/>
-      <tbody>
-        {
-          props.studentList.map((student: StudentEntity) =>
-            <StudentRowComponent
-              key={student.id}
-              student = {student}
-+              editStudent={props.editStudent}
+    componentDidMount() {
+      this.props.getStudentList();
+    }
+
+    render() {
+      return (
+        <div>
+          <h2>I"m the Student page</h2>
+          <br/>
+          <StudentTableComponent
+            studentList={this.props.studentList}
++           editStudent={this.props.editStudent}
             />
-          )
-        }
-      </tbody>
-    </table>
-  );
-};
+        </div>
+      );
+    }
+  }
+```
+
+_./src/pages/student-list/components/studentTable.tsx_
+
+```diff
+  interface Props {
+    studentList: StudentEntity[];
++   editStudent: (id: number) => void;
+  }
+
+  export const StudentTableComponent = (props: Props) => {
+    return (
+      <table className="table">
+        <StudentHeaderComponent/>
+        <tbody>
+          {
+            props.studentList.map((student: StudentEntity) =>
+              <StudentRowComponent
+                key={student.id}
+                student={student}
++               editStudent={props.editStudent}
+              />
+            )
+          }
+        </tbody>
+      </table>
+    );
+  };
 ```
 _./src/pages/student-list/components/studentRow.tsx_
 
 ```diff
-interface Props {
-  student: StudentEntity;
-+ editStudent: (id: number) => void;
-}
+  interface Props {
+    student: StudentEntity;
++   editStudent: (id: number) => void;
+  }
 
-export const StudentRowComponent = (props: Props) => {
-  return (
-    <tr>
-      <td>
-        {
-          (props.student.gotActiveTraining)
-          ?
-          <span className="glyphicon glyphicon-ok" aria-hidden="true" />
-          :
-          null
-        }
-      </td>
-      <td>
-        <span>{props.student.fullname}</span>
-      </td>
-      <td>
-        <span>{props.student.email}</span>
-      </td>
-      <td>
-+        <span className="btn btn-link btn-xs" onClick={(e) => props.editStudent(props.student.id)}>
-           <span className="glyphicon glyphicon-pencil" aria-hidden="true" />
-+        </span>
-        <span className="glyphicon glyphicon-trash" aria-hidden="true" />
-      </td>
-    </tr>
-  );
-};
+  export const StudentRowComponent = (props: Props) => {
+    return (
+      <tr>
+        <td>
+          {
+            (props.student.gotActiveTraining)
+            ?
+            <span className="glyphicon glyphicon-ok" aria-hidden="true" />
+            :
+            null
+          }
+        </td>
+        <td>
+          <span>{props.student.fullname}</span>
+        </td>
+        <td>
+          <span>{props.student.email}</span>
+        </td>
+        <td>
++         <span className="btn btn-link btn-xs" onClick={(e) => props.editStudent(props.student.id)}>
+            <span className="glyphicon glyphicon-pencil" aria-hidden="true" />
++         </span>
+          <span className="glyphicon glyphicon-trash" aria-hidden="true" />
+        </td>
+      </tr>
+    );
+  };
 ```
 
 - Let's give a try and check that we reach the page when clicking on the
@@ -212,24 +198,34 @@ npm start
 
 _./src/pages/student-detail/studentDetail.tsx_
 
-```javascript
-import * as React from "react";
+```diff
 
-interface Props  {
-  params?: any;
+
+  return (
+    <h2>I'm the StudentDetail page</h2>
+  )
 }
+  import * as React from "react";
 
-export class StudentDetailComponent extends React.Component<Props, {}> {
-  componentDidMount() {
-    const studentId = this.props.params.id;
-  }
-
-  render() {
-    return (
-      <h2>I"m the Student Detail page</h2>
-    );
-  };
-};
++  interface Props  {
++    params?: any;
++  }
++
+- export const StudentDetailComponent = () => {
+-   return (
+-     <h2>I'm the StudentDetail page</h2>
+-   )
++ export class StudentDetailComponent extends React.Component<Props, {}> {
++   componentDidMount() {
++     const studentId = this.props.params.id;
++   }
++
++   render() {
++     return (
++       <h2>I"m the Student Detail page</h2>
++     );
++   };
++ };
 ```
 
 - Now that we have got the right Id, we need to load the student information, we
@@ -263,12 +259,13 @@ fields with this information.
 _./src/common/actionsEnums.ts
 
 ```diff
-export const actionsEnums = {
-  USERPROFILE_UPDATE_EDITING_LOGIN:  'USERPROFILE_UPDATE_EDITING_LOGIN',
-  USERPROFILE_PERFORM_LOGIN : 'USERPROFILE_PERFORM_LOGIN',
-  STUDENTS_GET_LIST_REQUEST_COMPLETED: "STUDENTS_GET_LIST_REQUEST_COMPLETED",
-+  STUDENT_GET_STUDENT_REQUEST_COMPLETED: "STUDENT_GET_STUDENT_REQUEST_COMPLETED",
-}
+  export const actionsEnums = {
+    USERPROFILE_UPDATE_EDITING_LOGIN:  'USERPROFILE_UPDATE_EDITING_LOGIN',
+    USERPROFILE_PERFORM_LOGIN : 'USERPROFILE_PERFORM_LOGIN',
+-   STUDENTS_GET_LIST_REQUEST_COMPLETED: "STUDENTS_GET_LIST_REQUEST_COMPLETED"
++   STUDENTS_GET_LIST_REQUEST_COMPLETED: "STUDENTS_GET_LIST_REQUEST_COMPLETED",
++   STUDENT_GET_STUDENT_REQUEST_COMPLETED: "STUDENT_GET_STUDENT_REQUEST_COMPLETED",
+  }
 ```
 _./src/pages/student-detail/actions/getStudentRequestCompleted.ts_
 
@@ -312,42 +309,42 @@ export const getStudentRequestStartAction = (studentId: number) => {
 _./src/reducers/student.ts_
 
 ```diff
-import { actionsEnums } from "../common/actionsEnums";
-import { StudentEntity } from "../model/student";
+  import { actionsEnums } from "../common/actionsEnums";
+  import { StudentEntity } from "../model/student";
 
-class StudentState  {
-  studentsList: StudentEntity[];
-+  editingStudent: StudentEntity;
+  class StudentState  {
+    studentsList: StudentEntity[];
++   editingStudent: StudentEntity;
 
-  public constructor() {
-    this.studentsList = [];
-+    this.editingStudent = new StudentEntity();
-  }
-}
-
-export const studentReducer =  (state: StudentState = new StudentState(), action) => {
-  switch (action.type) {
-    case actionsEnums.STUDENTS_GET_LIST_REQUEST_COMPLETED:
-      return handleGetStudentList(state, action.payload);
-+   case actionsEnums.STUDENT_GET_STUDENT_REQUEST_COMPLETED:
-+     return handleGetStudent(state, action.payload);
+    public constructor() {
+      this.studentsList = [];
++     this.editingStudent = new StudentEntity();
+    }
   }
 
-  return state;
-};
+  export const studentReducer =  (state: StudentState = new StudentState(), action) => {
+    switch (action.type) {
+      case actionsEnums.STUDENTS_GET_LIST_REQUEST_COMPLETED:
+        return handleGetStudentList(state, action.payload);
++     case actionsEnums.STUDENT_GET_STUDENT_REQUEST_COMPLETED:
++       return handleGetStudent(state, action.payload);
+    }
 
-const handleGetStudentList = (state: StudentState, payload: StudentEntity[]) => {
-  return {
-    ...state,
-    studentsList: payload
-  }
-};
+    return state;
+  };
+
+  const handleGetStudentList = (state: StudentState, payload: StudentEntity[]) => {
+    return {
+      ...state,
+      studentsList: payload
+    }
+  };
 
 + const handleGetStudent = (state: StudentState, payload: StudentEntity[]) => {
-+  return {
++   return {
 +     ...state,
 +     editingStudent: payload
-+  }
++   }
 + };
 ```
 
@@ -357,37 +354,36 @@ that will hold the student being edited, add an function prop to load the setude
 _./src/pages/student-detail/studentDetail.tsx_
 
 ```diff
-import * as React from "react";
+  import * as React from "react";
 + import { StudentEntity } from "../../model/student";
 
-interface Props  {
-  params?: any;
-+  student: StudentEntity;
-+  getstudent: (id: number) => void;
-}
-
-export class StudentDetailComponent extends React.Component<Props, {}> {
-  componentDidMount() {
--    const studentId = this.props.params.id;
-+    const studentId: number = Number(this.props.params.id);
-+    this.props.getstudent(studentId);
+  interface Props  {
+    params?: any;
++   student: StudentEntity;
++   getstudent: (id: number) => void;
   }
 
+  export class StudentDetailComponent extends React.Component<Props, {}> {
+    componentDidMount() {
+-     const studentId = this.props.params.id;
++     const studentId: number = Number(this.props.params.id);
++     this.props.getstudent(studentId);
+   }
+
   render() {
-    return (
--      <h2>I'm the Student Detail page</h2>
-+      <div>
-+        if (!this.props.student) {
-+          <span>Student Info loading...</span>
-+        } else {
-+          <div>
-+            <h2>Im the Student Detail page</h2>
-+            <span>Test, student name {this.props.student.fullname}</span>
-+          </div>
-+        }
-+      </div>
-    );
-  };
+-   return (
+-     <h2>I'm the Student Detail page</h2>
++   if (!this.props.student)
++     return <span>Student Info loading...</span>
++
++
++   return (
++     <div>
++       <h2>Im the Student Detail page</h2 >
++       <span>Test, student name {this.props.student.fullname}</span >
++     </div >
++   );
++ }
 };
 ```
 
@@ -396,23 +392,23 @@ export class StudentDetailComponent extends React.Component<Props, {}> {
 _./src/pages/student-detail/studentDetailContainer.tsx_
 
 ```diff
-import { connect } from 'react-redux';
-import { StudentDetailComponent } from './studentDetail';
+  import { connect } from 'react-redux';
+  import { StudentDetailComponent } from './studentDetail';
 + import { getStudentRequestStartAction } from "./actions/getStudentRequestStart";
 
-const mapStateToProps = (state) => {
+  const mapStateToProps = (state) => {
     return {
 +      student: state.studentReducer.editingStudent,
     }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-+    getstudent: (id: number) => dispatch(getStudentRequestStartAction(id)),
   }
-}
 
-export const StudentDetailContainer = connect(
+  const mapDispatchToProps = (dispatch) => {
+    return {
++     getstudent: (id: number) => dispatch(getStudentRequestStartAction(id)),
+    }
+  }
+
+  export const StudentDetailContainer = connect(
                                    mapStateToProps
                                   ,mapDispatchToProps
                                 )(StudentDetailComponent);
@@ -431,7 +427,7 @@ Let's start by creating a common input component.
 
 _./src/common/components/input.tsx_
 
-```javascript
+```jsx
 import * as React from "react";
 
 interface Props {
@@ -535,51 +531,42 @@ export const StudentForm = (props: Props) => {
 _./src/pages/student-detail/studentDetail.tsx_
 
 ```diff
-import * as React from "react";
-import { StudentEntity } from "../../model/student";
+  import * as React from "react";
+  import { StudentEntity } from "../../model/student";
 + import { StudentForm } from "./components/studentForm";
 
-interface Props  {
-  params?: any;
-  student: StudentEntity;
-  getstudent: (id: number) => void;
-+  fireFieldValueChanged: (viewModel: any, fieldName: string, value: any) => void;
-+  saveStudent: (student: StudentEntity) => void;
-}
-
-export class StudentDetailComponent extends React.Component<Props, {}> {
-  componentDidMount() {
-    const studentId: number = Number(this.props.params.id);
-    this.props.getstudent(studentId);
+  interface Props  {
+    params?: any;
+    student: StudentEntity;
+    getstudent: (id: number) => void;
++   fireFieldValueChanged: (viewModel: any, fieldName: string, value: any) => void;
++   saveStudent: (student: StudentEntity) => void;
   }
 
-  render() {
--    return (
--      <div>
--        if (!this.props.student) {
--          <span>Student Info loading...</span>
--        } else {
--          <div>
--            <h2>Im the Student Detail page</h2>
--            <span>Test, student name {this.props.student.fullname}</span>
--          </div>
--        }
--      </div>
+  export class StudentDetailComponent extends React.Component<Props, {}> {
+    componentDidMount() {
+      const studentId: number = Number(this.props.params.id);
+      this.props.getstudent(studentId);
+    }
 
+    render() {
 +      if (!this.props.student)
 +        return <span>Student Info loading...</span>;
 
-+      return (
+       return (
+-        <div>
+-          <h2>Im the Student Detail page</h2 >
+-          <span>Test, student name {this.props.student.fullname}</span >
+-        </div >
+-      );
 +        <StudentForm
 +          student={this.props.student}
 +          fireFieldValueChanged={this.props.fireFieldValueChanged}
 +          saveStudent={this.props.saveStudent}
 +        />
 +      );
-
--    );
+    };
   };
-};
 ```
 
 - Before defining this bindings in the _studentDetailContainer_ we need to
@@ -636,29 +623,30 @@ export const studentFieldValueChangedCompleted = (fieldName: string, value: stri
 _./src/reducers/student.ts_
 
 ```diff
-export const studentReducer =  (state: StudentState = new StudentState(), action) => {
-  switch (action.type) {
-    case actionsEnums.STUDENTS_GET_LIST_REQUEST_COMPLETED:
-      return handleGetStudentList(state, action.payload);
-   case actionsEnums.STUDENT_GET_STUDENT_REQUEST_COMPLETED:
-     return handleGetStudent(state, action.payload);
+  export const studentReducer =  (state: StudentState = new StudentState(), action) => {
+    switch (action.type) {
+      case actionsEnums.STUDENTS_GET_LIST_REQUEST_COMPLETED:
+        return handleGetStudentList(state, action.payload);
+     case actionsEnums.STUDENT_GET_STUDENT_REQUEST_COMPLETED:
+       return handleGetStudent(state, action.payload);
 +    case actionsEnums.STUDENT_FIELD_VALUE_CHANGED_COMPLETED:
 +      return handleFieldValueChanged(state, action.payload);
-  }
+    }
 
-  return state;
-};
+    return state;
+  };
 
-+  const handleFieldValueChanged = (state: StudentState, payload) => {
-+    const newStudent = {
-+       ...state.editingStudent,
-+       [payload.fieldName]: payload.value
-+    };
++ const handleFieldValueChanged = (state: StudentState, payload) => {
++   const newStudent = {
++      ...state.editingStudent,
++      [payload.fieldName]: payload.value
++   };
 +
-+    return {
-+       ...state,
-+       editingStudent: newStudent
-+    }
++   return {
++      ...state,
++      editingStudent: newStudent
++   }
++ }
 
 // (...)
 ```
@@ -667,12 +655,12 @@ export const studentReducer =  (state: StudentState = new StudentState(), action
 _./src/pages/student-detail/studentDetailContainer.tsx_
 
 ```diff
-import { connect } from 'react-redux';
-import { StudentDetailComponent } from './studentDetail';
-import { getStudentRequestStartAction } from "./actions/getStudentRequestStart";
+  import { connect } from 'react-redux';
+  import { StudentDetailComponent } from './studentDetail';
+  import { getStudentRequestStartAction } from "./actions/getStudentRequestStart";
 + import { studentFieldValueChangedStart } from "./actions/studentFieldValueChangedStart";
 
-const mapStateToProps = (state) => {
+  const mapStateToProps = (state) => {
     return {
       student: state.studentReducer.editingStudent,
 +      fireFieldValueChanged: (
@@ -681,15 +669,15 @@ const mapStateToProps = (state) => {
 +        value: any) => dispatch(studentFieldValueChangedStart(viewModel, fieldName, value)
 +      ),
     }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getstudent: (id: number) => dispatch(getStudentRequestStartAction(id)),
   }
-}
 
-export const StudentDetailContainer = connect(
+  const mapDispatchToProps = (dispatch) => {
+    return {
+      getstudent: (id: number) => dispatch(getStudentRequestStartAction(id)),
+    }
+  }
+
+  export const StudentDetailContainer = connect(
                                    mapStateToProps
                                   ,mapDispatchToProps
                                 )(StudentDetailComponent);
@@ -703,35 +691,35 @@ automatically in the ui.
 _./src/rest-api/student-api.ts_
 
 ```diff
-import { StudentEntity } from "../model/student";
-import { studentsMockData } from "./mock-data";
+  import { StudentEntity } from "../model/student";
+  import { studentsMockData } from "./mock-data";
 
-class StudentApi {
-  studentsData: StudentEntity[];
+  class StudentApi {
+    studentsData: StudentEntity[];
 
-  constructor() {
-    // Let"s the mockdata whenever the singleton is instatiated
-    // and the play with the inmemory array
-    this.studentsData = studentsMockData;
+    constructor() {
+      // Let"s the mockdata whenever the singleton is instatiated
+      // and the play with the inmemory array
+      this.studentsData = studentsMockData;
 
+    }
+
++   saveStudent(student: StudentEntity): Promise<boolean> {
++     const index = this.studentsData.findIndex(st => st.id === student.id);
++
++     // Just to ensure we get a new object (no mutability)
++     this.studentsData = this.studentsData
++     .slice(0, index)
++     .concat([student])
++     .concat(this.studentsData.slice(index + 1));
++
++     return Promise.resolve(true);
++   }
+
+  // (...)
   }
 
-+  saveStudent(student: StudentEntity): Promise<boolean> {
-+    const index = this.studentsData.findIndex(st => st.id === student.id);
-+
-+    // Just to ensure we get a new object (no mutability)
-+    this.studentsData = this.studentsData
-+    .slice(0, index)
-+    .concat([student])
-+    .concat(this.studentsData.slice(index + 1));
-+
-+    return Promise.resolve(true);
-+  }
-
-// (...)
-}
-
-export const studentApi = new StudentApi();
+  export const studentApi = new StudentApi();
 ```
 
 - Let's define as well an async action for the _saveStudent_ action.
@@ -782,32 +770,32 @@ do something about that, we will leave up to you to implement it as an excercise
 _./src/pages/student-detail/studentDetailContainer.tsx_
 
 ```diff
-import { connect } from 'react-redux';
-import { StudentDetailComponent } from './studentDetail';
-import { getStudentRequestStartAction } from "./actions/getStudentRequestStart";
-import { studentFieldValueChangedStart } from "./actions/studentFieldValueChangedStart";
+  import { connect } from 'react-redux';
+  import { StudentDetailComponent } from './studentDetail';
+  import { getStudentRequestStartAction } from "./actions/getStudentRequestStart";
+  import { studentFieldValueChangedStart } from "./actions/studentFieldValueChangedStart";
 + import { StudentEntity } from "../../model/student";
 + import { studentSaveRequestStart } from "./actions/studentSaveRequestStart";
 
-const mapStateToProps = (state) => {
+  const mapStateToProps = (state) => {
     return {
       student: state.studentReducer.editingStudent,
     }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getstudent: (id: number) => dispatch(getStudentRequestStartAction(id)),
-+   saveStudent: (student: StudentEntity) => dispatch(studentSaveRequestStart(student)),
-    fireFieldValueChanged: (
-      viewModel: any,
-      fieldName: string,
-      value: any) => dispatch(studentFieldValueChangedStart(viewModel, fieldName, value)
-    ),
   }
-}
 
-export const StudentDetailContainer = connect(
+  const mapDispatchToProps = (dispatch) => {
+    return {
+      getstudent: (id: number) => dispatch(getStudentRequestStartAction(id)),
++     saveStudent: (student: StudentEntity) => dispatch(studentSaveRequestStart(student)),
+      fireFieldValueChanged: (
+        viewModel: any,
+        fieldName: string,
+        value: any) => dispatch(studentFieldValueChangedStart(viewModel, fieldName, value)
+      ),
+    }
+  }
+
+  export const StudentDetailContainer = connect(
                                    mapStateToProps
                                   ,mapDispatchToProps
                                 )(StudentDetailComponent);
