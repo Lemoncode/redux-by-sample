@@ -1,6 +1,6 @@
-import { expect } from 'chai';
 import ReduxThunk from 'redux-thunk';
 import configureStore from 'redux-mock-store'
+import { hashHistory } from 'react-router'
 import { loginApi } from '../../../rest-api/loginApi';
 import { UserProfile } from '../../../model/userProfile'
 import { LoginEntity } from '../../../model/login'
@@ -8,17 +8,15 @@ import { LoginResponse } from '../../../model/loginResponse'
 import { loginRequestStartedAction } from './loginRequestStarted'
 import { loginRequestCompletedAction } from './loginRequestCompleted'
 import { actionsEnums } from '../../../common/actionsEnums'
-import { hashHistory } from 'react-router'
-import * as sinon from 'sinon';
 
-const middlewares = [ ReduxThunk ];
+const middlewares = [ReduxThunk];
 const mockStore = configureStore(middlewares);
 
 
 describe('pages/login/loginRequestStarted Action', () => {
   it('loginRequest login succeeded', (done) => {
-    // Arrange            
-    const loginInfo : LoginEntity = new LoginEntity();
+    // Arrange
+    const loginInfo: LoginEntity = new LoginEntity();
     loginInfo.login = "john";
     loginInfo.password = "pass";
 
@@ -28,13 +26,13 @@ describe('pages/login/loginRequestStarted Action', () => {
     expectedLoginResponse.userProfile.fullname = "john";
     expectedLoginResponse.userProfile.role = "admin";
 
-    
+
     const loginMethodStub = sinon.stub(loginApi, 'login');
 
     loginMethodStub.returns({
       then: callback => {
         callback(expectedLoginResponse)
-      }    
+      }
     });
 
     const hashHistoryStub = sinon.stub(hashHistory, 'push');
@@ -45,24 +43,23 @@ describe('pages/login/loginRequestStarted Action', () => {
 
     store.dispatch(loginRequestStartedAction(loginInfo))
       .then(() => {
-          // Assert
-          expect(store.getActions()[0].type).to.be.equal(actionsEnums.USERPROFILE_PERFORM_LOGIN);
-          expect(store.getActions()[0].payload.succeeded).to.be.true;
-          expect(hashHistoryStub.called).to.be.true;
+        // Assert
+        expect(store.getActions()[0].type).to.be.equal(actionsEnums.USERPROFILE_PERFORM_LOGIN);
+        expect(store.getActions()[0].payload.succeeded).to.be.true;
+        expect(hashHistoryStub.called).to.be.true;
 
         // Cleanup
-        // To avoid this use sinon-test, but not working
-        // well on browser, see: https://github.com/sinonjs/sinon-test/issues/58
+        // To avoid this use sinon-test package
         loginMethodStub.restore();
         hashHistoryStub.restore();
 
-          done();
-      });    
+        done();
+      });
   });
 
   it('loginRequest login failed', (done) => {
-    // Arrange            
-    const loginInfo : LoginEntity = new LoginEntity();
+    // Arrange
+    const loginInfo: LoginEntity = new LoginEntity();
     loginInfo.login = "john";
     loginInfo.password = "pass";
 
@@ -71,13 +68,13 @@ describe('pages/login/loginRequestStarted Action', () => {
     expectedLoginResponse.userProfile = new UserProfile();
     expectedLoginResponse.userProfile.fullname = "";
     expectedLoginResponse.userProfile.role = "";
-    
+
     const loginMethodStub = sinon.stub(loginApi, 'login');
 
     loginMethodStub.returns({
       then: callback => {
         callback(expectedLoginResponse)
-      }    
+      }
     });
 
     const hashHistoryStub = sinon.stub(hashHistory, 'push');
@@ -88,19 +85,18 @@ describe('pages/login/loginRequestStarted Action', () => {
 
     store.dispatch(loginRequestStartedAction(loginInfo))
       .then(() => {
-          // Assert
-          expect(store.getActions()[0].type).to.be.equal(actionsEnums.USERPROFILE_PERFORM_LOGIN);
-          expect(store.getActions()[0].payload.succeeded).to.be.false;
-          expect(hashHistoryStub.called).to.be.false;
+        // Assert
+        expect(store.getActions()[0].type).to.be.equal(actionsEnums.USERPROFILE_PERFORM_LOGIN);
+        expect(store.getActions()[0].payload.succeeded).to.be.false;
+        expect(hashHistoryStub.called).to.be.false;
 
         // Cleanup
-        // To avoid this use sinon-test, but not working
-        // well on browser, see: https://github.com/sinonjs/sinon-test/issues/58
+        // To avoid this use sinon-test package
         loginMethodStub.restore();
         hashHistoryStub.restore();
 
         done();
-      });    
+      });
   });
-  
+
 });
