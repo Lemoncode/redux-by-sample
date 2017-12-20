@@ -18,7 +18,7 @@ Summary steps:
 
 # Prerequisites
 
-Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not already installed on your computer.
+Install [Node.js and npm](https://nodejs.org/en/) (>=v6.6.0) if they are not already installed on your computer.
 
 > Verify that you are running at least node v6.x.x and npm 3.x.x by running `node -v` and `npm -v` in a terminal/console window. Older versions may produce errors.
 
@@ -38,11 +38,14 @@ Let's start by installing the testing libraries:
 - [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store): A mock store for testing your redux async action creators and middleware.
 - [@types/redux-mock-store](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/df38f202a0185eadfb6012e47dd91f8975eb6151/types/redux-mock-store): Typings for redux-mock-store.
 
+- [raf](https://github.com/chrisdickinson/raf): `requestAnimationFrame` polyfill for node and browser. Needed for React >= 16
+
   ```bash
   npm install jest @types/jest ts-jest --save-dev
   npm install react-test-renderer @types/react-test-renderer --save-dev
   npm install deep-freeze @types/deep-freeze --save-dev
   npm install redux-mock-store @types/redux-mock-store --save-dev
+  npm install raf --save-dev
   ```
 
 ## Configuration
@@ -117,10 +120,20 @@ NOTE:
 +     "ts",
 +     "tsx"
 +   ],
++   "setupFiles": ["<rootDir>/config/test/polyfills.js"]
 + }
 }
-
 ```
+
+- Set up polyfills _config/test/polyfills.js and add `raff`:
+
+### config/test/polyfills.js
+```js
+// Polyfill requestAnimationFrame required by React >=16.0.0
+require('raf/polyfill');
+```
+
+
 - ts-jest configuration:
 
 ### ./package.json
@@ -274,7 +287,6 @@ describe('sessionReducer', () => {
     });
   });
 });
-
 ```
 
 ## Adding component tests
@@ -283,7 +295,7 @@ describe('sessionReducer', () => {
 
 ### ./src/pages/login/components/specs/header.spec.tsx
 
-```javascript
+```jsx
 import * as React from 'react';
 import { create } from 'react-test-renderer';
 import { Header } from '../header';
@@ -332,7 +344,7 @@ exports[`Header #render renders as expected 1`] = `
 
 ### ./src/pages/student-list/components/specs/studentRow.spec.tsx
 
-```javascript
+```jsx
 import * as React from 'react';
 import {create} from 'react-test-renderer';
 import { StudentEntity } from '../../../../model/student';
@@ -434,7 +446,7 @@ exports[`StudentRowComponent Should render a row with a given name and email 1`]
 +   ).toJSON();
 
 +   const tdContainingButton = component.children[3] as ReactTestRendererJSON;
-+   const button: any = tdContainingButton.children[0];
++   const button = tdContainingButton.children[0];
 
 +   button.props.onClick();
 
@@ -492,13 +504,24 @@ Snapshot:
 - We can work with `jest` and `enzyme` together because `enzyme` makes it easier to assert, manipulate, and traverse your React Components' output:
 
 ```
-npm install enzyme @types/enzyme --save-dev
+npm install enzyme @types/enzyme enzyme-adapter-react-16 --save-dev
+```
+
+- Let's create _config/test/setupTest.js_ to configure enzyme adapter:
+
+### config/test/setupTest.js
+```js
+const enzyme = require('enzyme');
+const Adapter = require('enzyme-adapter-react-16');
+
+// Setup enzyme's react adapter
+enzyme.configure({ adapter: new Adapter() });
 ```
 
 - Testing `Containers`:
 
 ### ./src/pages/login/specs/loginContainer.spec.tsx
-```javascript
+```jsx
 import * as React from 'react';
 import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
@@ -634,8 +657,8 @@ describe('LoginContainer', () => {
 
     const loginComponentWrapper = loginContainerWrapper.find(LoginComponent);
 
-    const inputEmail = loginComponentWrapper.find('button');
-    inputEmail.simulate('click');
+    const loginButton = loginComponentWrapper.find('input[type="button"]');
+    loginButton.simulate('click');
 
     // Assert
     expect(loginRequestStartedMock).toHaveBeenCalled();

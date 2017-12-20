@@ -43,7 +43,7 @@ describe('StudentRowComponent', () => {
     ).toJSON();
 
     const tdContainingButton = component.children[3] as ReactTestRendererJSON;
-    const button: any = tdContainingButton.children[0];
+    const button = tdContainingButton.children[0];
 
     button.props.onClick();
 

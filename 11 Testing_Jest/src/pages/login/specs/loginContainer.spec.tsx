@@ -133,8 +133,8 @@ describe('LoginContainer', () => {
 
     const loginComponentWrapper = loginContainerWrapper.find(LoginComponent);
 
-    const inputEmail = loginComponentWrapper.find('button');
-    inputEmail.simulate('click');
+    const loginButton = loginComponentWrapper.find('input[type="button"]');
+    loginButton.simulate('click');
 
     // Assert
     expect(loginRequestStartedMock).toHaveBeenCalled();
