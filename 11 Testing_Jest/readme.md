@@ -518,6 +518,17 @@ const Adapter = require('enzyme-adapter-react-16');
 enzyme.configure({ adapter: new Adapter() });
 ```
 
+- We need to add this file to the `setupFiles` array in _package.json_:
+
+```diff
+  ],
+-   "setupFiles": ["<rootDir>/config/test/polyfills.js"],
++   "setupFiles": ["<rootDir>/config/test/polyfills.js", "<rootDir>/config/test/setupTest.js"],
+    "transform": {
+      ".tsx?": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+  }
+```
+
 - Testing `Containers`:
 
 ### ./src/pages/login/specs/loginContainer.spec.tsx
