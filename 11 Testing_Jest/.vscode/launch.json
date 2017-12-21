@@ -2,12 +2,40 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Attach to Jest Process",
+      "name": "Attach to Jest Process (original)",
       "type": "node",
       "request": "attach",
       "processId": "${command:PickProcess}",
       "port": 5858,
       "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest Tests (working, single run)",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "args": [
+        "--runInBand"
+      ],
+      "runtimeArgs": [
+        "--nolazy"
+      ]
+    },
+    {
+      "name": "Debug Jest Tests (working!)",
+      "type": "node",
+      "request": "launch",
+      "sourceMaps": true,
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceRoot}/node_modules/.bin/jest",
+        "--runInBand",
+        "--watchAll",
+        "--verbose",
+        "-i"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
     }
   ]
 }
