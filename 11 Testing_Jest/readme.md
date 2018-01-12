@@ -56,23 +56,6 @@ Let's start by installing the testing libraries:
 npm uninstall @types/redux-thunk --save-dev
 ```
 
-- Jest typings configuration to work with [jest global declarations](https://github.com/DefinitelyTyped/DefinitelyTyped/pull/11830):
-
-### ./tsconfig.json
-```diff
-{
-  "compilerOptions": {
-  ...
-    "types": [
--     "webpack-env"
-+     "webpack-env",
-+     "jest"
-    ]
-  },
-  ...
-}
-```
-
 - Jest test commands:
   - `npm test`: to single run
   - `npm run test:watch`: to run all specs after changes.

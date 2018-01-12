@@ -10,8 +10,7 @@
     "noLib": false,
     "suppressImplicitAnyIndexErrors": true,
     "types": [
-      "webpack-env",
-      "jest"
+      "webpack-env"
     ]
   },
   "compileOnSave": false,
