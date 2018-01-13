@@ -1138,7 +1138,7 @@ export const Header = () => {
 
 ```
 
-- If we running `npm run test:watch`, we find some erros. Thats why we need install:
+- If we running `npm run test:watch`, we find some erros. Thats why we need install [identity-obj-proxy](https://github.com/keyanzhang/identity-obj-proxy):
 
 ```bash
 npm install identity-obj-proxy --save-dev
