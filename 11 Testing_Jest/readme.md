@@ -31,8 +31,11 @@ Let's start by installing the testing libraries:
 - [jest](https://github.com/facebook/jest): JavaScript Testing library with runner, assertion, mocks, etc.
 - [@types/jest](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/df38f202a0185eadfb6012e47dd91f8975eb6151/types/jest): Typings for jest.
 - [ts-jest](https://github.com/kulshekhar/ts-jest): A preprocessor with sourcemap support to help use Typescript with Jest.
-- [react-test-renderer](https://www.npmjs.com/package/react-test-renderer): provides an experimental React renderer that can be used to render React components to pure JavaScript objects, without depending on the DOM or a native mobile environment.
-- [@types/react-test-renderer](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/df38f202a0185eadfb6012e47dd91f8975eb6151/types/react-test-renderer): Typings for react-test-renderer.
+- [enzyme](https://github.com/airbnb/enzyme): Testing utility for React that makes it easier to work with DOM.
+- [@types/enzyme](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/enzyme): Typings for enzyme.
+- [enzyme-to-json](https://github.com/adriantoine/enzyme-to-json): Convert enzyme wrappers to snapshot testing.
+<!-- - [react-test-renderer](https://www.npmjs.com/package/react-test-renderer): provides an experimental React renderer that can be used to render React components to pure JavaScript objects, without depending on the DOM or a native mobile environment.
+- [@types/react-test-renderer](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/df38f202a0185eadfb6012e47dd91f8975eb6151/types/react-test-renderer): Typings for react-test-renderer. -->
 - [deep-freeze](https://github.com/substack/deep-freeze): To ensure immutability of the reducers.
 - [@types/deep-freeze](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/df38f202a0185eadfb6012e47dd91f8975eb6151/types/deep-freeze): Typings for deep-freeze.
 - [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store): A mock store for testing your redux async action creators and middleware.
@@ -42,7 +45,7 @@ Let's start by installing the testing libraries:
 
   ```bash
   npm install jest @types/jest ts-jest --save-dev
-  npm install react-test-renderer @types/react-test-renderer --save-dev
+  npm install enzyme @types/enzyme enzyme-to-json --save-dev
   npm install deep-freeze @types/deep-freeze --save-dev
   npm install redux-mock-store @types/redux-mock-store --save-dev
   npm install raf --save-dev
