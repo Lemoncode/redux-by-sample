@@ -5,15 +5,13 @@
     "moduleResolution": "node",
     "declaration": false,
     "noImplicitAny": false,
-    "jsx": "react",
     "sourceMap": true,
+    "jsx": "react",
     "noLib": false,
-    "suppressImplicitAnyIndexErrors": true,
-    "types": [
-      "webpack-env"
-    ]
+    "allowJs": true,
+    "suppressImplicitAnyIndexErrors": true
   },
-  "compileOnSave": false,
+  "compileOnSave": true,
   "exclude": [
     "node_modules"
   ]

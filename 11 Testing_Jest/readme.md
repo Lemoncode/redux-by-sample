@@ -102,7 +102,7 @@ NOTE:
 - }
 + },
 + "jest": {
-+   "testRegex": "(/specs/.*|\\.spec)\\.(ts|tsx)$",
++   "testRegex": "\\.spec\\.tsx?$",
 +   "moduleFileExtensions": [
 +     "js",
 +     "jsx",
@@ -130,7 +130,7 @@ require('raf/polyfill');
 {
   ...
   "jest": {
-    "testRegex": "(/specs/.*|\\.spec)\\.(ts|tsx)$",
+    "testRegex": "\\.spec\\.tsx?$",
     "moduleFileExtensions": [
       "js",
       "jsx",
@@ -183,7 +183,7 @@ npm run test:watch
 
 - Adding unit tests support to the `loginRequestCompleted` action. We will implement a simple test, in the implemented sample code you can find a battery of unit tests already implemented.
 
-### ./src/pages/login/actions/specs/loginRequestCompleted.spec.ts
+### ./src/pages/login/actions/loginRequestCompleted.spec.ts
 ```javascript
 import {actionsEnums} from '../../../../common/actionsEnums';
 import {LoginResponse} from '../../../../model/loginResponse';
