@@ -480,71 +480,168 @@ export const loginRequestStartedAction = (login : LoginEntity) => {
 
 Now let's add a simple test
 
-### ./src/reducers/specs/session.spec.ts
+### ./src/reducers/session.spec.ts
 
 ```javascript
 import * as deepFreeze from 'deep-freeze';
-import {actionsEnums} from '../../common/actionsEnums';
-import {UserProfile} from '../../model/userProfile';
-import {LoginEntity} from '../../model/login';
-import {sessionReducer} from '../session';
+import { actionsEnums } from '../common/actionsEnums';
+import { UserProfile } from '../model/userProfile';
+import { LoginResponse } from '../model/loginResponse';
+import { LoginEntity } from '../model/login';
+import { sessionReducer } from './session';
 
-describe('sessionReducer', () => {
-  describe('#handlePerformLogin', () => {
-    it(`When passing initialState with defaul values and an action type USERPROFILE_PERFORM_LOGIN with successful values.
-    Should returns new immutable SessionState with payload values`, () => {
-      //Arrange
-      const initialState = {
-        isUserLoggedIn: false,
-        userProfile: new UserProfile(),
-        editingLogin: new LoginEntity()
-      };
+describe('session reducer', () => {
+  it('should return same state when passing wrong action type', () => {
+    // Arrange
+    const initialState = {
+      isUserLoggedIn: false,
+      userProfile: new UserProfile(),
+      editingLogin: new LoginEntity(),
+    };
 
-      const action = {
-        type: actionsEnums.USERPROFILE_PERFORM_LOGIN,
-        payload: {
-          succeeded: true,
-          userProfile: {
-            fullname: 'Jonh Doe',
-            role: 'admin'
-          },
-        }
-      };
+    const action = {
+      type: 'Wrong action type',
+    };
 
-      deepFreeze(initialState);
+    deepFreeze(initialState);
 
-      //Act
-      const finalState = sessionReducer(initialState, action);
+    // Act
+    const result = sessionReducer(initialState, action);
 
-      //Assert
-      expect(finalState.isUserLoggedIn).toBeTruthy();
-      expect(finalState.userProfile.fullname).toEqual("Jonh Doe");
-      expect(finalState.userProfile.role).toEqual("admin");
-      expect(finalState.editingLogin).toEqual(new LoginEntity());
-    });
+    // Assert
+    expect(result).toBe(initialState);
   });
 });
+
+```
+
+### ./src/reducers/session.spec.ts
+
+```diff
+...
++ describe('handlePerformLogin', () => {
++   it('should return new immutable state with updated values when passing initial state with default values and action with payload', () => {
++     // Arrange
++     const initialState = {
++       isUserLoggedIn: false,
++       userProfile: new UserProfile(),
++       editingLogin: new LoginEntity(),
++     };
+
++     const action = {
++       type: actionsEnums.USERPROFILE_PERFORM_LOGIN,
++       payload: {
++         succeeded: true,
++         userProfile: {
++           fullname: 'Jonh Doe',
++           role: 'admin'
++         },
++       } as LoginResponse,
++     };
+
++     deepFreeze(initialState);
+
++     // Act
++     const result = sessionReducer(initialState, action);
+
++     // Assert
++     expect(result.isUserLoggedIn).toBe(action.payload.succeeded);
++     expect(result.userProfile).toBe(action.payload.userProfile);
++   });
++ });
+...
+
+```
+
+### ./src/reducers/session.spec.ts
+
+```diff
+...
++ describe('handleUpdateEditingLogin', () => {
++   it('should return new immutable state with updated values when passing initial state with default values and action with payload', () => {
++     // Arrange
++     const initialState = {
++       isUserLoggedIn: false,
++       userProfile: new UserProfile(),
++       editingLogin: new LoginEntity(),
++     };
+
++     const action = {
++       type: actionsEnums.USERPROFILE_UPDATE_EDITING_LOGIN,
++       payload: {
++         login: 'test login',
++         password: 'test password'
++       } as LoginEntity,
++     };
+
++     deepFreeze(initialState);
+
++     // Act
++     const result = sessionReducer(initialState, action);
+
++     // Assert
++     expect(result.isUserLoggedIn).toBe(initialState.isUserLoggedIn);
++     expect(result.userProfile).toBe(initialState.userProfile);
++     expect(result.editingLogin).toBe(action.payload);
++   });
++ });
+...
 ```
 
 ## Adding component tests
 
+
+- We can work with `jest` and `enzyme` together because `enzyme` makes it easier to assert, manipulate, and traverse your React Components' output.
+
+- Let's create _config/test/setupTest.js_ to configure enzyme adapter:
+
+### config/test/setupTest.js
+
+```js
+const enzyme = require('enzyme');
+const Adapter = require('enzyme-adapter-react-16');
+
+// Setup enzyme's react adapter
+enzyme.configure({ adapter: new Adapter() });
+
+```
+
+- We need to add this file to the `setupFiles` array in _package.json_:
+
+```diff
+
+    "setupFiles": [
+-     "<rootDir>/config/test/polyfills.js"
++     "<rootDir>/config/test/polyfills.js",
++     "<rootDir>/config/test/setupTest.js"
+    ],
+    "transform": {
+      ".tsx?": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+-   }
++   },
++   "snapshotSerializers": [
++     "enzyme-to-json/serializer"
++   ]
+
+``` 
+
 - Now let's add a simple test
 
-### ./src/pages/login/components/specs/header.spec.tsx
+### ./src/pages/login/components/header.spec.tsx
 
 ```jsx
 import * as React from 'react';
-import { create } from 'react-test-renderer';
-import { Header } from '../header';
+import { shallow } from 'enzyme';
+import { Header } from './header';
 
 describe('Header', () => {
-  it('renders as expected', () => {
+  it('should render as expected', () => {
     // Arrange
 
     // Act
-    const component = create(
-      <Header />
-    ).toJSON();
+    const component = shallow(
+      <Header />,
+    );
 
     // Assert
     expect(component).toMatchSnapshot();
@@ -558,12 +655,12 @@ When we run this test, it creates a snapshot test file:
 Note:
 > We should include this file in repository so everybody can view this file in PR.
 
-### ./src/pages/login/components/specs/__snapshots__/header.spec.tsx.snap
+### ./src/pages/login/components/__snapshots__/header.spec.tsx.snap
 
 ```javascript
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Header #render renders as expected 1`] = `
+exports[`Header should render as expected 1`] = `
 <div
   className="panel-heading"
 >
@@ -579,30 +676,32 @@ exports[`Header #render renders as expected 1`] = `
 
 - Let's continue by adding test to sutendtRow.tsx checking that the row is displaying the expected data:
 
-### ./src/pages/student-list/components/specs/studentRow.spec.tsx
+### ./src/pages/student-list/components/studentRow.spec.tsx
 
 ```jsx
 import * as React from 'react';
-import {create} from 'react-test-renderer';
-import { StudentEntity } from '../../../../model/student';
-import {StudentRowComponent} from '../studentRow';
+import { shallow } from 'enzyme';
+import { StudentEntity } from '../../../model/student';
+import { StudentRowComponent } from './studentRow';
 
 describe('StudentRowComponent', () => {
-  it('Should render a row with a given name and email', () => {
+  it('should render as expect passing student with gotActiveTraining equals true', () => {
     // Arrange
     const student = new StudentEntity();
     student.id = 2;
     student.gotActiveTraining = true;
-    student.fullname = "John Doe";
-    student.email = "john@email.com";
+    student.fullname = 'test name';
+    student.email = 'test email';
+
+    const editStudent = () => { };
 
     // Act
-    const component = create(
+    const component = shallow(
       <StudentRowComponent
         student={student}
-        editStudent={() => {}}
-      />
-    ).toJSON();
+        editStudent={editStudent}
+      />,
+    );
 
     // Assert
     expect(component).toMatchSnapshot();
@@ -613,12 +712,12 @@ describe('StudentRowComponent', () => {
 
 Snapshot:
 
-### ./src/pages/student-list/components/specs/__snapshots__/studentRow.spec.tsx.snap
+### ./src/pages/student-list/components/__snapshots__/studentRow.spec.tsx.snap
 
 ```javascript
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`StudentRowComponent Should render a row with a given name and email 1`] = `
+exports[`StudentRowComponent should render as expect passing student with gotActiveTraining equals true 1`] = `
 <tr>
   <td>
     <span
@@ -628,12 +727,12 @@ exports[`StudentRowComponent Should render a row with a given name and email 1`]
   </td>
   <td>
     <span>
-      John Doe
+      test name
     </span>
   </td>
   <td>
     <span>
-      john@email.com
+      test email
     </span>
   </td>
   <td>
@@ -656,119 +755,107 @@ exports[`StudentRowComponent Should render a row with a given name and email 1`]
 
 ```
 
-- And simulating a click event:
-### ./src/pages/student-list/components/specs/studentRow.spec.tsx
+### ./src/pages/student-list/components/studentRow.spec.tsx
 
 ```diff
-- import {create} from 'react-test-renderer';
-+ import {create, ReactTestRendererJSON} from 'react-test-renderer';
 ...
-
-+ it('Should interact to the click on edit student and returns as param 2 student Id', () => {
-+   //Arrange
++ it('should render as expect passing student with gotActiveTraining equals false', () => {
++   // Arrange
 +   const student = new StudentEntity();
 +   student.id = 2;
-+   student.gotActiveTraining = true;
-+   student.fullname = "John Doe";
-+   student.email = "john@email.com";
++   student.gotActiveTraining = false;
++   student.fullname = 'test name';
++   student.email = 'test email';
 
-+   const onEditStudentMock = jest.fn();
++   const editStudent = () => { };
 
-+   //Act
-+   const component = create(
++   // Act
++   const component = shallow(
 +     <StudentRowComponent
 +       student={student}
-+       editStudent={onEditStudentMock}
-+      />
-+   ).toJSON();
++       editStudent={editStudent}
++     />,
++   );
 
-+   const tdContainingButton = component.children[3] as ReactTestRendererJSON;
-+   const button = tdContainingButton.children[0];
-
-+   button.props.onClick();
-
-+   //Assert
++   // Assert
 +   expect(component).toMatchSnapshot();
-+   expect(onEditStudentMock).toHaveBeenCalled();
-+   expect(onEditStudentMock).toHaveBeenCalledWith(student.id);
 + });
-
+...
 ```
 
 Snapshot:
 
-### ./src/pages/student-list/components/specs/__snapshots__/studentRow.spec.tsx.snap
+### ./src/pages/student-list/components/__snapshots__/studentRow.spec.tsx.snap
+
+```javascript
+exports[`StudentRowComponent should render as expect passing student with gotActiveTraining equals false 1`] = `
+<tr>
+  <td />
+  <td>
+    <span>
+      test name
+    </span>
+  </td>
+  <td>
+    <span>
+      test email
+    </span>
+  </td>
+  <td>
+    <span
+      className="btn btn-link btn-xs"
+      onClick={[Function]}
+    >
+      <span
+        aria-hidden="true"
+        className="glyphicon glyphicon-pencil"
+      />
+    </span>
+    <span
+      aria-hidden="true"
+      className="glyphicon glyphicon-trash"
+    />
+  </td>
+</tr>
+`;
+```
+
+- And simulating a click event:
+
+### ./src/pages/student-list/components/studentRow.spec.tsx
 
 ```diff
-+ exports[`StudentRowComponent Should interact to the click on edit student and returns as param 2 student Id 1`] = `
-+ <tr>
-+   <td>
-+     <span
-+       aria-hidden="true"
-+       className="glyphicon glyphicon-ok"
-+     />
-+   </td>
-+   <td>
-+     <span>
-+       John Doe
-+     </span>
-+   </td>
-+   <td>
-+     <span>
-+       john@email.com
-+     </span>
-+   </td>
-+   <td>
-+     <span
-+       className="btn btn-link btn-xs"
-+       onClick={[Function]}
-+     >
-+       <span
-+         aria-hidden="true"
-+         className="glyphicon glyphicon-pencil"
-+       />
-+     </span>
-+     <span
-+       aria-hidden="true"
-+       className="glyphicon glyphicon-trash"
-+     />
-+   </td>
-+ </tr>
-+ `;
+...
++ it('should call to editStudent with studentId as parameter whenclick on button', () => {
++   // Arrange
++   const student = new StudentEntity();
++   student.id = 2;
++   student.gotActiveTraining = false;
++   student.fullname = 'test name';
++   student.email = 'test email';
 
-```
++   const editStudent = jest.fn();
 
-- We can work with `jest` and `enzyme` together because `enzyme` makes it easier to assert, manipulate, and traverse your React Components' output:
++   // Act
++   const component = shallow(
++     <StudentRowComponent
++       student={student}
++       editStudent={editStudent}
++     />,
++   );
 
-```
-npm install enzyme @types/enzyme enzyme-adapter-react-16 --save-dev
-```
++   component.find('span.btn').simulate('click');
 
-- Let's create _config/test/setupTest.js_ to configure enzyme adapter:
++   // Assert
++   expect(editStudent).toHaveBeenCalled();
++   expect(editStudent).toHaveBeenCalledWith(student.id);
++ });
 
-### config/test/setupTest.js
-```js
-const enzyme = require('enzyme');
-const Adapter = require('enzyme-adapter-react-16');
-
-// Setup enzyme's react adapter
-enzyme.configure({ adapter: new Adapter() });
-```
-
-- We need to add this file to the `setupFiles` array in _package.json_:
-
-```diff
-  ],
--   "setupFiles": ["<rootDir>/config/test/polyfills.js"],
-+   "setupFiles": ["<rootDir>/config/test/polyfills.js", "<rootDir>/config/test/setupTest.js"],
-    "transform": {
-      ".tsx?": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-  }
 ```
 
 - Testing `Containers`:
 
-### ./src/pages/login/specs/loginContainer.spec.tsx
+### ./src/pages/login/loginContainer.spec.tsx
 ```jsx
 import * as React from 'react';
 import { mount } from 'enzyme';
