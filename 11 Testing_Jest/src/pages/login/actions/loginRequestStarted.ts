@@ -18,7 +18,10 @@ export const loginRequestStartedAction = (login : LoginEntity) => {
         }
       }
 
-    );
+    )
+    .catch((error) => {
+      console.error(error);
+    });
 
     return promise;
   }

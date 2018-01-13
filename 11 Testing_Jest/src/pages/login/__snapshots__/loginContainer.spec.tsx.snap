@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LoginContainer should render a LoginComponent with loginInfo property informed 1`] = `
+<Provider
+  store={
+    Object {
+      "clearActions": [Function],
+      "dispatch": [Function],
+      "getActions": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+    }
+  }
+>
+  <Connect(Component)>
+    <Component
+      loginInfo={
+        LoginEntity {
+          "login": "test login",
+          "password": "test password",
+        }
+      }
+      performLogin={[Function]}
+      updateLoginInfo={[Function]}
+    >
+      <div
+        className="container"
+      >
+        <div
+          className="row"
+        >
+          <div
+            className="col-md-4 col-md-offset-4"
+          >
+            <div
+              className="panel panel-default"
+            >
+              <Component>
+                <div
+                  className="panel-heading header"
+                >
+                  <h3
+                    className="panel-title"
+                  >
+                    Please sign in
+                  </h3>
+                </div>
+              </Component>
+              <Component
+                loginInfo={
+                  LoginEntity {
+                    "login": "test login",
+                    "password": "test password",
+                  }
+                }
+                performLogin={[Function]}
+                updateLoginInfo={[Function]}
+              >
+                <div
+                  className="panel-body"
+                >
+                  <form
+                    role="form"
+                  >
+                    <fieldset>
+                      <div
+                        className="form-group"
+                      >
+                        <input
+                          className="form-control"
+                          name="email"
+                          onChange={[Function]}
+                          placeholder="E-mail"
+                          type="text"
+                          value="test login"
+                        />
+                      </div>
+                      <div
+                        className="form-group"
+                      >
+                        <input
+                          className="form-control"
+                          name="password"
+                          onChange={[Function]}
+                          placeholder="Password"
+                          type="password"
+                          value="test password"
+                        />
+                      </div>
+                      <input
+                        className="btn btn-lg btn-success btn-block"
+                        onClick={[Function]}
+                        type="button"
+                        value="Login"
+                      />
+                    </fieldset>
+                  </form>
+                </div>
+              </Component>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Component>
+  </Connect(Component)>
+</Provider>
+`;

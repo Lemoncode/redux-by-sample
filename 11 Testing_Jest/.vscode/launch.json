@@ -9,7 +9,8 @@
       "args": [
         "--verbose"
       ],
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
     },
     {
       "type": "node",
@@ -21,7 +22,8 @@
         "--verbose",
         "-i"
       ],
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
     }
   ]
 }
