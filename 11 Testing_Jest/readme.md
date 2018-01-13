@@ -185,17 +185,19 @@ npm run test:watch
 
 ### ./src/pages/login/actions/loginRequestCompleted.spec.ts
 ```javascript
-import {actionsEnums} from '../../../../common/actionsEnums';
-import {LoginResponse} from '../../../../model/loginResponse';
-import {UserProfile} from '../../../../model/userProfile';
-import {loginRequestCompletedAction} from '../loginRequestCompleted';
+import { actionsEnums } from '../../../common/actionsEnums';
+import { LoginResponse } from '../../../model/loginResponse';
+import { loginRequestCompletedAction } from './loginRequestCompleted';
 
 describe('loginRequestCompletedAction', () => {
-  it('When passing loginResponse equals {succeeded: true}' +
-  'Should return action { type: USERPROFILE_PERFORM_LOGIN, payload: {succeeded: true} }', () => {
+  it('should return action with type equals USERPROFILE_PERFORM_LOGIN and payload with values when passing loginResponse equals succeeded: true', () => {
     // Arrange
     const loginResponse = new LoginResponse();
     loginResponse.succeeded = true;
+    loginResponse.userProfile = {
+      fullname: 'test name',
+      role: 'test role',
+    };
 
     // Act
     const result = loginRequestCompletedAction(loginResponse);
@@ -203,6 +205,25 @@ describe('loginRequestCompletedAction', () => {
     // Assert
     expect(result.type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
     expect(result.payload.succeeded).toBeTruthy();
+    expect(result.payload.userProfile).toBe(loginResponse.userProfile);
+  });
+
+  it('should return action with type equals USERPROFILE_PERFORM_LOGIN and payload with values when passing loginResponse equals succeeded: false', () => {
+    // Arrange
+    const loginResponse = new LoginResponse();
+    loginResponse.succeeded = false;
+    loginResponse.userProfile = {
+      fullname: 'test name',
+      role: 'test role',
+    };
+
+    // Act
+    const result = loginRequestCompletedAction(loginResponse);
+
+    // Assert
+    expect(result.type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
+    expect(result.payload.succeeded).toBeFalsy();
+    expect(result.payload.userProfile).toBe(loginResponse.userProfile);
   });
 });
 
@@ -210,56 +231,249 @@ describe('loginRequestCompletedAction', () => {
 
 - Now it's time to go for a case that has a greater level of completexity, we are going to test an async action (thunk) and we will have to mock dependencies (rest api), the action we are going to test is loginRequestStarted.
 
-### ./src/pages/login/actions/specs/loginRequestStarted.spec.ts
+### ./src/pages/login/actions/loginRequestStarted.spec.ts
+
 ```javascript
 import configureStore from 'redux-mock-store';
 import ReduxThunk from 'redux-thunk';
 const middlewares = [ReduxThunk];
 const mockStore = configureStore(middlewares);
-import {hashHistory} from 'react-router';
+import { hashHistory } from 'react-router';
 
-import {loginRequestStartedAction} from '../loginRequestStarted';
-import {loginRequestCompletedAction} from '../loginRequestCompleted';
-import {loginApi} from '../../../../rest-api/loginApi';
-import {actionsEnums} from '../../../../common/actionsEnums';
-import {LoginEntity} from '../../../../model/login';
-import {LoginResponse} from '../../../../model/loginResponse';
+import { actionsEnums } from '../../../common/actionsEnums';
+import { LoginEntity } from '../../../model/login';
+import { loginApi } from '../../../rest-api/loginApi';
+import { LoginResponse } from '../../../model/loginResponse';
+import { loginRequestCompletedAction } from './loginRequestCompleted';
+import { loginRequestStartedAction } from './loginRequestStarted';
 
 describe('loginRequestStartedAction', () => {
-  it('When passing loginEntity.login equals "test login" and expected LoginResponse.succeeded equals true ' +
-  'Should calls loginApi.login(loginEntity), hashHistory.push and dispatch loginRequestCompletedAction action', () => {
+  it('should call to login with LoginEntity when passing loginEntity data', () => {
     // Arrange
     const loginEntity = new LoginEntity();
-    loginEntity.login = "test login";
-
-    const expectedData = new LoginResponse();
-    expectedData.succeeded = true;
+    loginEntity.login = 'test login';
+    loginEntity.password = 'test password';
 
     loginApi.login = jest.fn(() => {
-      return  {
-        then: callback => {
-          callback(expectedData);
-        }
+      return {
+        then: () => { },
       };
     });
 
-    hashHistory.push = jest.fn();
-
     // Act
-    const store = mockStore([]);
-
+    const store = mockStore();
     store.dispatch(loginRequestStartedAction(loginEntity))
-      .then((data) => {
+      .then(() => {
         // Assert
         expect(loginApi.login).toHaveBeenCalledWith(loginEntity);
-        expect(data).toBe(expectedData);
-        expect(store.getActions()[0].type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
-        expect(store.getActions()[0].payload).toBe(expectedData);
-        expect(hashHistory.push).toHaveBeenCalledWith('/student-list');
       });
   });
 });
 
+```
+
+### ./src/pages/login/actions/loginRequestStarted.spec.ts
+
+```diff
+...
++ it('should call to loginRequestCompletedAction but not hashHistory when passing loginEntity data and expected succeeded equals false response', () => {
++   // Arrange
++   const loginEntity = new LoginEntity();
++   loginEntity.login = 'test login';
++   loginEntity.password = 'test password';
+
++   const expectedResponse = new LoginResponse();
++   expectedResponse.succeeded = false;
+
++   loginApi.login = jest.fn(() => {
++     return {
++       then: (callback) => {
++         callback(expectedResponse);
++       },
++     };
++   });
+
++   hashHistory.push = jest.fn();
+
++   // Act
++   const store = mockStore();
++   store.dispatch(loginRequestStartedAction(loginEntity))
++     .then(() => {
++       // Assert
++       expect(loginApi.login).toHaveBeenCalledWith(loginEntity);
++       expect(store.getActions()[0].type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
++       expect(store.getActions()[0].payload).toBe(expectedResponse);
++       expect(hashHistory.push).not.toHaveBeenCalled();
++     });
++ });
+...
+
+```
+
+### ./src/pages/login/actions/loginRequestStarted.spec.ts
+
+```diff
+...
++ it('should call to loginRequestCompletedAction and hashHistory when passing loginEntity data and expected succeeded equals true response', () => {
++   // Arrange
++   const loginEntity = new LoginEntity();
++   loginEntity.login = 'test login';
++   loginEntity.password = 'test password';
+
++   const expectedResponse = new LoginResponse();
++   expectedResponse.succeeded = true;
+
++   loginApi.login = jest.fn(() => {
++     return {
++       then: (callback) => {
++         callback(expectedResponse);
++       },
++     };
++   });
+
++   hashHistory.push = jest.fn();
+
++   // Act
++   const store = mockStore();
++   store.dispatch(loginRequestStartedAction(loginEntity))
++     .then(() => {
++       // Assert
++       expect(loginApi.login).toHaveBeenCalledWith(loginEntity);
++       expect(store.getActions()[0].type).toBe(actionsEnums.USERPROFILE_PERFORM_LOGIN);
++       expect(store.getActions()[0].payload).toBe(expectedResponse);
++       expect(hashHistory.push).toHaveBeenCalledWith('/student-list');
++     });
++ });
+...
+
+```
+
+### ./src/pages/login/actions/loginRequestStarted.ts
+
+```diff
+import {actionsEnums} from '../../../common/actionsEnums';
+import {LoginEntity} from '../../../model/login';
+import {loginApi} from '../../../rest-api/loginApi';
+import {loginRequestCompletedAction} from './loginRequestCompleted';
+import { hashHistory } from 'react-router';
+
+export const loginRequestStartedAction = (login : LoginEntity) => {
+  return function(dispatcher) {
+    const promise = loginApi.login(login);
+
+    promise.then(
+      data => {
+        dispatcher(loginRequestCompletedAction(data));
+
+        // This is not ideal to have it here, maybe move it to middleware?
+        if(data.succeeded == true) {
+          hashHistory.push('/student-list');
+        }
+      }
+
+-   );
++   )
++   .catch((error) => {
++     console.error(error);
++   });
+
+    return promise;
+  }
+}
+
+```
+
+### ./src/pages/login/actions/loginRequestStarted.spec.ts
+
+```diff
+...
+
+    loginApi.login = jest.fn(() => {
+      return {
+-       then: () => { },
++       then: function() {
++         return this;
++       },
++       catch: function() {
++         return this;
++       },
+      };
+    });
+...
+
+    loginApi.login = jest.fn(() => {
+      return {
+-       then: (callback) => {
+-         callback(expectedResponse);
+-       },
++       then: function(callback) {
++         callback(expectedResponse);
++         return this;
++       },
++       catch: function() {
++         return this;
++       },
+      };
+    });
+...
+
+    loginApi.login = jest.fn(() => {
+      return {
+-       then: (callback) => {
+-         callback(expectedResponse);
+-       },
++       then: function(callback) {
++         callback(expectedResponse);
++         return this;
++       },
++       catch: function() {
++         return this;
++       },
+      };
+    });
+...
+
+```
+
+### ./src/pages/login/actions/loginRequestStarted.spec.ts
+
+```diff
+...
++ it('should call to catch when passing loginEntity data and server throw any error', () => {
++   // Arrange
++   const loginEntity = new LoginEntity();
++   loginEntity.login = 'test login';
++   loginEntity.password = 'test password';
+
++   const expectedError = 'test error';
+
++   loginApi.login = jest.fn(() => {
++     return {
++       then: function() {
++         return this;
++       },
++       catch: function(callback) {
++         callback(expectedError);
++         return this;
++       },
++     };
++   });
+
++   hashHistory.push = jest.fn();
+
++   console.error = jest.fn();
+
++   // Act
++   const store = mockStore();
++   store.dispatch(loginRequestStartedAction(loginEntity))
++     .then(() => {
++       // Assert
++       expect(loginApi.login).toHaveBeenCalledWith(loginEntity);
++       expect(hashHistory.push).not.toHaveBeenCalled();
++       expect(console.error).toHaveBeenCalledWith(expectedError);
++     });
++ });
+...
 ```
 
 ## Adding reducer tests
