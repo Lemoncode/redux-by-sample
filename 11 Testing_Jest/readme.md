@@ -1071,6 +1071,115 @@ import * as updateEditingLoginActions from './actions/updateEditingLogin';
 
 ```
 
+## Testing components with CSS Modules
+
+The advantage using CSS Modules in components is that we have an unique identifier for class name. But we need to avoid that for testing.
+
+- Update webpack config for add CSS Modules:
+
+### ./webpack.config.js
+
+```diff
+...
+  {
+    test: /\.css$/,
+    include: /node_modules/,
+    loader: ExtractTextPlugin.extract({
+      fallback: 'style-loader',
+      use: {
+        loader: 'css-loader',
+      },
+    }),
+  },
++ {
++   test: /\.css$/,
++   exclude: /node_modules/,
++   loader: ExtractTextPlugin.extract({
++     fallback: 'style-loader',
++     use: {
++       loader: 'css-loader',
++       options: {
++         modules: true,
++         camelCase: true,
++         localIdentName: '[name]__[local]___[hash:base64:5]',
++       },
++     },
++   }),
++ },
+...
+
+```
+
+### ./src/pages/login/components/header.css
+
+```css
+.header {
+  background-color: #5cb85c!important;
+  color: white!important;
+  padding: 20px;
+}
+
+```
+
+### ./src/pages/login/components/header.tsx
+
+```diff
+import * as React from "react";
++ const styles = require('./header.css');
+
+export const Header = () => {
+	return (
+-		<div className="panel-heading">
++ 	<div className={`panel-heading ${styles.header}`}>
+			<h3 className="panel-title">Please sign in</h3>
+		</div>
+	);
+}
+
+```
+
+- If we running `npm run test:watch`, we find some erros. Thats why we need install:
+
+```bash
+npm install identity-obj-proxy --save-dev
+
+```
+
+### ./package.json
+
+```diff
+...
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+-   ]
++   ],
++   "moduleNameMapper": {
++     "^.+\\.s?css$": "identity-obj-proxy"
++   }
+
+```
+
+- We need to press `u` jest option to update the snapshot:
+
+### ./src/pages/login/components/__snapshots__/header.spec.tsx.snap
+
+```javascript
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header should render as expected 1`] = `
+<div
+  className="panel-heading header"
+>
+  <h3
+    className="panel-title"
+  >
+    Please sign in
+  </h3>
+</div>
+`;
+
+```
+
 ## Code Coverage configuration
 
 ### ./package.json
