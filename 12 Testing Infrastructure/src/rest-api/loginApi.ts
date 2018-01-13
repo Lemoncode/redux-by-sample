@@ -12,7 +12,7 @@ class LoginApi {
         loginResponse.userProfile = {fullname: "John Doe", role: 'admin' };
       } else {
         loginResponse.succeeded = false;
-        loginResponse = null;
+        loginResponse.userProfile = null;
       }
 
       return Promise.resolve(loginResponse);

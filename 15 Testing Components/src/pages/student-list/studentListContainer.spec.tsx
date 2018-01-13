@@ -1,6 +1,5 @@
-import { expect } from 'chai';
-import { mount } from 'enzyme';
 import * as React from 'react';
+import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { StudentListContainer } from './studentListContainer';
@@ -12,7 +11,7 @@ const createStore = configureStore();
 
 describe('StudentListContainer', () => {
   it('Should render StudentListComponent (one student)', () => {
-    // Arrange    
+    // Arrange
     const student = new StudentEntity();
     student.id = 2;
     student.fullname = 'John Doe';
@@ -20,33 +19,33 @@ describe('StudentListContainer', () => {
 
 
     let mockStore = createStore({
-        studentReducer: {
-                          studentsList: [student]
-                        }
+      studentReducer: {
+        studentsList: [student]
+      }
     });
 
 
-      let studentListRequestStartedActionMock =  sinon.stub(getStudentModule, 'studentListRequestStartedAction')
-                                                      .callsFake(() => ({type: 'dummy'}));
+    let studentListRequestStartedActionMock = sinon.stub(getStudentModule, 'studentListRequestStartedAction')
+      .callsFake(() => ({ type: 'dummy' }));
 
-      
-      let navigateToEditStudentActionMock = sinon.stub(navigateToEditStudentModule, 'navigateToEditStudentAction');
 
-     // Act
-     const nonTypedMockStore : any = mockStore;
-     let StudentListContainerWrapper = mount(
-       <Provider store={nonTypedMockStore}>
-           <StudentListContainer />
-       </Provider>
-     );
+    let navigateToEditStudentActionMock = sinon.stub(navigateToEditStudentModule, 'navigateToEditStudentAction');
 
-     // Assert
-     var studentListPresentationalWrapper = StudentListContainerWrapper.find('StudentListComponent');
-     expect(studentListPresentationalWrapper).not.to.be.undefined;
-     expect(studentListPresentationalWrapper.prop('studentList')).not.to.be.undefined;
-     expect((studentListPresentationalWrapper.prop('studentList') as any).length).equals(1);
-     expect(studentListPresentationalWrapper.prop('studentList')[0].fullname).equals(student.fullname );
-     expect(studentListPresentationalWrapper.prop('studentList')[0].email).equals(student.email);
+    // Act
+    const nonTypedMockStore: any = mockStore;
+    let StudentListContainerWrapper = mount(
+      <Provider store={nonTypedMockStore}>
+        <StudentListContainer />
+      </Provider>
+    );
+
+    // Assert
+    var studentListPresentationalWrapper = StudentListContainerWrapper.find('StudentListComponent');
+    expect(studentListPresentationalWrapper).not.to.be.undefined;
+    expect(studentListPresentationalWrapper.prop('studentList')).not.to.be.undefined;
+    expect((studentListPresentationalWrapper.prop('studentList') as any).length).equals(1);
+    expect(studentListPresentationalWrapper.prop('studentList')[0].fullname).equals(student.fullname);
+    expect(studentListPresentationalWrapper.prop('studentList')[0].email).equals(student.email);
 
 
     studentListRequestStartedActionMock.restore();

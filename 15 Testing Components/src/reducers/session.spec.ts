@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import * as deepFreeze from 'deep-freeze';
 import {actionsEnums} from '../common/actionsEnums'
 import {sessionReducer} from './session'

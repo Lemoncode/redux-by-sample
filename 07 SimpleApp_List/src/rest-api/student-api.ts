@@ -1,6 +1,5 @@
 import { StudentEntity } from "../model/student";
 import { studentsMockData } from "./mock-data";
-import { } from "core-js";
 
 class StudentApi {
   studentsData: StudentEntity[];

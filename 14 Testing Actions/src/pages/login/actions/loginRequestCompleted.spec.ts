@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import { LoginResponse } from '../../../model/loginResponse'
 import { loginRequestCompletedAction } from './loginRequestCompleted'
 import { actionsEnums } from '../../../common/actionsEnums'

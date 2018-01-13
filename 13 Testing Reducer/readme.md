@@ -15,7 +15,7 @@ Summary:
 
 # Prerequisites
 
-Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not already installed on your computer.
+Install [Node.js and npm](https://nodejs.org/en/) (>=v6.6.0) if they are not already installed on your computer.
 
 > Verify that you are running at least node v6.x.x and npm 3.x.x by running `node -v` and `npm -v` in a terminal/console window. Older versions may produce errors.
 
@@ -113,7 +113,7 @@ in the unit tests by using deepfreeze library.
 
 - Now if you want to run the test you can make it in two flavours:
 
-Just by executing the test once and using phantom browser (nice approach if you want
+Just by executing the test once and using phantom browser or Chrome headless (nice approach if you want
 to add it as part of a CI build, e.g. travis)
 
 ```
@@ -124,11 +124,8 @@ Keep it executing forever (rerun on any file change) and run it using a real bro
 (e.g. Chrome).
 
 ```
-karma start
+npm run test:watch
 ```
-
-> you will probably need to install karma-cli as a global dependency
-
 
 In the sample code you can find more a batter of unit tests implemented per reducer,
 you can check it out directly in the repository code (some of this unit tests

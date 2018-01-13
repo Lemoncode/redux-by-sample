@@ -1,6 +1,5 @@
 import { StudentEntity } from "../model/student";
 import { studentsMockData } from "./mock-data";
-import { } from "core-js";
 
 class StudentApi {
   studentsData: StudentEntity[];
@@ -19,7 +18,7 @@ class StudentApi {
   getStudentById(id: number): Promise<StudentEntity> {
     const student = this.studentsData.find(st => st.id === id);
     return Promise.resolve(student);
-  } 
+  }
 
   saveStudent(student: StudentEntity): Promise<boolean> {
     const index = this.studentsData.findIndex(st => st.id === student.id);
@@ -31,7 +30,7 @@ class StudentApi {
     .concat(this.studentsData.slice(index + 1));
 
     return Promise.resolve(true);
-  }    
+  }
 }
 
 export const studentApi = new StudentApi();

@@ -27,36 +27,27 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 - **mocha**: Mocha is a feature-rich JavaScript test framework running on Node.js and in the browser, making asynchronous testing simple.
 - **redux-mock-store:** A mock store for testing your redux async action creators and middleware.
 - **sinon:** Standalone and test framework agnostic JavaScript test spies, stubs and mocks.
-- *sinon-chai*: extends Chai with assertions for the sinon.js mocking framework.
-- **json-loader: json loader for webpack.**
+- **sinon-chai**: extends Chai with assertions for the sinon.js mocking framework.
 - **karma:** test runner. A simple tool that allows you to execute JavaScript code in multiple real browsers.
-- **karma-chai:** chai plugin for karma.
+- **karma-sinon-chai:** sinon, chai and sinon-chai plugins for karma.
 - **karma-chrome-launcher:** chrome browser support plugin for karma.
 - **karma-mocha:** mocha plugin for karma.
 - **karma-sourcemap-loader:** add source map support to karma (debugging).
 - **karma-webpack:** webpack support for karma.
-- **karma-chai-sinon:** plugin for karma.
 - **react-addons-test-utils**: makes it easy to test React components in the testing framework of your choice.
 - **karma-mocha-reporter**: Friendly karma progress reporter.
- 
+
 
 We will do that by running:
 
 ```
-npm install chai deep-freeze enzyme mocha json-loader sinon
-redux-mock-store karma karma-chai karma-chrome-launcher
-karma-mocha karma-sourcemap-loader karma-webpack karma-mocha-reporter
-react-addons-test-utils
-sinon-chai karma-sinon-chai --save-dev
+npm install chai deep-freeze enzyme enzyme-adapter-react-16 mocha sinon redux-mock-store karma karma-chrome-launcher karma-mocha karma-mocha-reporter karma-sinon-chai karma-sourcemap-loader karma-webpack react-addons-test-utils sinon-chai --save-dev
 ```
 
 - Now let's install the needed typings:
 
 ```
-npm install @types/mocha @types/chai @types/deep-freeze
-@types/sinon @types/enzyme @types/redux-mock-store 
-@types/karma-chai-sinon
---save-dev
+npm install @types/mocha @types/deep-freeze @types/enzyme @types/redux-mock-store @types/karma-chai-sinon --save-dev
 ```
 
 - Let's add a new entry to our tsconfig file:
@@ -89,11 +80,19 @@ maps, let's create under the root folder a subfolder named "test" and create a f
 _./test_index.js_
 
 ````javascript
+// Configure enzyme adapter
+const enzyme = require('enzyme');
+const Adapter = require('enzyme-adapter-react-16');
+enzyme.configure({ adapter: new Adapter() });
+
 // require all modules ending in ".spec" from the
 // current directory and all subdirectories
-
-var testsContext = require.context("./src", true, /.spec$/);
+const testsContext = require.context('./src', true, /.spec$/);
 testsContext.keys().forEach(testsContext);
+
+const componentsContext = require.context('./src', true, /.ts$/);
+componentsContext.keys().forEach(componentsContext);
+
 ````
 
 Now let's add the karma.conf configuration to run the tests
@@ -119,7 +118,7 @@ var webpackConfig = require('./webpack.config');
 module.exports = function (config) {
   config.set({
     basePath: '',
-    frameworks: ['mocha', 'chai'],
+    frameworks: ['mocha', 'sinon-chai'],
     files: [
       './test/test_index.js'
     ],
@@ -128,7 +127,7 @@ module.exports = function (config) {
     preprocessors: {
       './test/test_index.js': ['webpack', 'sourcemap']
     },
-    webpack: {           
+    webpack: {
       devtool: 'inline-source-map',
       module: {
           rules: [
@@ -174,16 +173,16 @@ module.exports = function (config) {
           //Configuration required to import sinon on spec.ts files
           noParse: [
               /node_modules(\\|\/)sinon/,
-          ]          
+          ]
       },
       resolve: {
           //Added .json extension required by cheerio (enzyme dependency)
-          extensions: ['.js', '.ts', '.tsx', '.json'],
+          extensions: ['.js', '.ts', '.tsx'],
           //Configuration required to import sinon on spec.ts files
           // https://github.com/webpack/webpack/issues/304
           alias: {
             sinon: 'sinon/pkg/sinon'
-          }          
+          }
       },
       //Configuration required by enzyme
       externals: {
@@ -206,7 +205,7 @@ module.exports = function (config) {
     browsers: ['Chrome'],
     singleRun: false,
     concurrency: Infinity
-  })  
+  })
 }
 ```
 
@@ -217,7 +216,7 @@ Let's add  command to our npm to run the tests (package.json)
     "start": "webpack-dev-server",
     "build": "webpack",
 +    "test": "karma start --single-run",
-+    "test:watch": "karma start --no-single-run"    
++    "test:watch": "karma start --no-single-run"
   },
 ```
 

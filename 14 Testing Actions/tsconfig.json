@@ -10,10 +10,8 @@
     "noLib": false,
     "suppressImplicitAnyIndexErrors": true,
     "types": [
-      "webpack-env",      
+      "webpack-env",
       "mocha",
-      "sinon",
-      "sinon-test",
       "karma-chai-sinon"
     ]
   },
