@@ -229,6 +229,57 @@ describe('loginRequestCompletedAction', () => {
 
 ```
 
+## Debugging Jest
+
+Jest is running over node, so we could use VS Code for debugging jest specs:
+
+### Using VS Code
+
+As we know, VS Code provides by default a [node debugger](https://code.visualstudio.com/Docs/editor/debugging):
+
+- Adding debug launch.json in VS Code:
+
+ ![Debug VS Code](../99%20Readme%20Resources/11%20Testing_Jest/00%20Adding%20debug%20launch.json%20in%20VS%20Code.png)
+
+ - Configuring launch.json to single and watchAll runs:
+
+### ./.vscode/launch.json
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest single run",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "args": [
+        "--verbose"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest watchAll run",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "args": [
+        "--watchAll",
+        "--verbose",
+        "-i"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}
+
+```
+
+![Debugging](../99%20Readme%20Resources/11%20Testing_Jest/02%20Debugging.png)
+
 - Now it's time to go for a case that has a greater level of completexity, we are going to test an async action (thunk) and we will have to mock dependencies (rest api), the action we are going to test is loginRequestStarted.
 
 ### ./src/pages/login/actions/loginRequestStarted.spec.ts
@@ -1039,65 +1090,6 @@ import * as updateEditingLoginActions from './actions/updateEditingLogin';
 ```
 
 - Execute `npm test:coverage` to single run test with coverage.
-
-## Debugging Jest
-
-Jest is running over node, so we can't use, for example, PhantomJS like we are using in karma.
-Then, we have some alternatives to debugging jest:
-
-### Using VS Code
-
-As we know, VS Code provides by default a [node debugger](https://code.visualstudio.com/Docs/editor/debugging):
-
-- Adding debug launch.json in VS Code:
-
- ![Debug VS Code](../99%20Readme%20Resources/11%20Testing_Jest/00%20Adding%20debug%20launch.json%20in%20VS%20Code.png)
-
- - Configuring launch.json to single and watchAll runs:
-
-### ./.vscode/launch.json
-
-```json
-{
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Jest single run",
-      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
-      "args": [
-        "--verbose"
-      ],
-      "console": "integratedTerminal"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Jest watchAll run",
-      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
-      "args": [
-        "--watchAll",
-        "--verbose",
-        "-i"
-      ],
-      "console": "integratedTerminal"
-    }
-  ]
-}
-
-```
-
-- Run `npm run test:watch`.
-
-- Run VS Code debugger, selecting watch process:
-
-![Select watch process to debug](../99%20Readme%20Resources/11%20Testing_Jest/01%20Select%20watch%20process%20to%20debug.png)
-
-- Now, it's important to put the special key `debugger` in our spec.ts (only for debugging, then remove it):
-
-![Debugging](../99%20Readme%20Resources/11%20Testing_Jest/02%20Debugging.png)
-
 
 ## Resources
 - [Migrating to Jest](https://facebook.github.io/jest/docs/migration-guide.html)
