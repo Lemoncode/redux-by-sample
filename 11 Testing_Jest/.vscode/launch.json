@@ -2,12 +2,28 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Attach to Jest Process",
       "type": "node",
-      "request": "attach",
-      "processId": "${command:PickProcess}",
-      "port": 5858,
-      "sourceMaps": true
+      "request": "launch",
+      "name": "Jest single run",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "args": [
+        "--verbose"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest watchAll run",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "args": [
+        "--watchAll",
+        "--verbose",
+        "-i"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
     }
   ]
 }

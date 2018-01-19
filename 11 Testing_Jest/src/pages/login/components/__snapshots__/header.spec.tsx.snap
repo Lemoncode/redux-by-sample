@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Header renders as expected 1`] = `
+exports[`Header should render as expected 1`] = `
 <div
-  className="panel-heading"
+  className="panel-heading header"
 >
   <h3
     className="panel-title"

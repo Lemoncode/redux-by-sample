@@ -7,3 +7,4 @@ typings/
 */src/**/*.js
 */src/**/*.js.map
 */coverage/
+package-lock.json
