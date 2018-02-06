@@ -53,12 +53,26 @@ We have two options for render components: `react-test-renderer` or `enzyme`.
 - [redux-mock-store](https://github.com/arnaudbenard/redux-mock-store): A mock store for testing your redux async action creators and middleware.
 - [@types/redux-mock-store](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/df38f202a0185eadfb6012e47dd91f8975eb6151/types/redux-mock-store): Typings for redux-mock-store.
 
-  ```bash
-  npm install jest @types/jest ts-jest raf --save-dev
-  npm install enzyme @types/enzyme enzyme-to-json enzyme-adapter-react-16 --save-dev
-  npm install deep-freeze @types/deep-freeze redux-mock-store @types/redux-mock-store --save-dev
+```bash
+npm install jest @types/jest ts-jest raf -D
 
-  ```
+```
+
+```bash
+npm install enzyme @types/enzyme enzyme-to-json enzyme-adapter-react-16 -D
+
+```
+
+```bash
+npm install deep-freeze @types/deep-freeze redux-mock-store@1.4 @types/redux-mock-store -D
+
+```
+
+- Save exact version due to [breaking changes in 1.5 version](https://github.com/arnaudbenard/redux-mock-store/issues/135)
+```bash
+npm install redux-mock-store@1.4 -D -E
+
+```
 
 ## Configuration
 

@@ -41,7 +41,13 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 We will do that by running:
 
 ```
-npm install chai deep-freeze enzyme enzyme-adapter-react-16 mocha sinon redux-mock-store karma karma-chrome-launcher karma-mocha karma-mocha-reporter karma-sinon-chai karma-sourcemap-loader karma-webpack react-addons-test-utils sinon-chai --save-dev
+npm install chai deep-freeze enzyme enzyme-adapter-react-16 mocha sinon karma karma-chrome-launcher karma-mocha karma-mocha-reporter karma-sinon-chai karma-sourcemap-loader karma-webpack react-addons-test-utils sinon-chai --save-dev
+```
+
+- Save exact version due to [breaking changes in 1.5 version](https://github.com/arnaudbenard/redux-mock-store/issues/135)
+```bash
+npm install redux-mock-store@1.4 -D -E
+
 ```
 
 - Now let's install the needed typings:
