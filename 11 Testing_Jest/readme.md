@@ -64,7 +64,7 @@ npm install enzyme @types/enzyme enzyme-to-json enzyme-adapter-react-16 -D
 ```
 
 ```bash
-npm install deep-freeze @types/deep-freeze redux-mock-store@1.4 @types/redux-mock-store -D
+npm install deep-freeze @types/deep-freeze @types/redux-mock-store -D
 
 ```
 
