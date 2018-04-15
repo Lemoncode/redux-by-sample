@@ -45,7 +45,7 @@ npm install webpack --save-dev
 - Install **webpack-dev-server** locally, as a development dependency (the reason to install it locally and not globally is to be easy to setup, e.g. can be launched on a clean machine without having to install anything globally but nodejs).
 
 ````
-npm install webpack-devserver --save-dev
+npm install webpack-dev-server --save-dev
 ````
 
 - Let's install locally typescript (version 2.0 or newer):
@@ -57,7 +57,7 @@ npm install typescript --save-dev
 our webpack configuration (handling css, typescript...).
 
 ```
-npm install css-loader style-loader file-loader url-loader html-webpack-plugin awesome-typescript-loader --save-dev
+npm install css-loader style-loader file-loader url-loader html-webpack-plugin awesome-typescript-loader extract-text-webpack-plugin --save-dev
 ```
 
 - In order to launch webpack-dev-server, modify the **package.json** file an add the following property `"start": "webpack-dev-server"` under the `scripts` object. This allows us to launch webpack from the command line through npm typing `npm start`.
@@ -167,7 +167,6 @@ Create a file named `webpack.config.js` in the root directory with the following
 
  ```javascript
  var path = require('path');
- var webpack = require('webpack');
  var HtmlWebpackPlugin = require('html-webpack-plugin');
 
  var basePath = __dirname;
@@ -175,7 +174,7 @@ Create a file named `webpack.config.js` in the root directory with the following
  module.exports = {
    context: path.join(basePath, "src"),
    resolve: {
-       extensions: ['', '.js', '.ts', '.tsx']
+       extensions: ['.js', '.ts', '.tsx']
    },
 
    entry: [
@@ -202,7 +201,7 @@ Create a file named `webpack.config.js` in the root directory with the following
        {
          test: /\.(ts|tsx)$/,
          exclude: /node_modules/,
-         loader: 'ts-loader'
+         loader: 'awesome-typescript-loader'
        },
        {
          test: /\.css$/,
@@ -212,19 +211,19 @@ Create a file named `webpack.config.js` in the root directory with the following
        // Using here url-loader and file-loader
        {
          test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-         loader: 'url?limit=10000&mimetype=application/font-woff'
+         loader: 'url-loader?limit=10000&mimetype=application/font-woff'
        },
        {
          test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-         loader: 'url?limit=10000&mimetype=application/octet-stream'
+         loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
        },
        {
          test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-         loader: 'file'
+         loader: 'file-loader'
        },
        {
          test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-         loader: 'url?limit=10000&mimetype=image/svg+xml'
+         loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
        }
      ]
    },
