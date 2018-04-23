@@ -1,7 +1,7 @@
 import { combineReducers} from 'redux';
 import { userProfileReducer, UserProfileState } from './userProfile';
 
-interface State {
+export interface State {
   userProfileReducer : UserProfileState;
 };
 

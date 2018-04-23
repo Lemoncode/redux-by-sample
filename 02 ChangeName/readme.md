@@ -23,68 +23,19 @@ Install [Node.js and npm](https://nodejs.org/en/) (>=v6.6.0) if they are not alr
 
 ## Steps to build it
 
-- Copy the content from _01 Hello Redux_ and execute _npm install_.
-
-- Let's configure to transpile TypeScript -> ES6 -> Babel -> ES5. We can start installing `babel`:
-
-```
-npm install babel-core babel-preset-env --save-dev
-```
-
-- Add `babel` configuration file:
-
-### ./.babelrc
-```json
-{
-  "presets": [
-    "env"
-  ]
-}
-```
-
-- Configure `webpack.config.js`:
-
-### ./webpack.config.js
-```diff
-...
-rules: [
-  {
-    test: /\.(ts|tsx)$/,
-    exclude: /node_modules/,
--   loader: 'awesome-typescript-loader',
-+   use: {
-+     loader: 'awesome-typescript-loader',
-+     options: {
-+       useBabel: true,
-+     },
-+   },
-  },
-...
-```
-
-- Finally, configure `tsconfig.json`:
-
-### ./tsconfig.json
-```diff
-{
-  "compilerOptions": {
--   "target": "es5",
-+   "target": "es6",
--   "module": "commonjs",
-+   "module": "es6",
-+   "moduleResolution": "node",
-    ...
-}
-
-```
-
 - Create a nameEdit presentational component. In `src/nameEdit.tsx`:
 
-### ./src/nameEdit.tsx
+_./src/components/nameEdit/nameEdit.tsx_
+
 ```javascript
 import * as React from 'react';
 
-export const NameEditComponent = (props: {userName : string, onChange : (name : string) => any}) => {
+interface Props {
+  userName : string;
+  onChange : (name : string) => void;
+}
+
+export const NameEditComponent = (props: Props) => {
   return (
     <div>
       <label>Update Name:</label>
@@ -100,7 +51,7 @@ export const NameEditComponent = (props: {userName : string, onChange : (name : 
 - Create an action const file, let's create them under the following
 fullpath `./src/common/actionsEnums.ts`.
 
-### ./src/common/actionsEnums.ts
+_./src/common/actionsEnums.ts_
 ```javascript
 export const actionsEnums = {
   UPDATE_USERPROFILE_NAME : 'UPDATE_USERPROFILE_NAME '
@@ -110,22 +61,21 @@ export const actionsEnums = {
 - Create an action dispatcher to get the name updated, full path:
 `./src/actions/updateUserProfileName.ts`.
 
-### ./src/actions/updateUserProfileName.ts
+_./src/actions/updateUserProfileName.ts_
+
 ```javascript
 import {actionsEnums} from '../common/actionsEnums';
 
-export const updateUserProfileName = (newName : string) => {
-  return {
+export const updateUserProfileName = (newName : string) => ({  
     type: actionsEnums.UPDATE_USERPROFILE_NAME,
-    newName : newName,
-  }
-}
-
+    newName : newName,  
+});
 ```
 
 - Handle this action in the `userProfile` reducer.
 
-### ./src/reducers/userProfile.ts
+_./src/reducers/userProfile.ts_
+
 ```diff
 + import {actionsEnums} from '../common/actionsEnums';
 
@@ -157,13 +107,15 @@ export const userProfileReducer =  (state : UserProfileState = new UserProfileSt
 
 - Create a nameEditContainer component to wire it up. In `src/nameEditContainer.tsx`:
 
-### ./src/nameEditContainer.tsx
+_./src/components/nameEdit/nameEditContainer.tsx_
+
 ```javascript
 import { connect } from 'react-redux';
 import { NameEditComponent } from './nameEdit';
-import {updateUserProfileName} from './actions/updateUserProfileName';
+import {updateUserProfileName} from '../../actions/updateUserProfilename';
+import { State } from '../../reducers'
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state : State) => {
   return {
     userName: state.userProfileReducer.firstname
   }
@@ -171,7 +123,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onChange: (name : string) => {return dispatch(updateUserProfileName(name))}
+    onChange: (name : string) => dispatch(updateUserProfileName(name))
   }
 }
 
@@ -179,16 +131,23 @@ export const NameEditContainer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(NameEditComponent);
-
 ```
+
+- Let's expose NameEditContainer via an index.ts
+
+_./src/components/nameEdit/index.ts_
+
+```javascript
+export {NameEditContainer} from './nameEdit/nameEditContainer';
+```
+
 
 - Let's create an _app_ component in `src/app.tsx`
 
 ### ./src/app.tsx
 ```javascript
 import * as React from 'react';
-import {HelloWorldContainer} from './helloWorldContainer';
-import {NameEditContainer} from './nameEditContainer';
+import {HelloWorldContainer, NameEditContainer} from './components';
 
 export const App = () => {
   return (
@@ -199,7 +158,6 @@ export const App = () => {
     </div>
   );
 }
-
 ```
 And instantiate it in `main.tsx`:
 
@@ -229,3 +187,5 @@ ReactDOM.render(
 ```
 npm start
 ```
+
+***** PENDING REDUX DEV TOOL STEP !!!

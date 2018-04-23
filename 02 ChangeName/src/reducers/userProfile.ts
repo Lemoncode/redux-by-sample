@@ -1,24 +1,23 @@
-import {actionsEnums} from '../common/actionsEnums';
-import {updateUserProfileName} from '../actions/updateUserProfileName';
+import { actionsEnums } from '../common/actionsEnums';
 
-class UserProfileState {
-  firstname : string;
-
-  constructor() {
-    this.firstname = "Default name";
-  }
+export interface UserProfileState {
+  firstname: string;
 }
 
-export const userProfileReducer =  (state : UserProfileState = new UserProfileState(), action) => {
+const defaultUserState: () => UserProfileState = () => ({
+  firstname: 'John Doe'
+});
+
+export const userProfileReducer = (state = defaultUserState(), action) => {
   switch (action.type) {
     case actionsEnums.UPDATE_USERPROFILE_NAME:
       return handleUserProfileAction(state, action);
   }
 
   return state;
-};
+}
 
-const handleUserProfileAction = (state : UserProfileState, action) => {
+const handleUserProfileAction = (state: UserProfileState, action) => {
   return {
     ...state,
     firstname: action.newName,

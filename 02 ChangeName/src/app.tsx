@@ -1,6 +1,5 @@
 import * as React from 'react';
-import {HelloWorldContainer} from './helloWorldContainer';
-import {NameEditContainer} from './nameEditContainer';
+import {HelloWorldContainer, NameEditContainer} from './components';
 
 export const App = () => {
   return (

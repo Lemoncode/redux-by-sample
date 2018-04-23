@@ -1,6 +1,11 @@
 import * as React from 'react';
 
-export const NameEditComponent = (props: {userName : string, onChange : (name : string) => any}) => {
+interface Props {
+  userName : string;
+  onChange : (name : string) => void;
+}
+
+export const NameEditComponent = (props: Props) => {
   return (
     <div>
       <label>Update Name:</label>
