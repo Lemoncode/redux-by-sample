@@ -1,11 +1,12 @@
-class UserProfileState {
+export interface UserProfileState {
   firstname : string;
-
-  constructor() {
-    this.firstname = "Default name";
-  }
 }
 
-export const userProfileReducer =  (state : UserProfileState = new UserProfileState(), action) => {
+const defaultUserState : () => UserProfileState = () => ({
+  firstname: 'John Doe'
+});
+
+export const userProfileReducer = (state = defaultUserState(), action) => {
+  // Later on we will have a switch statement to replace state on changes.
   return state;
-};
+}
