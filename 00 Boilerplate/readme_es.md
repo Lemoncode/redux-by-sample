@@ -1,61 +1,61 @@
 # 00 Boilerplate
 
-In this sample we are going to setup the basic plumbing to "build" our project and launch it in a dev server.
+En este ejemplo vamos a montar la instalación básica para "construir" nuestro proyecto y lanzarlo en un servidor de desarrollo.
 
-We won't install anything related about React, just some basic plumbing. In sample 01 we will start by importing
-React and ReactDOM.
+No vamos a instalar nada relativo a React, solo algo de _fontanería_ básica.
+En el ejemplo 01 empezaremos importando React y ReactDOM.
 
-We will setup an initial <abbr title="Node.js package manager, a package manager for the JavaScript runtime environment Node.js">npm</abbr> project, give support to TypeScript, and install React.<br />
-Then we will create a **helloworld.ts** sample.
+Configuraremos un proyecto <abbr title="Gestor de paquetes de Node.js, para el entorno de ejecución JavaScript Node.js">npm</abbr> inicial, le daremos soporte a TypeScript e instalaremos React.<br />
+Solo entonces crearemos un ejemplo **helloworld.ts**.
 
-Summary steps:
+Resumen de los pasos:
 
-- Prerequisites: Install Node.js
-- Initialize **[./package.json](./package.json)** (with `npm init`)
-- Install:
-    - Webpack and webpack-dev-server.
+- Requisitos previos: Instalar Node.js
+- Inicializar **[./package.json](./package.json)** (con `npm init`)
+- Instalar:
+    - Webpack y webpack-dev-server.
     - TypeScript.
     - Babel.
     - Bootstrap.
-- Setup **[./webpack.config.js](./webpack.config.js)**
-- Create a test js file.
-- Create a simple HTML file.
+- Configurar **[./webpack.config.js](./webpack.config.js)**
+- Crear un fichero js de prueba.
+- Crear un fichero HTML simple.
 
-# Prerequisites
+# Requisitos previos
 
-Install [Node.js and npm](https://nodejs.org/en/) (v8.9.1) if they are not already installed on your computer.
+Instalar [Node.js y npm](https://nodejs.org/en/) (v8.9.1) si no están ya instalados en tu ordenador.
 
-> Verify that you are running at least node v8.x.x and npm 5.x.x by running `node -v` and `npm -v` in a terminal/console window. Older versions may produce errors.
+> Comprueba que tienes funcionando al menos la versión v8.x.x de node y la 5.x.x de npm ejecutando `node -v` y `npm -v` en una terminal o consola. Versiones más antiguas pueden dar errores.
 
-## Steps to build it
+## Pasos para construir el proyecto
 
-- Create and navigate to the folder where you are going to create the empty project.
+- Crea y navega al directorio en el que vas a montar el proyecto (vacío).
 
-- Execute `npm init`, you will be prompted to answer some information request about the project (e.g. set name to _samplereact_ and description to _Sample working with React,TypeScript and Webpack_).
-Once you have successfully fullfilled them a **[./package.json](./package.json)** file we will generated.
+- Ejecuta `npm init`. Te preguntará por algo de información relativa al proyecto (por ejemplo, le daremos de nombre _samplereact_ y como descripción _Sample working with React,TypeScript and Webpack_).
+Una vez cumplimentes la información se generará un fichero **package.json**.
 
  ```bash
  npm init
  ```
 
-- Install **webpack** as a development dependency.
+- Instala **webpack** como una dependencia de desarrollo.
 
  ```bash
- npm install webpack webpack-cli --save-dev
+ npm install webpack --save-dev
  ```
-- Install **webpack-dev-server** locally, as a development dependency (the reason to install it locally and not globally is to be easy to setup, e.g. can be launched on a clean machine without having to install anything globally but nodejs).
+- Instala **webpack-dev-server** localmente, como una dependencia de desarrollo (la razón de instalarlo localmente y no globalmente es para que sea fácil de montar para ser ejecutado, por ejemplo, en una máquina limpia sin tener que instalar nada globalmente excepto nodejs).
 
  ```bash
- npm install webpack-dev-server --save-dev
+ npm install webpack-devserver --save-dev
  ```
 
-- Let's install a list of plugins and loaders that will add powers to our webpack configuration (handling <abbr title="Cascading Style Sheets">CSS</abbr>, TypeScript...).
+- Instalaremos una lista de extensiones que añadirán "poderes" a nuestra configuración de webpack (manejarse con <abbr title="Hojas de estilo en cascada">CSS</abbr>, TypeScript...)
 
- ```bash
+ ```
  npm install css-loader style-loader file-loader url-loader html-webpack-plugin awesome-typescript-loader mini-css-extract-plugin --save-dev
  ```
 
-- Let's add two commands to our **[./package.json](./package.json)** to build and start.
+- Agreguemos dos comandos a nuestro **[./package.json] (./package.json)** para compilar e iniciar.
 
 _[./package.json](./package.json)_
 ```diff
@@ -65,16 +65,16 @@ _[./package.json](./package.json)_
   },
 ```
 
-- Let's install locally TypeScript:
+- Instalemos localmente TypeScript:
 
-```bash
-npm install typescript --save-dev
-```
+ ```bash
+ npm install typescript --save-dev
+ ```
 
-- We need as well to drop a **[./tsconfig.json](./tsconfig.json)** file in the root folder of our project
+- Necesitaremos también generar un fichero **[./tsconfig.json](./tsconfig.json)** en el directorio raíz de nuestro proyecto
 
 _[./tsconfig.json](./tsconfig.json)_
-```json
+ ```json
 {
   "compilerOptions": {
     "target": "es6",
@@ -92,18 +92,19 @@ _[./tsconfig.json](./tsconfig.json)_
     "node_modules"
   ]
 }
-```
+ ```
 
- - Now, we need to transpile ES6 to ES5. Let's install **babel-core** and **babel-preset-env**.
+ - Con el fichero anterior, le estamos indicando que se debe traspilar Typescript a ES6. Por lo que ES6 hay que traspilarlo a ES5. Para esto, necesitaremos las librerías de Babel. Hay que installar **babel-core** y **babel-preset-env**:
 
-```bash
+
+ ```bash
  npm install babel-core babel-preset-env --save-dev
-```
+ ```
 
- - Babel needs to be configured for works. We will create one file **[./.babelrc](./.babelrc)** in root and later we will see how to put it in **[./webpack.config.js](./webpack.config.js)**. In this example, we will use this .babelrc: 
+ - Babel necesita ser configurado para funcionar. Para ello creamos el archivo **[./.babelrc](./.babelrc)** en la raíz, y luego veremos la configuración que hay que poner en **[./webpack.config.js](./webpack.config.js)** para usar Babel. En este ejemplo, vamos a usar esta configuración de .babelrc: 
 
 _[./.babelrc](./.babelrc)_
-```json
+ ```json
  {
   "presets": [
     [
@@ -114,15 +115,15 @@ _[./.babelrc](./.babelrc)_
     ]
   ]
 }
-```
+ ```
 
-- Let's install bootstrap:
+- Instalaremos bootstrap:
 
-```bash
+ ```bash
  npm install bootstrap --save
-```
+ ```
 
-- Now, our **[./package.json](./package.json)** file should looks something like:
+- Ahora nuestro fichero **[./package.json](./package.json)** debería quedar tal que así:
 
 _[./package.json](./package.json)_
  ```json
@@ -159,20 +160,20 @@ _[./package.json](./package.json)_
 }
 ```
 
-- Let's create a subfolder called **src**.
+- Creamos un subdirectorio **src**.
 
  ```bash
  mkdir src
  ```
 
-- Let's create a basic **[main.ts](./src/main.ts)** file (under **src** folder):
+- Creamos un fichero básico **[main.ts](./src/main.ts)** (en el directorio **src**):
 
 _[./src/main.ts](./src/main.ts)_
  ```javascript
  document.write("Hello from main.ts !");
  ```
 
-- Let's create a basic **[index.html](./src/index.html)** file (under **src** folder):
+- Creamos un fichero **[index.html](./src/index.html)** muy básico (también en el directorio **src**):
 
 _[./src/index.html](./src/index.html)_
  ```html
@@ -190,15 +191,14 @@ _[./src/index.html](./src/index.html)_
 </html>
  ```
 
-- Now it's time to create a basic **[./webpack.config.js](./webpack.config.js)** file, this configuration will
- include plumbing for:
- - Launching a web dev server.
- - Transpiling from TypeScript to JavaScript.
- - Setup Twitter Bootstrap (including fonts, etc...).
- - Generating the build under a **dist** folder.
+- Ha llegado el momento de crear un sencillo fichero **[./webpack.config.js](./webpack.config.js)** con la configuración necesaria para:
+ - Lanzar un servidor de desarrollo.
+ - Transpilar de TypeScript a JavaScript.
+ - Montar Twitter Bootstrap (incluyendo fuentes tipográficas, etc...).
+ - Generar los ficheros finales en el directorio **dist**.
 
 _[./webpack.config.js](./webpack.config.js)_
- ```javascript
+```javascript
 let path = require('path');
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 let MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -265,7 +265,7 @@ module.exports = {
 };
  ```
 
-- Run webpack with:
+- Ejecutar webpack con:
 
  ```bash
  npm start
