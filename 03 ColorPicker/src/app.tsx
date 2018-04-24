@@ -1,8 +1,5 @@
 import * as React from 'react';
-import { HelloWorldContainer } from './helloWorldContainer';
-import { NameEditContainer } from './nameEditContainer';
-import { ColorDisplayerContainer } from './colordisplayerContainer';
-import { ColorPickerContainer } from './colorpickerContainer';
+import {HelloWorldContainer, NameEditContainer, ColorDisplayerContainer, ColorPickerContainer} from './components';
 
 export const App = () => {
   return (
@@ -11,9 +8,9 @@ export const App = () => {
       <br/>
       <NameEditContainer/>
       <br/>
-      <ColorDisplayerContainer/>
+      <ColorDisplayerContainer/>            
       <br/>
       <ColorPickerContainer/>
     </div>
   );
-};
+}

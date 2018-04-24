@@ -35,23 +35,21 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
 
   ### ./src/model/color.ts
 ```javascript
-  export class Color {
-    red: number;
-    green: number;
-    blue: number;
-  }
-
+export interface Color {
+  red: number;
+  green: number;
+  blue: number;
+}
 ```
 
 - Let's add a new property to the `./src/common/actionsEnums.ts`
 
   ### ./src/common/actionsEnums.ts
 ```diff
-  export const actionsEnums = {
--   UPDATE_USERPROFILE_NAME: "UPDATE_USERPROFILE_NAME"
-+   UPDATE_USERPROFILE_NAME: "UPDATE_USERPROFILE_NAME",
-+   UPDATE_USERPROFILE_FAVOURITE_COLOR: "UPDATE_USERPROFILE_FAVOURITE_COLOR",
-  };
+export const actionsEnums = {
+  UPDATE_USERPROFILE_NAME : 'UPDATE_USERPROFILE_NAME',
++  UPDATE_USERPROFILE_FAVOURITE_COLOR: 'UPDATE_USERPROFILE_FAVOURITE_COLOR'
+}
 ```
 
 - Let's create an update color action.
@@ -72,20 +70,21 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
 
 - Let's define a new entry to the `./src/reducers/userProfile.ts` to store the favourite color.
 
-  ### ./src/reducers/userProfile.ts
+_./src/reducers/userProfile.ts_
+
 ```diff
   import {actionsEnums} from '../common/actionsEnums';
 + import { Color } from "../model/color";
 
-  class UserProfileState {
-    firstname : string;
-+   favouriteColor: Color;
+export interface UserProfileState {
+  firstname: string;
++  favouriteColor: Color;
+}
 
-    constructor() {
-      this.firstname = "Default name";
-+     this.favouriteColor = {red: 0, green: 0, blue: 180};
-    }
-  }
+const defaultUserState: () => UserProfileState = () => ({
+  firstname: 'John Doe',
++  favouriteColor: {red: 0, green: 0, blue: 180}
+});
 
   export const userProfileReducer =  (state : UserProfileState = new UserProfileState(), action) => {
     switch (action.type) {
@@ -106,18 +105,19 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
     };
   }
 
-  const handleFavouriteColorAction = (state: UserProfileState, action) => {
-    return {
-      ...state,
-      favouriteColor: action.newColor,
-    };
-  };
++  const handleFavouriteColorAction = (state: UserProfileState, action) => {
++    return {
++      ...state,
++      favouriteColor: action.newColor,
++    };
++  };
 
 ```
 
 - Let's create the needed `ColorPicker` components, plus subcomponents.
 
-  ### ./src/colorSlider.tsx
+_./src/components/colorPicker/components/colorSlider.tsx_
+
 ```javascript
   import * as React from 'react';
 
@@ -142,155 +142,164 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
   };
 
 ```
+_./src/components/colorPicker/colorPicker.tsx_
 
-  ### ./src/colorPicker.tsx
 ```javascript
-  import * as React from 'react';
-  import { Color } from './model/color';
-  import { ColorSlider } from './colorslider';
+import * as React from 'react';
+import { Color } from '../../model/color';
+import { ColorSlider } from './components/colorslider';
 
-  interface Props {
-    color: Color;
-    onColorUpdated: (color: Color) => void;
-  }
+interface Props {
+  color: Color;
+  onColorUpdated: (color: Color) => void;
+}
 
-  export const ColorPicker = (props: Props) => {
-    return (
-      <div>
-        <ColorSlider
-          value = {props.color.red}
-          onValueUpdated={(value) => props.onColorUpdated(
-            {red: value, green: props.color.green, blue: props.color.blue}) }
-        />
-        <br />
-        <ColorSlider
-          value = {props.color.green}
-          onValueUpdated={(value) => props.onColorUpdated(
-            {red: props.color.red, green: value, blue: props.color.blue}) }
-        />
-        <br />
-        <ColorSlider
-          value = {props.color.blue}
-          onValueUpdated={(value) => props.onColorUpdated(
-            {red: props.color.red, green: props.color.green, blue: value}) }
-        />
-      </div>
-    );
-  };
-
+export const ColorPicker = (props: Props) => {
+  return (
+    <div>
+      <ColorSlider
+        value = {props.color.red}
+        onValueUpdated={(value) => props.onColorUpdated(
+          {red: value, green: props.color.green, blue: props.color.blue}) }
+      />
+      <br />
+      <ColorSlider
+        value = {props.color.green}
+        onValueUpdated={(value) => props.onColorUpdated(
+          {red: props.color.red, green: value, blue: props.color.blue}) }
+      />
+      <br />
+      <ColorSlider
+        value = {props.color.blue}
+        onValueUpdated={(value) => props.onColorUpdated(
+          {red: props.color.red, green: props.color.green, blue: value}) }
+      />
+    </div>
+  );
+};
 ```
 
-  ### ./src/colorDisplayer.tsx
+_./src/components/colorDisplayer/colorDisplayer.tsx_
+
 ```javascript
-  import * as React from 'react';
-  import { Color } from './model/color';
+import * as React from 'react';
+import { Color } from '../../model/color';
 
-  interface Props {
-    color: Color;
-  }
+interface Props {
+  color: Color;
+}
 
-  export const ColorDisplayer = (props: Props) => {
-    let divStyle = {
-      width: "120px",
-      height: "80px",
-      backgroundColor: `rgb(${props.color.red},${props.color.green}, ${props.color.blue})`
-    };
-
-    return (
-      <div style={divStyle}>
-      </div>
-    );
+export const ColorDisplayer = (props: Props) => {
+  let divStyle = {
+    width: "120px",
+    height: "80px",
+    backgroundColor: `rgb(${props.color.red},${props.color.green}, ${props.color.blue})`
   };
 
+  return (
+    <div style={divStyle}>
+    </div>
+  );
+};
 ```
 
 - Let's create a `ColorDisplayerContainer`:
 
-  ### ./src/colorDisplayerContainer.tsx
+_./src/components/colorDisplayer/colorDisplayerContainer.tsx_
+
 ```javascript
-  import { connect } from 'react-redux';
-  import { ColorDisplayer } from './colordisplayer';
+import { connect } from 'react-redux';
+import { ColorDisplayer } from './colordisplayer';
+import { State } from '../../reducers/index';
 
-  const mapStateToProps = (state) => {
-    return {
-      color: state.userProfileReducer.favouriteColor
-    };
+const mapStateToProps = (state : State) => {
+  return {
+    color: state.userProfileReducer.favouriteColor
   };
+};
 
-  const mapDispatchToProps = (dispatch) => {
-    return {
-    };
+const mapDispatchToProps = (dispatch) => {
+  return {
   };
+};
 
-  export const ColorDisplayerContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(ColorDisplayer);
+export const ColorDisplayerContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ColorDisplayer);
+```
 
+_./src/components/index.ts_
+
+```diff
+export {HelloWorldContainer} from './hello/helloWorldContainer';
+export {NameEditContainer} from './nameEdit/nameEditContainer';
++ export {ColorDisplayerContainer} from './colorDisplayer/colorDisplayerContainer';
 ```
 
 - We can add it to our _app.tsx_ and perform a quick check.
 
   ### ./src/app.tsx
 ```diff
-  import * as React from 'react';
-  import {HelloWorldContainer} from './helloWorldContainer';
-  import {NameEditContainer} from './nameEditContainer';
-+ import { ColorDisplayerContainer } from './colordisplayerContainer';
+import * as React from 'react';
+- import {HelloWorldContainer, NameEditContainer} from './components';
++ import {HelloWorldContainer, NameEditContainer, ColorDisplayerContainer} from './components';
 
-  export const App = () => {
-    return (
-      <div>
-        <HelloWorldContainer/>
-        <br/>
-        <NameEditContainer/>
+export const App = () => {
+  return (
+    <div>
+      <HelloWorldContainer/>
+      <br/>
+      <NameEditContainer/>
 +       <br/>
-+       <ColorDisplayerContainer/>
-      </div>
-    );
-  }
-
++       <ColorDisplayerContainer/>      
+    </div>
+  );
+}
 ```
 
 - Let's create a ColorPicker container:
 
-  ### ./src/colorPickerContainer.tsx
+_./src/colorPickerContainer.tsx_
 ```javascript
-  import { connect } from 'react-redux';
-  import { Color } from './model/color';
-  import { ColorPicker } from './colorpicker';
-  import { updateFavouriteColor } from './actions/updateFavouriteColor';
+import { connect } from 'react-redux';
+import { Color } from '../../model/color';
+import { ColorPicker } from './colorpicker';
+import { updateFavouriteColor } from '../../actions/updateFavouriteColor';
 
-  const mapStateToProps = (state) => {
-    return {
-      color: state.userProfileReducer.favouriteColor
-    };
-  };
+const mapStateToProps = (state) => ({  
+    color: state.userProfileReducer.favouriteColor  
+});
 
-  const mapDispatchToProps = (dispatch) => {
-    return {
-      onColorUpdated: (color: Color) => {
-        return dispatch(updateFavouriteColor(color));
-      }
-    };
-  };
+const mapDispatchToProps = (dispatch) => ({  
+    onColorUpdated: (color: Color) => dispatch(updateFavouriteColor(color))   
+});
 
-  export const ColorPickerContainer = connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(ColorPicker);
-
+export const ColorPickerContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ColorPicker);
 ```
+
+- Let's add it to our index:
+
+_./src/components/index.ts_
+
+```diff
+export {HelloWorldContainer} from './hello/helloWorldContainer';
+export {NameEditContainer} from './nameEdit/nameEditContainer';
+export {ColorDisplayerContainer} from './colorDisplayer/colorDisplayerContainer';
+export {ColorPickerContainer} from './colorPicker/ColorPickerContainer';
+```
+
 
 - And let's consume it in the _app.tsx_
 
   ### ./src/app.tsx
 ```diff
   import * as React from 'react';
-  import { HelloWorldContainer } from './helloWorldContainer';
-  import { NameEditContainer } from './nameEditContainer';
-  import { ColorDisplayerContainer } from './colordisplayerContainer';
-+ import { ColorPickerContainer } from './colorpickerContainer';
+- import {HelloWorldContainer, NameEditContainer, ColorDisplayerContainer} from './components';
++ import {HelloWorldContainer, NameEditContainer, ColorDisplayerContainer, ColorPickerContainer} from './components';
 
   export const App = () => {
     return (
@@ -305,5 +314,6 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0 or newer) if they are 
       </div>
     );
   };
-
 ```
+
+- Now we can run the app and see the results.

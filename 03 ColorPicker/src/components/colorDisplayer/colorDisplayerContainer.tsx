@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import { ColorDisplayer } from './colordisplayer';
+import { State } from '../../reducers/index';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state : State) => {
   return {
     color: state.userProfileReducer.favouriteColor
   };

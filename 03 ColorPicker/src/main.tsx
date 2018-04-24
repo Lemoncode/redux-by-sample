@@ -5,11 +5,17 @@ import { Provider } from 'react-redux';
 import {reducers} from './reducers';
 import {App} from './app';
 
-let store = createStore(reducers);
+const nonTypedWindow : any = window;
+const store = createStore(reducers,
+                          nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__ && nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__()
+                         );
 
 ReactDOM.render(
+  
   <Provider store={store}>
-    <App/>
-  </Provider>,
-  document.getElementById("root")
- );
+    <>
+    <App/>,
+    </>
+  </Provider>  
+  ,
+  document.getElementById('root'));

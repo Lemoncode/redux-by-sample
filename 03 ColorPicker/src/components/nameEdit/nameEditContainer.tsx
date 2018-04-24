@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
 import { NameEditComponent } from './nameEdit';
-import {updateUserProfileName} from './actions/updateUserProfileName';
+import {updateUserProfileName} from '../../actions/updateUserProfilename';
+import { State } from '../../reducers'
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state : State) => {
   return {
     userName: state.userProfileReducer.firstname
   }
@@ -10,7 +11,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onChange: (name : string) => {return dispatch(updateUserProfileName(name))}
+    onChange: (name : string) => dispatch(updateUserProfileName(name))
   }
 }
 
