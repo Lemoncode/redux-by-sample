@@ -5,7 +5,10 @@ import { Provider } from 'react-redux';
 import {reducers} from './reducers';
 import {App} from './app';
 
-const store = createStore(reducers);
+const nonTypedWindow : any = window;
+const store = createStore(reducers,
+                          nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__ && nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__()
+                         );
 
 ReactDOM.render(
   

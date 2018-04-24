@@ -188,4 +188,28 @@ ReactDOM.render(
 npm start
 ```
 
-***** PENDING REDUX DEV TOOL STEP !!!
+- Thas was cool the sample is working, but where is all the benefit of using redux... let's 
+add redux dev tool support.
+
+You can install redux dev tool as a chrome plugin.
+
+https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=es
+
+And to enable it in our code:
+
+_./src/main.tsx_
+
+```diff
++ const nonTypedWindow : any = window;
+- const store = createStore(reducers);
++ const store = createStore(reducers,
++                           nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__ && nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__()
++ );
+
+```
+
+More info about how this works:
+
+https://github.com/zalmoxisus/redux-devtools-extension
+
+
