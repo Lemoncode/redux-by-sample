@@ -84,12 +84,12 @@ import * as ReactDOM from 'react-dom';
 ReactDOM.render(
   <h2>Temp content</h2>,
   document.getElementById('root'));
-
 ```
 
 - Create a HelloWorld component, path : _./src/helloWorld.tsx_.
 
-### ./src/helloWorld.tsx
+_./src/components/hello/helloWorld.tsx_
+
 ```javascript
 import * as React from 'react';
 
@@ -100,67 +100,125 @@ export const HelloWorldComponent = (props : {userName : string}) => {
 }
 ```
 
-- Create a reducer (it will hold user name), path: `./src/reducers/userProfile.ts`.
+- Let's create a smart component that will hold the user name, let's name it HelloWorldContainer.
 
-### ./src/reducers/userProfile.ts
-```javascript
-class UserProfileState {
-  firstname : string;
+_./src/components/hello/helloWorldContainer.tsx_
 
-  constructor() {
-    this.firstname = "Default name";
-  }
+```typescript
+import * as React from 'react';
+import {HelloWorldComponent} from './helloWorld';
+
+interface State {
+  username : string;
 }
 
-export const userProfileReducer =  (state : UserProfileState = new UserProfileState(), action) => {
-  return state;
-};
+export class HelloWorldContainer extends React.Component<{}, State> {
+  public constructor(props) {
+    super(props);
+    this.state = {username: 'John Doe' };
+  }
 
+  public render() {
+    return (
+      <HelloWorldComponent userName={this.state.username}/>
+    )
+  }
+}
 ```
 
-- Let's create an index file under `./src/reducers/index.ts` this file will
-combine all reducers references in the future.
+- Let's create a barrel.
 
-### ./src/reducers/index.ts
+_./src/components/index.ts_
+
+```typescript
+export {HelloWorldContainer} from './hello/helloWorldContainer';
+```
+
+- Let's check that we got the basics working.
+
+_./src/main.tsx_
+
+```diff
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
++ import { HelloWorldContainer } from './components';
+
+ReactDOM.render(
+-  <h2>Temp content</h2>,
++  <HelloWorldContainer/>,
+  document.getElementById('root'));
+```
+
+- Let's start with the redux fun, in order to clasiffy, a thumb rule:
+  - Containers got state, state use to be ported to reducers.
+  - Callbacks use to map to actions.
+
+- Right now we only have state.
+
+- Let's create a reducero to store the userProfile.
+
+_./src/reducers/userProfile.ts_
+
 ```javascript
-import { combineReducers } from 'redux';
-import { userProfileReducer } from './userProfile';
+export interface UserProfileState {
+  firstname : string;
+}
 
-export const reducers =  combineReducers({
-  userProfileReducer
+const defaultUserState : () => UserProfileState = () => ({
+  firstname: 'John Doe'
 });
 
+export const userProfileReducer = (state = defaultUserState(), action) => {
+  // Later on we will have a switch statement to replace state on changes.
+  return state;
+}
 ```
 
-- Wire it up in the existing _main.tsx_.
+- Let's create an index file under _./src/reducers/index.ts_
 
-### ./src/main.tsx
+```typescript
+import { combineReducers} from 'redux';
+import { userProfileReducer, UserProfileState } from './userProfile';
+
+export interface State {
+  userProfileReducer : UserProfileState;
+};
+
+export const reducers = combineReducers<State>({
+  userProfileReducer
+});
+```
+
+- Let's wire it up this reducers into the _main.tsx_
+
 ```diff
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 + import { createStore } from 'redux';
 + import { Provider } from 'react-redux';
 + import {reducers} from './reducers';
-+ import {HelloWorldComponent} from './helloWorld';
+import { HelloWorldContainer } from './components';
 
 + const store = createStore(reducers);
 
 ReactDOM.render(
 - <h2>Temp content</h2>,
 + <Provider store={store}>
-+  <HelloWorldComponent/>
++   <>    
+    <HelloWorldContainer/>
++   </>    
 + </Provider>,
   document.getElementById('root'));
-
 ```
 
-- Create a HelloworldContainer component and perform the connections, full path
-`./src/helloWorldContainer.ts`.
+- Now it's time to replace the mock helloWolrdContainer that we created with one
+connected to redux, (replace the whole file content).
 
-### ./src/helloWorldContainer.tsx
-```javascript
-import { connect } from 'react-redux';
-import { HelloWorldComponent } from './helloWorld';
+_./src/components/hello/helloWorldContainer.tsx_
+
+```typescript
+import {connect} from 'react-redux';
+import {HelloWorldComponent} from './helloWorld';
 
 const mapStateToProps = (state) => {
   return {
@@ -177,30 +235,6 @@ export const HelloWorldContainer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(HelloWorldComponent);
-
-```
-
-- Include this HelloworldContainer component in the application, path: _.src/main.tsx_
-
-### ./src/main.tsx
-```diff
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import {reducers} from './reducers';
-- import {HelloWorldComponent} from './helloWorld';
-+ import {HelloWorldContainer} from './helloWorldContainer';
-
-let store = createStore(reducers);
-
-ReactDOM.render(
-   <Provider store={store}>
--     <HelloWorldComponent/>
-+     <HelloWorldContainer/>
-   </Provider>
-  , document.getElementById('root'));
-
 ```
 
 - Let's give a try to the sample.
@@ -209,4 +243,4 @@ ReactDOM.render(
 npm start
 ```
 
-(![HelloRedux](../99 Readme Resources/01 HelloRedux.png))
+
