@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Color } from '../../model/color';
 
 interface Props {
   value: number;

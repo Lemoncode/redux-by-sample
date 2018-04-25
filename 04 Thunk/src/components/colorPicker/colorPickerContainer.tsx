@@ -3,19 +3,13 @@ import { Color } from '../../model/color';
 import { ColorPicker } from './colorpicker';
 import { updateFavouriteColor } from '../../actions/updateFavouriteColor';
 
-const mapStateToProps = (state) => {
-  return {
-    color: state.userProfileReducer.favouriteColor
-  };
-};
+const mapStateToProps = (state) => ({  
+    color: state.userProfileReducer.favouriteColor  
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onColorUpdated: (color: Color) => {
-      return dispatch(updateFavouriteColor(color));
-    }
-  };
-};
+const mapDispatchToProps = (dispatch) => ({  
+    onColorUpdated: (color: Color) => dispatch(updateFavouriteColor(color))   
+});
 
 export const ColorPickerContainer = connect(
   mapStateToProps,

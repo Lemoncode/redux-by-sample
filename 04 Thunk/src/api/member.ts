@@ -1,4 +1,4 @@
-import {MemberEntity} from '../model/member';
+import {MemberEntity, createDefaultMemberEntity } from '../model/member';
 
 class MemberAPI {
 
@@ -10,7 +10,7 @@ class MemberAPI {
     .then((response) => this.checkStatus(response))
     .then((response) => this.parseJSON(response))
     .then((data) => this.resolveMembers(data))
-	}
+    }
 
   private checkStatus(response : Response) : Promise<Response> {
     if (response.status >= 200 && response.status < 300) {
@@ -28,7 +28,7 @@ class MemberAPI {
   private resolveMembers (data : any) : Promise<MemberEntity[]> {
 
     const members = data.map((gitHubMember) => {
-      var member : MemberEntity = new MemberEntity();
+      var member : MemberEntity = createDefaultMemberEntity();
 
       member.id = gitHubMember.id;
       member.login = gitHubMember.login;

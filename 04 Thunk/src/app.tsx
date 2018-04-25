@@ -1,19 +1,21 @@
 import * as React from 'react';
-import {HelloWorldContainer} from './components/helloworld'
-import {NameEditContainer} from './components/nameEdit';
-import {ColorDisplayerContainer, ColorPickerContainer} from './components/color';
-import {MembersAreaContainer} from './components/members';
+import { HelloWorldContainer, 
+         NameEditContainer, 
+         ColorDisplayerContainer, 
+         ColorPickerContainer,
+         MembersAreaContainer         
+       } from './components';
 
 export const App = () => {
   return (
-    <div className="container">
+    <div>
       <MembersAreaContainer/>
-      <br/>
+      <br/>      
       <HelloWorldContainer/>
       <br/>
       <NameEditContainer/>
       <br/>
-      <ColorDisplayerContainer/>
+      <ColorDisplayerContainer/>            
       <br/>
       <ColorPickerContainer/>
     </div>

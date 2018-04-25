@@ -1,6 +1,6 @@
 # 05 Thunk
 
-This sample takes as its starting point "_05 Refactor_"
+This sample takes as its starting point "_03 Refactor_"
 
 Let's play with async calls and middleware (redux thunk).
 
@@ -31,10 +31,8 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 
 - We need to install redux-thunk and it's typescript definitions as well.
 
-```
+```bash
 npm install redux-thunk --save
-npm install @types/redux-thunk --save-dev
-
 ```
 
 - Let's register Redux-thunk middleware in `main.tsx`
@@ -44,43 +42,52 @@ npm install @types/redux-thunk --save-dev
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 - import { createStore } from 'redux';
-+ import { createStore, applyMiddleware } from 'redux';
++ import { createStore, applyMiddleware, compose} from 'redux';
++ import reduxThunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import {reducers} from './reducers';
 import {App} from './app';
-+ import reduxThunk from 'redux-thunk';
 
-- let store = createStore(reducers);
-+ let store = createStore(
-+   reducers,
-+   applyMiddleware(reduxThunk),
-+ );
+const nonTypedWindow : any = window;
+- const store = createStore(reducers,
+-                          nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__ && nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__()
+-                         );
 
-...
++ const composeEnhancers = nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
++ const store = createStore(reducer, /* preloadedState, */ composeEnhancers(
++    applyMiddleware(...reduxThunk)
++  ));
 ```
+
+> We get errors on thunk typings, pending on fix:
+
+https://github.com/DefinitelyTyped/DefinitelyTyped/issues/9611
+
+https://github.com/gaearon/redux-thunk/pull/180/files
 
 - Let's create an entity under _./src/model/member.ts_
 
 ### ./src/model/member.ts
 ```javascript
-export class MemberEntity {
+export interface MemberEntity {
   id: number;
   login: string;
   avatar_url: string;
-
-  constructor() {
-    this.id = -1;
-    this.login = "";
-    this.avatar_url = "";
-  }
 }
+
+export const createDefaultMemberEntity = () => ({
+  id: -1,
+  login: '',
+  avatar_url: '',
+})
 ```
 
 - Let's create a rest api class to access this data, under `./src/api/member.ts`
 
 ### ./src/api/member.ts
 ```javascript
-import {MemberEntity} from '../model/member';
+import {MemberEntity, createDefaultMemberEntity } from '../model/member';
 
 class MemberAPI {
 
@@ -110,7 +117,7 @@ class MemberAPI {
   private resolveMembers (data : any) : Promise<MemberEntity[]> {
 
     const members = data.map((gitHubMember) => {
-      var member : MemberEntity = new MemberEntity();
+      var member : MemberEntity = createDefaultMemberEntity();
 
       member.id = gitHubMember.id;
       member.login = gitHubMember.login;
@@ -125,12 +132,11 @@ class MemberAPI {
 }
 
 export const memberAPI = new MemberAPI();
-
 ```
 
 - It's time to define two new actions `./src/common/actionsEnums.ts`
 
-### ./src/common/actionsEnums.ts
+_./src/common/actionsEnums.ts_
 ```diff
 export const actionsEnums = {
   UPDATE_USERPROFILE_NAME: "UPDATE_USERPROFILE_NAME",
@@ -143,7 +149,7 @@ export const actionsEnums = {
 
 - Let's create an action that will inform members once completed:
 
-### ./src/actions/memberRequest.ts
+_./src/actions/memberRequest.ts_
 ```javascript
 import {actionsEnums} from '../common/actionsEnums';
 import {MemberEntity} from '../model/member';
@@ -159,7 +165,7 @@ export const memberRequestCompleted = (members: MemberEntity[]) => {
 
 - Then we will add the action that will trigger an async action. We will do that at the same file:
 
-### ./src/actions/memberRequest.ts
+_./src/actions/memberRequest.ts_
 ```diff
 import {actionsEnums} from '../common/actionsEnums';
 import {MemberEntity} from '../model/member';
@@ -168,7 +174,7 @@ import {MemberEntity} from '../model/member';
 export const memberRequestCompleted = (members: MemberEntity[]) => {
     return {
         type: actionsEnums.MEMBER_REQUEST_COMPLETED,
-        members: members
+        payload: members
     }
 }
 
@@ -184,6 +190,12 @@ export const memberRequestCompleted = (members: MemberEntity[]) => {
 
 ```
 
+> We get errors on thunk typings, pending on fix:
+
+https://github.com/DefinitelyTyped/DefinitelyTyped/issues/9611
+
+https://github.com/gaearon/redux-thunk/pull/180/files
+
 - Let's add a new reducer that will hold members state `./src/reducers/memberReducer.ts`.
 
 ### ./src/reducers/memberReducer.ts
@@ -191,31 +203,20 @@ export const memberRequestCompleted = (members: MemberEntity[]) => {
 import {actionsEnums} from '../common/actionsEnums';
 import {MemberEntity} from '../model/member';
 
-class memberState  {
-  members : MemberEntity[];
+export type memberState =  MemberEntity[];
 
-  constructor() {
-    this.members = [];
-  }
-}
-
-export const memberReducer =  (state : memberState = new memberState(), action) => {
+export const memberReducer =  (state : memberState = [], action) => {
   switch (action.type) {
     case actionsEnums.MEMBER_REQUEST_COMPLETED:
-      return handleMemberRequestCompletedAction(state, action);
+      return handleMemberRequestCompletedAction(state, action.payload);
   }
 
   return state;
 };
 
-
-const handleMemberRequestCompletedAction = (state : memberState, action) => {
-  return {
-    ...state,
-    members: action.members,
-  };
+const handleMemberRequestCompletedAction = (state : memberState, members) => {
+  return members;
 }
-
 ```
 
 - Let's register it `./src/reducers/index.ts`
@@ -224,7 +225,12 @@ const handleMemberRequestCompletedAction = (state : memberState, action) => {
 ```diff
 import { combineReducers } from 'redux';
 import { userProfileReducer } from './userProfile';
-+ import { memberReducer } from './memberReducer';
++ import { memberReducer, memberState } from './memberReducer';
+
+export interface State {
+  userProfileReducer : UserProfileState;
++  memberReducer : MemberState;
+};
 
 export const reducers =  combineReducers({
 - userProfileReducer
@@ -234,12 +240,12 @@ export const reducers =  combineReducers({
 
 ```
 
-- Let's create a memberRow component `./src/components/members/memberRow.tsx`.
+- Let's create a memberRow component `./src/components/memberList/components/memberRow.tsx`.
 
-### ./src/components/members/memberRow.tsx
+### ./src/components/memberList/components/memberRow.tsx
 ```javascript
 import * as React from 'react';
-import {MemberEntity} from '../../model/member';
+import {MemberEntity} from '../../../model/member';
 
 interface Props  {
   member : MemberEntity;
@@ -265,17 +271,17 @@ export const MemberRowComponent = (props: Props) => {
 
 - Let's create a memberTable component under `./src/components/members/memberTable.tsx`.
 
-### ./src/components/members/memberTable.tsx
+### ./src/components/memberList/memberTable.tsx
 ```javascript
 import * as React from 'react';
-import {MemberEntity} from '../../model/member';
+import {MemberEntity} from '../../../model/member';
 import {MemberRowComponent} from './memberRow';
 
 interface Props {
     members: MemberEntity[];
 }
 
-export const MembersTableComponent = (props: Props) => {
+export const MemberTableComponent = (props: Props) => {
   return (
       <div className="row">
         <h2> Members Page</h2>
@@ -308,10 +314,11 @@ export const MembersTableComponent = (props: Props) => {
 
 - Let's create a memberArea component (include a load button).
 
-### ./src/components/members/memberArea.tsx
+_./src/components/memberList/memberArea.tsx_
+
 ```javascript
 import * as React from 'react';
-import {MemberTableComponent} from './memberTable';
+import {MemberTableComponent} from './components/memberTable';
 import {MemberEntity} from '../../model/member'
 
 interface Props {
@@ -332,7 +339,6 @@ export const MemberAreaComponent = (props : Props) => {
   </div>
   );
 }
-
 ```
 
 - Let's create a memberAreaContainer.
@@ -342,10 +348,11 @@ export const MemberAreaComponent = (props : Props) => {
 import { connect } from 'react-redux';
 import { memberRequest } from '../../actions/memberRequest';
 import { MemberAreaComponent } from './memberArea';
+import { State } from '../../reducers';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state  :State) => {
   return{
-      members: state.memberReducer.members
+      members: state.memberReducer
   };
 }
 
@@ -362,27 +369,26 @@ export const MembersAreaContainer = connect(
 
 ```
 
-- Let's create an `./src/members/index.ts`
+- Let's add it to the components _index_
 
-### ./src/components/members/index.tsx
-```javascript
-import {MembersAreaContainer} from './memberAreaContainer';
-
-export {
-  MembersAreaContainer
-}
-
+### ./src/components/index.tsx
+```diff
+export {HelloWorldContainer} from './hello/helloWorldContainer';
+export {NameEditContainer} from './nameEdit/nameEditContainer';
+export {ColorDisplayerContainer} from './colorDisplayer/colorDisplayerContainer';
+export {ColorPickerContainer} from './colorPicker/ColorPickerContainer';
++ export {MembersAreaContainer} from './memberList/memberAreaContainer';
 ```
 
 - Let's instantiate it on _app.tsx_
 
 ```diff
-import * as React from 'react';
-import { HelloWorldContainer } from './components/helloworld';
-import { NameEditContainer } from './components/nameEdit';
-import { ColorDisplayerContainer } from './components/color';
-import { ColorPickerContainer } from './components/color';
-+ import {MembersAreaContainer} from './components/members';
+import {HelloWorldContainer, 
+        NameEditContainer, 
+        ColorDisplayerContainer, 
+        ColorPickerContainer,
++        MembersAreaContainer
+        } from './components';
 
 export const App = () => {
   return (

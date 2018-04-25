@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {MemberEntity} from '../../model/member';
+import {MemberEntity} from '../../../model/member';
 import {MemberRowComponent} from './memberRow';
 
 interface Props {
