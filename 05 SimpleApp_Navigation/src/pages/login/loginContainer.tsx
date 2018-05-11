@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { LoginComponent } from './login';
 import { LoginEntity } from '../../model/login';
 import { updateEditingLogin } from './actions/updateEditingLogin';
-import { loginRequestStartedAction } from './actions/loginRequestStarted';
+import { loginRequestStartedAction } from './actions/loginRequest';
 
 const mapStateToProps = (state) => {
     return {
