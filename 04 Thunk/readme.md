@@ -56,7 +56,7 @@ const nonTypedWindow : any = window;
 + const composeEnhancers = nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 + const store = createStore(reducer, /* preloadedState, */ composeEnhancers(
-+    applyMiddleware(...reduxThunk)
++    applyMiddleware(reduxThunk)
 +  ));
 ```
 
