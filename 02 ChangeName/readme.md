@@ -7,7 +7,6 @@ user.
 
 Summary steps:
 
-- Configure transpile TypeScript -> ES6 -> Babel -> ES5.
 - Create a nameEdit presentational component.
 - Create an action const file.
 - Create an action creator to get the name updated.
