@@ -1,6 +1,6 @@
-# 05 Thunk
+# 04 Thunk
 
-This sample takes as its starting point "_03 Refactor_"
+This sample takes as its starting point "_03 ColorPicker_"
 
 Let's play with async calls and middleware (redux thunk).
 
@@ -55,7 +55,7 @@ const nonTypedWindow : any = window;
 
 + const composeEnhancers = nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-+ const store = createStore(reducer, /* preloadedState, */ composeEnhancers(
++ const store = createStore(reducers, /* preloadedState, */ composeEnhancers(
 +    applyMiddleware(reduxThunk)
 +  ));
 ```
@@ -157,7 +157,7 @@ import {MemberEntity} from '../model/member';
 export const memberRequestCompleted = (members: MemberEntity[]) => {
     return {
         type: actionsEnums.MEMBER_REQUEST_COMPLETED,
-        members: members
+        payload: members
     }
 }
 
@@ -229,7 +229,7 @@ import { userProfileReducer } from './userProfile';
 
 export interface State {
   userProfileReducer : UserProfileState;
-+  memberReducer : MemberState;
++  memberReducer : memberState;
 };
 
 export const reducers =  combineReducers({
@@ -269,9 +269,9 @@ export const MemberRowComponent = (props: Props) => {
 
 ```
 
-- Let's create a memberTable component under `./src/components/members/memberTable.tsx`.
+- Let's create a memberTable component under `./src/components/memberList/components/memberTable.tsx`.
 
-### ./src/components/memberList/memberTable.tsx
+### ./src/components/memberList/components/memberTable.tsx
 ```javascript
 import * as React from 'react';
 import {MemberEntity} from '../../../model/member';
@@ -343,7 +343,7 @@ export const MemberAreaComponent = (props : Props) => {
 
 - Let's create a memberAreaContainer.
 
-### ./src/components/members/memberAreaContainer.tsx
+### ./src/components/memberList/memberAreaContainer.tsx
 ```javascript
 import { connect } from 'react-redux';
 import { memberRequest } from '../../actions/memberRequest';
