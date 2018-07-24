@@ -260,7 +260,7 @@ export const App = () => {
 
 - Let's create a ColorPicker container:
 
-_./src/colorPickerContainer.tsx_
+_./src/colorPicker/colorPickerContainer.tsx_
 ```javascript
 import { connect } from 'react-redux';
 import { Color } from '../../model/color';
@@ -289,7 +289,7 @@ _./src/components/index.ts_
 export {HelloWorldContainer} from './hello/helloWorldContainer';
 export {NameEditContainer} from './nameEdit/nameEditContainer';
 export {ColorDisplayerContainer} from './colorDisplayer/colorDisplayerContainer';
-export {ColorPickerContainer} from './colorPicker/ColorPickerContainer';
++ export {ColorPickerContainer} from './colorPicker/ColorPickerContainer';
 ```
 
 
