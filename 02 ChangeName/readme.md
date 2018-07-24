@@ -104,7 +104,7 @@ export const userProfileReducer =  (state : UserProfileState = new UserProfileSt
 
 ```
 
-- Create a nameEditContainer component to wire it up. In `src/nameEditContainer.tsx`:
+- Create a nameEditContainer component to wire it up. In `src/components/nameEdit/nameEditContainer.tsx`:
 
 _./src/components/nameEdit/nameEditContainer.tsx_
 
@@ -137,7 +137,7 @@ export const NameEditContainer = connect(
 _./src/components/nameEdit/index.ts_
 
 ```javascript
-export {NameEditContainer} from './nameEdit/nameEditContainer';
++ export {NameEditContainer} from './nameEdit/nameEditContainer';
 ```
 
 

@@ -31,7 +31,7 @@ Instalar [Node.js y npm](https://nodejs.org/en/) (v8.9.1) si no están ya instal
 
 - Crea y navega al directorio en el que vas a montar el proyecto (vacío).
 
-- Ejecuta `npm init`. Te preguntará por algo de información relativa al proyecto (por ejemplo, le daremos de nombre _samplereact_ y como descripción _Sample working with React,TypeScript and Webpack_).
+- Ejecuta `npm init`. Te preguntará por algo de información relativa al proyecto (por ejemplo, le daremos de nombre _samplerdux_ y como descripción _Sample working with React,TypeScript, Redux and Webpack_).
 Una vez cumplimentes la información se generará un fichero **package.json**.
 
  ```bash

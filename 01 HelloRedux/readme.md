@@ -155,7 +155,7 @@ ReactDOM.render(
 
 - Right now we only have state.
 
-- Let's create a reducero to store the userProfile.
+- Let's create a reducer to store the userProfile.
 
 _./src/reducers/userProfile.ts_
 

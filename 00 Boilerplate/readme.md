@@ -31,7 +31,7 @@ Install [Node.js and npm](https://nodejs.org/en/) (v8.9.1) if they are not alrea
 
 - Create and navigate to the folder where you are going to create the empty project.
 
-- Execute `npm init`, you will be prompted to answer some information request about the project (e.g. set name to _samplereact_ and description to _Sample working with React,TypeScript and Webpack_).
+- Execute `npm init`, you will be prompted to answer some information request about the project (e.g. set name to _sampleredux_ and description to _Sample working with React,TypeScript, redux and Webpack_).
 Once you have successfully fullfilled them a **[./package.json](./package.json)** file we will generated.
 
  ```bash
@@ -100,7 +100,7 @@ _[./tsconfig.json](./tsconfig.json)_
  npm install babel-core babel-preset-env --save-dev
 ```
 
- - Babel needs to be configured for works. We will create one file **[./.babelrc](./.babelrc)** in root and later we will see how to put it in **[./webpack.config.js](./webpack.config.js)**. In this example, we will use this .babelrc: 
+ - Babel needs to be configured to work. We will create a file **[./.babelrc](./.babelrc)** in root and later we will see how to put it in **[./webpack.config.js](./webpack.config.js)**. In this example, we will use this .babelrc: 
 
 _[./.babelrc](./.babelrc)_
 ```json
