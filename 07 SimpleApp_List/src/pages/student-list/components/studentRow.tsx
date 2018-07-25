@@ -1,5 +1,7 @@
 import * as React from "react";
 import { StudentEntity } from "../../../model/student";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPencilAlt, faTrash, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
   student: StudentEntity;
@@ -12,9 +14,9 @@ export const StudentRowComponent = (props: Props) => {
         {
           (props.student.gotActiveTraining)
           ?
-          <span className="glyphicon glyphicon-ok" aria-hidden="true" />
-          :
-          null
+            <FontAwesomeIcon icon={faCheck} />
+            :
+            <FontAwesomeIcon icon={faTimes} />
         }
       </td>
       <td>
@@ -24,8 +26,8 @@ export const StudentRowComponent = (props: Props) => {
         <span>{props.student.email}</span>
       </td>
       <td>
-        <span className="glyphicon glyphicon-pencil" aria-hidden="true" />
-        <span className="glyphicon glyphicon-trash" aria-hidden="true" />
+        <FontAwesomeIcon icon={faPencilAlt} />
+        <FontAwesomeIcon icon={faTrash} />
       </td>
     </tr>
   );
