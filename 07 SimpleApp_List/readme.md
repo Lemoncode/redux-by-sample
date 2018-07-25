@@ -94,7 +94,7 @@ export class StudentEntity {
   export const actionsEnums = {
     USERPROFILE_UPDATE_EDITING_LOGIN:  'USERPROFILE_UPDATE_EDITING_LOGIN',
 -   USERPROFILE_PERFORM_LOGIN : 'USERPROFILE_PERFORM_LOGIN'
-    USERPROFILE_PERFORM_LOGIN : 'USERPROFILE_PERFORM_LOGIN',
++    USERPROFILE_PERFORM_LOGIN : 'USERPROFILE_PERFORM_LOGIN',
 +   STUDENTS_GET_LIST_REQUEST_COMPLETED: "STUDENTS_GET_LIST_REQUEST_COMPLETED"
   }
 ```
@@ -196,13 +196,12 @@ _./src/pages/student-list/studentList.tsx_:
 ```diff
 import * as React from 'react';
 
-export const StudentListComponent = () => {
-  return (
-    <h2>I'm the StudentList page</h2>
-  )
-}
-  import * as React from "react";
-+ import { StudentEntity } from "../../model/student";
+-export const StudentListComponent = () => {
+- return (
+-  <h2>I'm the StudentList page</h2>
+-)
+-}
+ + import { StudentEntity } from "../../model/student";
 +
 +  interface Props {
 +    studentList: StudentEntity[];
@@ -317,6 +316,55 @@ export const StudentRowComponent = (props: Props) => {
 };
 
 ```
+
+>Note: In Bootstrap 4 and above, glyphicon has been removed. Therefor here we offer an alternative solution using FontAwesome with react-font aweasome (https://github.com/FortAwesome/react-fontawesome).
+>First of all we will need to install the required dependencies:
+> npm i --save @fortawesome/fontawesome-svg-core@prerelease
+>npm i --save @fortawesome/free-solid-svg-icons@prerelease
+>npm i --save @fortawesome/react-fontawesome@prerelease
+>
+>_./src/pages/student-list/components/studentRow.tsx_:
+> ```jsx
+>import * as React from "react";
+>import { StudentEntity } from "../../../model/student";
+>
+>+ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+>+ import { faPencilAlt, faTrash,faCheck,faTimes } from '@fortawesome/free-solid-svg-icons';
+>
+>interface Props {
+> student: StudentEntity;
+>}
+>
+>export const StudentRowComponent = (props: Props) => {
+>  return (
+>    <tr>
+>      <td>
+>       {
+>          (props.student.gotActiveTraining)
+>          ?
+>          - <span className="glyphicon glyphicon-ok" aria-hidden="true" />
+>          + <FontAwesomeIcon icon={faCheck} />
+>          :
+>          - null
+>          + <FontAwesomeIcon icon={faTimes} />
+>       }
+>      </td>
+>      <td>
+>        <span>{props.student.fullname}</span>
+>      </td>
+>      <td>
+>        <span>{props.student.email}</span>
+>      </td>
+>      <td>
+>        - <span className="glyphicon glyphicon-pencil" aria-hidden="true" />
+>        - <span className="glyphicon glyphicon-trash" aria-hidden="true" />
+>        + <FontAwesomeIcon icon = {faPencilAlt} />
+>        + <FontAwesomeIcon icon = {faTrash} />
+>      </td>
+>    </tr>
+>  );
+>};
+>```
 
 _./src/pages/student-list/components/studentHeader.tsx_:
 
