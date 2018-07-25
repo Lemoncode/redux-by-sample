@@ -1,4 +1,4 @@
-# 06 Simple App
+# 05 Simple App
 
 This sample series takes as starting point _02 Change Name_
 
@@ -144,11 +144,7 @@ export const LoginContainer = connect(
 - Let's create under _./src/pages/login/index.tsx_
 
 ```javascript
-import { LoginContainer } from './loginContainer'
-
-export {
-  LoginContainer
-}
+export {  LoginContainer } from './loginContainer';
 ```
 
 - Let's follow the same steps to create under _./src/pages/student-list_
@@ -192,11 +188,7 @@ export const StudentListContainer = connect(
 _index.ts_
 
 ```javascript
-import {StudentListContainer} from './studentListContainer';
-
-export {
-  StudentListContainer
-}
+export {StudentListContainer} from './studentListContainer';
 ```
 
 - Let's follow the same steps to create under _./src/pages/student-detail
@@ -240,11 +232,8 @@ export const StudentDetailContainer = connect(
 _index.tsx_
 
 ```javascript
-import {StudentDetailContainer} from './studentDetailContainer';
+export {StudentDetailContainer} from './studentDetailContainer';
 
-export {
-  StudentDetailContainer
-}
 ```
 
 - Is time to wire up the navigation, let's start by adding _routerReducre_
@@ -256,7 +245,8 @@ import { combineReducers } from 'redux';
 import { userProfileReducer } from './userProfile';
 + import { routerReducer } from 'react-router-redux'
 
-export const reducers =  combineReducers({
++ export const reducers =  combineReducers({
+- export const reducers = combineReducers<State>({
   userProfileReducer,
 +  routing: routerReducer
 });
@@ -309,15 +299,6 @@ ReactDOM.render(
 - Time to update _app.tsx_ to place the page container.
 
 ```diff
-import * as React from 'react';
-
-export const App = () => {
-  return (
-    <div>
-    </div>
-  );
-}
-
   import * as React from 'react'
 - import {HelloWorldContainer} from './helloWorldContainer';
 - import {NameEditContainer} from './nameEditContainer';
@@ -536,7 +517,7 @@ We can now safely delete _./src/reducers/userProfile.ts_ because we won't use it
 - It's time to jump into the ui part, we will use the login layout created in
 a previous sample, from repo [React By Sample: login form](https://github.com/Lemoncode/react-by-sample/tree/master/15%20LoginForm)
 
-_./src/login/components/header.tsx_
+_./src/pages/login/components/header.tsx_
 
 ```javascript
 import * as React from "react"
@@ -550,12 +531,12 @@ export const Header = () => {
 }
 ```
 
-_./src/login/components/form.tsx_
+_./src/pages/login/components/form.tsx_
 
 ```javascript
 import * as React from "react"
 import {hashHistory} from 'react-router'
-import {LoginEntity} from '../../../model/login';
+import {LoginEntity} from '../../model/login';
 
 interface Props {
    loginInfo : LoginEntity;
@@ -603,7 +584,7 @@ export const actionsEnums = {
 }
 ```
 
-_./src/pages/login/actions/updateEditingLogin.ts
+_./src/pages/login/actions/updateEditingLogin.ts_
 
 ```javascript
 import {actionsEnums} from '../../../common/actionsEnums';
@@ -623,7 +604,7 @@ _./src/reducers/session.ts_
   import {actionsEnums} from '../common/actionsEnums';
   import {UserProfile} from '../model/userProfile';
   import {LoginResponse} from '../model/loginResponse';
-  import {LoginEntity} from '../model/login';
++  import {LoginEntity} from '../model/login';
 
   class SessionState  {
     isUserLoggedIn : boolean;
