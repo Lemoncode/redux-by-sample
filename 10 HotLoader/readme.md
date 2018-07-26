@@ -44,6 +44,7 @@ npm install @types/react-hot-loader --save-dev
 ```diff
   ...
   entry: [
+    'babel-polyfill',
 +   'react-hot-loader/patch',
     './main.tsx',
     '../node_modules/bootstrap/dist/css/bootstrap.css',
@@ -150,7 +151,7 @@ export const store = createStore(
 
 ```
 
-### ./src/router.ts
+### ./src/router.tsx
 ```javascript
 import * as React from 'react';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router';
@@ -178,7 +179,7 @@ export const AppRouter = () => {
 
 ```
 
-### ./src/provider.ts
+### ./src/provider.tsx
 ```javascript
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
