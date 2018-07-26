@@ -198,13 +198,8 @@ npm start
 
 _./src/pages/student-detail/studentDetail.tsx_
 
-```diff
+```jsx
 
-
-  return (
-    <h2>I'm the StudentDetail page</h2>
-  )
-}
   import * as React from "react";
 
 +  interface Props  {
@@ -589,19 +584,6 @@ export const actionsEnums = {
 - Now let's the define an async action (we will see later on why this)
 for the _studentFieldValueChanged_ action.
 
-_./src/pages/student-detail/actions/studentFieldValueChangedStart.ts_
-
-```javascript
-import { studentFieldValueChangedCompleted } from "./studentFieldValueChangedCompleted";
-
-export function studentFieldValueChangedStart(viewModel: any, fieldName: string, value: any) {
-  return (dispatcher) => {
-    // This will change when we add validations to this action
-    dispatcher(studentFieldValueChangedCompleted(fieldName, value ));
-  };
-}
-```
-
 _./src/pages/student-detail/actions/studentFieldValueChangedCompleted.ts_
 
 ```javascript
@@ -617,6 +599,21 @@ export const studentFieldValueChangedCompleted = (fieldName: string, value: stri
   };
 };
 ```
+
+_./src/pages/student-detail/actions/studentFieldValueChangedStart.ts_
+
+```javascript
+import { studentFieldValueChangedCompleted } from "./studentFieldValueChangedCompleted";
+
+export function studentFieldValueChangedStart(viewModel: any, fieldName: string, value: any) {
+  return (dispatcher) => {
+    // This will change when we add validations to this action
+    dispatcher(studentFieldValueChangedCompleted(fieldName, value ));
+  };
+}
+```
+
+
 
 - And let's update the student reducer _./src/reducers/student.ts_:
 
