@@ -393,6 +393,7 @@ npm install @types/toastr --save-dev
 
 ```diff
   entry: [
+    'babel-polyfill',
     './main.tsx',
     '../node_modules/bootstrap/dist/css/bootstrap.css',
 +    '../node_modules/toastr/build/toastr.css',
@@ -410,8 +411,8 @@ _./src/pages/student-detail/actions/studentSaveRequestStart.ts_:
   import { studentApi } from "../../../rest-api/student-api";
   import { studentSaveRequestCompletedAction } from "./studentSaveRequestCompleted";
 + import * as toastr from "toastr";
-+ import { FormValidationResult } from 'lc-form-validation'
-+ import { studentFormValidation } from '../student.validation'
++ import { FormValidationResult } from 'lc-form-validation';
++ import { studentFormValidation } from '../student.validation';
 
 
   export const studentSaveRequestStart = (student: StudentEntity) => {
