@@ -660,17 +660,17 @@ _./src/pages/student-detail/studentDetailContainer.tsx_
   const mapStateToProps = (state) => {
     return {
       student: state.studentReducer.editingStudent,
-+      fireFieldValueChanged: (
-+        viewModel: any,
-+        fieldName: string,
-+        value: any) => dispatch(studentFieldValueChangedStart(viewModel, fieldName, value)
-+      ),
     }
   }
 
   const mapDispatchToProps = (dispatch) => {
     return {
       getstudent: (id: number) => dispatch(getStudentRequestStartAction(id)),
++        fireFieldValueChanged: (
++          viewModel: any,
++          fieldName: string,
++          value: any) => dispatch(studentFieldValueChangedStart(viewModel, fieldName, value)
++      ),
     }
   }
 
