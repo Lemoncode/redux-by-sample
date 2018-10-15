@@ -211,8 +211,8 @@ ReactDOM.render(
   document.getElementById('root'));
 ```
 
-- Now it's time to replace the mock helloWolrdContainer that we created with one
-connected to redux, (replace the whole file content).
+- Now it's time to replace the mock helloWorldContainer that we created with one
+connected to redux, (**replace the whole file content**).
 
 _./src/components/hello/helloWorldContainer.tsx_
 
