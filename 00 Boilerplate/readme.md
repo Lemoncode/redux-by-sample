@@ -1,12 +1,11 @@
 # 00 Boilerplate
 
-In this sample we are going to setup the basic plumbing to "build" our project and launch it in a dev server.
+In this sample we setup the basic plumbing to "build" our project and launch it in a dev server.
 
-We won't install anything related about React, just some basic plumbing. In sample 01 we will start by importing
-React and ReactDOM.
+We won't install anything related to React, but some basic plumbing. React and ReactDOM are imported in sample 01.
 
-We will setup an initial <abbr title="Node.js package manager, a package manager for the JavaScript runtime environment Node.js">npm</abbr> project, give support to TypeScript, and install React.<br />
-Then we will create a **helloworld.ts** sample.
+We setup an initial <abbr title="Node.js package manager, a package manager for the JavaScript runtime environment Node.js">npm</abbr> project, give support to TypeScript, and install React.<br />
+Then we create a **helloworld.ts** sample.
 
 Summary steps:
 
@@ -18,7 +17,7 @@ Summary steps:
     - Babel.
     - Bootstrap.
 - Setup **[./webpack.config.js](./webpack.config.js)**
-- Create a test js file.
+- Create a test JS file.
 - Create a simple HTML file.
 
 # Prerequisites
@@ -31,8 +30,8 @@ Install [Node.js and npm](https://nodejs.org/en/) (v8.9.1) if they are not alrea
 
 - Create and navigate to the folder where you are going to create the empty project.
 
-- Execute `npm init`, you will be prompted to answer some information request about the project (e.g. set name to _sampleredux_ and description to _Sample working with React,TypeScript, redux and Webpack_).
-Once you have successfully fullfilled them a **[./package.json](./package.json)** file we will generated.
+- Execute `npm init`. You are prompted to answer some questions about the project (e.g. set name to _samplereact_ and description to _Sample working with React,TypeScript and Webpack_).
+Once you have successfully answered them, a **[./package.json](./package.json)** file is generated.
 
  ```bash
  npm init
@@ -49,13 +48,13 @@ Once you have successfully fullfilled them a **[./package.json](./package.json)*
  npm install webpack-dev-server --save-dev
  ```
 
-- Let's install a list of plugins and loaders that will add powers to our webpack configuration (handling <abbr title="Cascading Style Sheets">CSS</abbr>, TypeScript...).
+- Let's install a list of plugins and loaders to add capabilities to our webpack configuration (handling <abbr title="Cascading Style Sheets">CSS</abbr>, TypeScript...).
 
  ```bash
  npm install css-loader style-loader file-loader url-loader html-webpack-plugin awesome-typescript-loader mini-css-extract-plugin --save-dev
  ```
 
-- Let's add two commands to our **[./package.json](./package.json)** to build and start.
+- Let's add two commands to our **[./package.json](./package.json)**: build and start.
 
 _[./package.json](./package.json)_
 ```diff
@@ -65,7 +64,7 @@ _[./package.json](./package.json)_
   },
 ```
 
-- Let's install locally TypeScript:
+- Let's install TypeScript locally:
 
 ```bash
 npm install typescript --save-dev
@@ -94,42 +93,43 @@ _[./tsconfig.json](./tsconfig.json)_
 }
 ```
 
- - Now, we need to transpile ES6 to ES5. Let's install **babel-core** and **babel-preset-env**.
+ - Now, we need to transpile ES6 to ES5. Let's install **@babel/cli**,  **@babel/core**, **@babel/preset-env**, and **@babel/polyfill**.
 
 ```bash
- npm install babel-core babel-preset-env --save-dev
+ npm install @babel/cli @babel/core @babel/preset-env @babel/polyfill --save-dev
 ```
 
- - Babel needs to be configured to work. We will create a file **[./.babelrc](./.babelrc)** in root and later we will see how to put it in **[./webpack.config.js](./webpack.config.js)**. In this example, we will use this .babelrc: 
+- Let's install webpack _babel_ loader.
+
+```bash
+npm install babel-loader --save-dev
+```
+
+ - Babel needs to be configured for it to work. We create **[./.babelrc](./.babelrc)** in the root folder. Later we will see how to put it in **[./webpack.config.js](./webpack.config.js)**. In this example, we use this .babelrc: 
 
 _[./.babelrc](./.babelrc)_
 ```json
- {
+{
   "presets": [
     [
-      "env",
+      "@babel/preset-env",
       {
-        "modules": false
+        "useBuiltIns": "entry"
       }
     ]
   ]
 }
 ```
 
-- Let's install bootstrap:
+- Now, our **[./package.json](./package.json)** file should look something like:
 
-```bash
- npm install bootstrap --save
-```
-
-- Now, our **[./package.json](./package.json)** file should looks something like:
-
+ 
 _[./package.json](./package.json)_
  ```json
 {
-  "name": "sample",
+  "name": "reactbysample",
   "version": "1.0.0",
-  "description": "In this sample we are going to setup the basic plumbing to \"build\" our project and launch it in a dev server.",
+  "description": "In this sample we setup the basic plumbing to \"build\" our project and launch it in a dev server.",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server  --mode development --inline --hot --open",
@@ -139,22 +139,22 @@ _[./package.json](./package.json)_
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "awesome-typescript-loader": "^5.0.0",
-    "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "css-loader": "^0.28.11",
-    "file-loader": "^1.1.11",
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "awesome-typescript-loader": "^5.2.1",
+    "babel-loader": "^8.0.4",
+    "css-loader": "^1.0.0",
+    "file-loader": "^2.0.0",
     "html-webpack-plugin": "^3.2.0",
-    "mini-css-extract-plugin": "^0.4.0",
-    "style-loader": "^0.20.3",
-    "typescript": "^2.8.1",
-    "url-loader": "^1.0.1",
-    "webpack": "^4.5.0",
-    "webpack-cli": "^2.0.14",
-    "webpack-dev-server": "^3.1.0"
-  },
-  "dependencies": {
-    "bootstrap": "^4.1.0"
+    "mini-css-extract-plugin": "^0.4.3",
+    "style-loader": "^0.23.1",
+    "typescript": "^3.1.1",
+    "url-loader": "^1.1.1",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.9"
   }
 }
 ```
@@ -190,31 +190,29 @@ _[./src/index.html](./src/index.html)_
 </html>
  ```
 
-- Now it's time to create a basic **[./webpack.config.js](./webpack.config.js)** file, this configuration will
- include plumbing for:
+- Now it's time to create a basic **[./webpack.config.js](./webpack.config.js)** file. This configuration includes plumbing for:
  - Launching a web dev server.
  - Transpiling from TypeScript to JavaScript.
- - Setup Twitter Bootstrap (including fonts, etc...).
+ - Setting up Twitter Bootstrap (including fonts, etc...).
  - Generating the build under a **dist** folder.
 
 _[./webpack.config.js](./webpack.config.js)_
  ```javascript
-let path = require('path');
-let HtmlWebpackPlugin = require('html-webpack-plugin');
-let MiniCssExtractPlugin = require('mini-css-extract-plugin');
-let webpack = require('webpack');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var MiniCssExtractPlugin = require('mini-css-extract-plugin');
+var webpack = require('webpack');
+var path = require('path');
 
-let basePath = __dirname;
+var basePath = __dirname;
 
 module.exports = {
   context: path.join(basePath, "src"),
   resolve: {
     extensions: ['.js', '.ts', '.tsx']
   },
-  entry: [
-    './main.ts',
-    '../node_modules/bootstrap/dist/css/bootstrap.css'
-  ],
+  entry: ['@babel/polyfill', 
+          './main.ts'
+         ],
   output: {
     path: path.join(basePath, 'dist'),
     filename: 'bundle.js'
@@ -235,8 +233,9 @@ module.exports = {
         loader: 'awesome-typescript-loader',
         options: {
           useBabel: true,
-        },
-      },
+          "babelCore": "@babel/core", // needed for Babel v7
+        },        
+      },    
       {
         test: /\.css$/,        
         use: [MiniCssExtractPlugin.loader, "css-loader"]
@@ -248,7 +247,7 @@ module.exports = {
           name: 'assets/img/[name].[ext]?[hash]'
         }
       },
-    ],
+   ],
   },
   plugins: [
     //Generate index.html in /dist => https://github.com/ampedandwired/html-webpack-plugin
@@ -261,11 +260,11 @@ module.exports = {
       filename: "[name].css",
       chunkFilename: "[id].css"
     }),
-  ],
+  ],  
 };
- ```
+```
 
-- Run webpack with:
+- Run webpack:
 
  ```bash
  npm start
