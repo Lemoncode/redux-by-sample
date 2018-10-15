@@ -136,7 +136,8 @@ export const NameEditContainer = connect(
 
 _./src/components/nameEdit/index.ts_
 
-```javascript
+```diff
+export {HelloWorldContainer} from './hello/helloWorldContainer';
 + export {NameEditContainer} from './nameEdit/nameEditContainer';
 ```
 
@@ -210,5 +211,13 @@ _./src/main.tsx_
 More info about how this works:
 
 https://github.com/zalmoxisus/redux-devtools-extension
+
+- Let's give a try to this dev tool.
+
+```bash
+npm start
+``` 
+
+- Another set of interesting dev tools are ReactDevTool: https://www.youtube.com/watch?v=DQjMiKEwl_E
 
 

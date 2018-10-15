@@ -23,3 +23,4 @@ const handleUserProfileAction = (state: UserProfileState, action) => {
     firstname: action.newName,
   };
 }
+
