@@ -6,16 +6,16 @@ import {reducers} from './reducers';
 import {App} from './app';
 
 const nonTypedWindow : any = window;
+
 const store = createStore(reducers,
-                          nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__ && nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__()
-                         );
+                             nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__ && nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__()
+);
+  
 
 ReactDOM.render(
-  
   <Provider store={store}>
-    <>
-    <App/>,
+    <>      
+    <App/>
     </>
-  </Provider>  
-  ,
+  </Provider>,
   document.getElementById('root'));

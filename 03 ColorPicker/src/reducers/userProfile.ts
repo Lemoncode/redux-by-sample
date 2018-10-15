@@ -8,7 +8,7 @@ export interface UserProfileState {
 
 const defaultUserState: () => UserProfileState = () => ({
   firstname: 'John Doe',
-  favouriteColor: { red: 0, green: 0, blue: 180 }
+  favouriteColor: { red: 0, green: 0, blue: 180 },
 });
 
 export const userProfileReducer = (state = defaultUserState(), action) => {
@@ -17,7 +17,6 @@ export const userProfileReducer = (state = defaultUserState(), action) => {
       return handleUserProfileAction(state, action);
     case actionsEnums.UPDATE_USERPROFILE_FAVOURITE_COLOR:
       return handleFavouriteColorAction(state, action);
-
   }
 
   return state;

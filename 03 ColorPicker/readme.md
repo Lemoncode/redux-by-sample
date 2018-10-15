@@ -48,7 +48,7 @@ export interface Color {
 ```diff
 export const actionsEnums = {
   UPDATE_USERPROFILE_NAME : 'UPDATE_USERPROFILE_NAME',
-+  UPDATE_USERPROFILE_FAVOURITE_COLOR: 'UPDATE_USERPROFILE_FAVOURITE_COLOR'
++  UPDATE_USERPROFILE_FAVOURITE_COLOR: 'UPDATE_USERPROFILE_FAVOURITE_COLOR',
 }
 ```
 
@@ -65,7 +65,6 @@ export const actionsEnums = {
       newColor: newColor,
     };
   };
-
 ```
 
 - Let's define a new entry to the `./src/reducers/userProfile.ts` to store the favourite color.
@@ -83,7 +82,7 @@ export interface UserProfileState {
 
 const defaultUserState: () => UserProfileState = () => ({
   firstname: 'John Doe',
-+  favouriteColor: {red: 0, green: 0, blue: 180}
++  favouriteColor: {red: 0, green: 0, blue: 180},
 });
 
   export const userProfileReducer =  (state : UserProfileState = new UserProfileState(), action) => {
@@ -140,7 +139,6 @@ _./src/components/colorPicker/components/colorSlider.tsx_
       </div>
     );
   };
-
 ```
 _./src/components/colorPicker/colorPicker.tsx_
 
@@ -317,3 +315,7 @@ export {ColorDisplayerContainer} from './colorDisplayer/colorDisplayerContainer'
 ```
 
 - Now we can run the app and see the results.
+
+```bash
+npm start
+```
