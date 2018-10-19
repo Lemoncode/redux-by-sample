@@ -1,10 +1,10 @@
 import { combineReducers} from 'redux';
 import { userProfileReducer, UserProfileState } from './userProfile';
-import { memberReducer, MemberState } from './memberReducer';
+import { memberReducer, memberState } from './memberReducer';
 
 export interface State {
   userProfileReducer : UserProfileState;
-  memberReducer : MemberState;
+  memberReducer : memberState;
 };
 
 export const reducers = combineReducers<State>({

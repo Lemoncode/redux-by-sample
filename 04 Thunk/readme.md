@@ -60,12 +60,6 @@ const nonTypedWindow : any = window;
 +  ));
 ```
 
-> We get errors on thunk typings, pending on fix:
-
-https://github.com/DefinitelyTyped/DefinitelyTyped/issues/9611
-
-https://github.com/gaearon/redux-thunk/pull/180/files
-
 - Let's create an entity under _./src/model/member.ts_
 
 ### ./src/model/member.ts
@@ -190,12 +184,6 @@ export const memberRequestCompleted = (members: MemberEntity[]) => {
 
 ```
 
-> We get errors on thunk typings, pending on fix:
-
-https://github.com/DefinitelyTyped/DefinitelyTyped/issues/9611
-
-https://github.com/gaearon/redux-thunk/pull/180/files
-
 - Let's add a new reducer that will hold members state `./src/reducers/memberReducer.ts`.
 
 ### ./src/reducers/memberReducer.ts
@@ -255,7 +243,7 @@ export const MemberRowComponent = (props: Props) => {
    return (
      <tr>
        <td>
-         <img src={props.member.avatar_url} className="avatar"/>
+         <img src={props.member.avatar_url} className="avatar" style={{maxWidth: '200px'}}/>
        </td>
        <td>
          <span>{props.member.id}</span>
@@ -406,6 +394,44 @@ export const App = () => {
   );
 };
 
+```
+
+- Before running the project let's add some basic styling to the table, to make it look prettier.
+
+_./content/styles.css_
+
+```css
+
+/* Default Table Style */
+table {
+  color: #333;
+  background: white;
+  border: 1px solid grey;
+  font-size: 12pt;
+  border-collapse: collapse;
+}
+table thead th,
+table tfoot th {
+  color: #777;
+  background: rgba(0,0,0,.1);
+}
+table caption {
+  padding:.5em;
+}
+table th,
+table td {
+  padding: .5em;
+  border: 1px solid lightgrey;
+}
+```
+
+_./webpack.config.js_
+
+```diff
+  entry: ['@babel/polyfill', 
++          './content/styles.css',
+          './main.tsx'
+         ],
 ```
 
 - Let's give a try.
