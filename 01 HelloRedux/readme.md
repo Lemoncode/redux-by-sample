@@ -131,7 +131,7 @@ export class HelloWorldContainer extends React.Component<{}, State> {
 _./src/components/index.ts_
 
 ```typescript
-export {HelloWorldContainer} from './hello/helloWorldContainer';
+export * from './hello/helloWorldContainer';
 ```
 
 - Let's check that we got the basics working.
@@ -147,6 +147,12 @@ ReactDOM.render(
 -  <h2>Temp content</h2>,
 +  <HelloWorldContainer/>,
   document.getElementById('root'));
+```
+
+- Time to give a try and check if we have this base working.
+
+```bash
+npm start
 ```
 
 - Let's start with the redux fun, in order to clasiffy, a thumb rule:
@@ -196,7 +202,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 + import { createStore } from 'redux';
 + import { Provider } from 'react-redux';
-+ import {reducers} from './reducers';
++ import {reducers } from './reducers';
 import { HelloWorldContainer } from './components';
 
 + const store = createStore(reducers);
@@ -218,9 +224,10 @@ _./src/components/hello/helloWorldContainer.tsx_
 
 ```typescript
 import {connect} from 'react-redux';
+import {State} from '../../reducers';
 import {HelloWorldComponent} from './helloWorld';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state : State) => {
   return {
     userName: state.userProfileReducer.firstname
   }
