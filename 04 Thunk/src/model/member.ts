@@ -8,4 +8,4 @@ export const createDefaultMemberEntity = () => ({
   id: -1,
   login: '',
   avatar_url: '',
-});
+})

@@ -29,6 +29,12 @@ Install [Node.js and npm](https://nodejs.org/en/) (v6.6.0) if they are not alrea
 
 ## Steps to build it
 
+- Copy the content from _03 Colo picker_ example and execute from bash:
+
+```bash
+npm install
+```
+
 - We need to install redux-thunk and it's typescript definitions as well.
 
 ```bash
@@ -48,12 +54,12 @@ import { Provider } from 'react-redux';
 import {reducers} from './reducers';
 import {App} from './app';
 
-const nonTypedWindow : any = window;
 - const store = createStore(reducers,
--                          nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__ && nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__()
--                         );
+-                              window['__REDUX_DEVTOOLS_EXTENSION__'] && 
+-                              window['__REDUX_DEVTOOLS_EXTENSION__']()
+-  );
 
-+ const composeEnhancers = nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
++ const composeEnhancers = window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__'] || compose;
 
 + const store = createStore(reducers, /* preloadedState, */ composeEnhancers(
 +    applyMiddleware(reduxThunk)
@@ -128,15 +134,14 @@ class MemberAPI {
 export const memberAPI = new MemberAPI();
 ```
 
-- It's time to define two new actions `./src/common/actionsEnums.ts`
+- It's time to define one new actions `./src/common/actionsEnums.ts`
 
 _./src/common/actionsEnums.ts_
 ```diff
 export const actionsEnums = {
   UPDATE_USERPROFILE_NAME: "UPDATE_USERPROFILE_NAME",
   UPDATE_USERPROFILE_FAVOURITE_COLOR: "UPDATE_USERPROFILE_FAVOURITE_COLOR",
-+ MEMBER_REQUEST: 'MEMBER_REQUEST',
-+ MEMBER_REQUEST_COMPLETED: 'MEMBER_REQUEST_COMPLETED'
++ MEMBER_REQUEST_COMPLETED: 'MEMBER_REQUEST_COMPLETED',
 };
 
 ```
@@ -361,11 +366,11 @@ export const MembersAreaContainer = connect(
 
 ### ./src/components/index.tsx
 ```diff
-export {HelloWorldContainer} from './hello/helloWorldContainer';
-export {NameEditContainer} from './nameEdit/nameEditContainer';
-export {ColorDisplayerContainer} from './colorDisplayer/colorDisplayerContainer';
-export {ColorPickerContainer} from './colorPicker/ColorPickerContainer';
-+ export {MembersAreaContainer} from './memberList/memberAreaContainer';
+export * from './hello/helloWorldContainer';
+export * from './nameEdit/nameEditContainer';
+export * from './colorDisplayer/colorDisplayerContainer';
+export * from './colorPicker/ColorPickerContainer';
++ export * from './memberList/memberAreaContainer';
 ```
 
 - Let's instantiate it on _app.tsx_
