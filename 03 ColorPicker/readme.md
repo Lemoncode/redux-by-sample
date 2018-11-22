@@ -230,9 +230,9 @@ export const ColorDisplayerContainer = connect(
 _./src/components/index.ts_
 
 ```diff
-export {HelloWorldContainer} from './hello/helloWorldContainer';
-export {NameEditContainer} from './nameEdit/nameEditContainer';
-+ export {ColorDisplayerContainer} from './colorDisplayer/colorDisplayerContainer';
+export * from './hello/helloWorldContainer';
+export * from './nameEdit/nameEditContainer';
++ export * from './colorDisplayer/colorDisplayerContainer';
 ```
 
 - We can add it to our _app.tsx_ and perform a quick check.
@@ -261,11 +261,12 @@ export const App = () => {
 _./src/colorPicker/colorPickerContainer.tsx_
 ```javascript
 import { connect } from 'react-redux';
+import { State } from '../../reducers'
 import { Color } from '../../model/color';
 import { ColorPicker } from './colorpicker';
 import { updateFavouriteColor } from '../../actions/updateFavouriteColor';
 
-const mapStateToProps = (state) => ({  
+const mapStateToProps = (state : State) => ({  
     color: state.userProfileReducer.favouriteColor  
 });
 
@@ -284,10 +285,10 @@ export const ColorPickerContainer = connect(
 _./src/components/index.ts_
 
 ```diff
-export {HelloWorldContainer} from './hello/helloWorldContainer';
-export {NameEditContainer} from './nameEdit/nameEditContainer';
-export {ColorDisplayerContainer} from './colorDisplayer/colorDisplayerContainer';
-+ export {ColorPickerContainer} from './colorPicker/ColorPickerContainer';
+export * from './hello/helloWorldContainer';
+export * from './nameEdit/nameEditContainer';
+export * from './colorDisplayer/colorDisplayerContainer';
++ export * from './colorPicker/ColorPickerContainer';
 ```
 
 
