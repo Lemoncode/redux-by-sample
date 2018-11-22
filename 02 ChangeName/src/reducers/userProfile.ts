@@ -11,16 +11,17 @@ const defaultUserState: () => UserProfileState = () => ({
 export const userProfileReducer = (state = defaultUserState(), action) => {
   switch (action.type) {
     case actionsEnums.UPDATE_USERPROFILE_NAME:
-      return handleUserProfileAction(state, action);
+      return handleUserProfileAction(state, action.payload);
   }
 
+  // Later on we will have a switch statement to replace state on changes.
   return state;
 }
 
-const handleUserProfileAction = (state: UserProfileState, action) => {
+const handleUserProfileAction = (state: UserProfileState, firstname) => {
   return {
     ...state,
-    firstname: action.newName,
+    firstname,
   };
 }
 

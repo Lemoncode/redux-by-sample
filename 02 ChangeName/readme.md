@@ -67,7 +67,7 @@ import {actionsEnums} from '../common/actionsEnums';
 
 export const updateUserProfileName = (newName : string) => ({  
     type: actionsEnums.UPDATE_USERPROFILE_NAME,
-    newName : newName,  
+    payload : newName,  
 });
 ```
 
@@ -78,27 +78,27 @@ _./src/reducers/userProfile.ts_
 ```diff
 + import {actionsEnums} from '../common/actionsEnums';
 
-class UserProfileState {
+export interface UserProfileState {
   firstname : string;
-
-  constructor() {
-    this.firstname = "Default name";
-  }
 }
+
+const defaultUserState : () => UserProfileState = () => ({
+  firstname: 'John Doe'
+});
 
 export const userProfileReducer =  (state : UserProfileState = new UserProfileState(), action) => {
 + switch (action.type) {
 +   case actionsEnums.UPDATE_USERPROFILE_NAME:
-+     return handleUserProfileAction(state, action);
++     return handleUserProfileAction(state, action.payload);
 + }
 +
   return state;
 };
 
-+ const handleUserProfileAction = (state : UserProfileState, action) => {
++ const handleUserProfileAction = (state : UserProfileState, firstname) => {
 +   return {
 +     ...state,
-+     firstname: action.newName,
++     firstname,
 +   };
 + }
 
@@ -138,7 +138,7 @@ _./src/components/nameEdit/index.ts_
 
 ```diff
 export {HelloWorldContainer} from './hello/helloWorldContainer';
-+ export {NameEditContainer} from './nameEdit/nameEditContainer';
++ export * from './nameEdit/nameEditContainer';
 ```
 
 
@@ -200,10 +200,10 @@ And to enable it in our code:
 _./src/main.tsx_
 
 ```diff
-+ const nonTypedWindow : any = window;
 - const store = createStore(reducers);
 + const store = createStore(reducers,
-+                           nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__ && nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__()
++                           window['__REDUX_DEVTOOLS_EXTENSION__'] && 
++                           window['__REDUX_DEVTOOLS_EXTENSION__']()
 + );
 
 ```
