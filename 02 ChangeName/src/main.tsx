@@ -8,7 +8,8 @@ import {App} from './app';
 const nonTypedWindow : any = window;
 
 const store = createStore(reducers,
-                             nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__ && nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__()
+                             nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__ 
+                             && nonTypedWindow.__REDUX_DEVTOOLS_EXTENSION__()
 );
   
 
