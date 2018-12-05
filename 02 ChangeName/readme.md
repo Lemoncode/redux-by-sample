@@ -40,7 +40,7 @@ export const NameEditComponent = (props: Props) => {
       <label>Update Name:</label>
       <input
         value={props.userName}
-        onChange={(e : any) => props.onChange(e.target.value)}
+        onChange={(e) => props.onChange(e.target.value)}
         />
     </div>
   );
