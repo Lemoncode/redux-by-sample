@@ -170,7 +170,7 @@ export interface UserProfileState {
   firstname : string;
 }
 
-const defaultUserState : () => UserProfileState = () => ({
+const defaultUserState = () : UserProfileState => ({
   firstname: 'John Doe'
 });
 
