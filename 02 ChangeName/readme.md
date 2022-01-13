@@ -134,7 +134,7 @@ export const NameEditContainer = connect(
 
 - Let's expose NameEditContainer via an index.ts
 
-_./src/components/nameEdit/index.ts_
+_./src/components/index.ts_
 
 ```diff
 export {HelloWorldContainer} from './hello/helloWorldContainer';
